@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>方案 B · 杂志感方案 — 每日论文精选演示</title>
+<style>
+  :root{
+    --paper:#faf7f1; --ink:#181612; --ink2:#4a443c; --muted:#8a8275;
+    --card:#ffffff; --line:#e7e0d3; --accent:#b23b2e; --accent-soft:#f7e9e6;
+    --quote:#f3ede2;
+    --shadow:0 2px 4px rgba(60,45,20,.05),0 14px 34px rgba(60,45,20,.08);
+  }
+  body[data-theme="dark"]{
+    --paper:#141210; --ink:#f0ebe0; --ink2:#c9c2b4; --muted:#8d8678;
+    --card:#1e1b17; --line:#322d26; --accent:#e8756a; --accent-soft:#3a221e;
+    --quote:#252119;
+    --shadow:0 2px 6px rgba(0,0,0,.4),0 14px 34px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:15px; line-height:1.7; transition:background .25s,color .25s;
+  }
+  .serif{font-family:Georgia,"Times New Roman","Songti SC","STSong","SimSun",serif;}
+  /* ---- 方案条 ---- */
+  .scheme-bar{
+    background:#17141f; color:#d9d2c5; padding:10px 24px; font-size:13px;
+    display:flex; gap:14px; align-items:center; flex-wrap:wrap;
+    position:sticky; top:0; z-index:60; border-bottom:2px solid #b23b2e;
+  }
+  body[data-theme="dark"] .scheme-bar{background:#0c0a12}
+  .scheme-bar .s-name{font-weight:800; color:#ef9a90; letter-spacing:.3px; white-space:nowrap}
+  .scheme-bar .s-item b{color:#c9b48a; font-weight:600}
+  .scheme-bar .sep{opacity:.3}
+  .theme-btn{margin-left:auto;border:1px solid rgba(255,255,255,.25);background:transparent;color:#eee;
+    border-radius:2px;padding:4px 14px;font-size:12.5px;cursor:pointer;white-space:nowrap;font-family:inherit}
+  .theme-btn:hover{background:rgba(255,255,255,.12)}
+  /* ---- 刊头 ---- */
+  .masthead{max-width:1160px;margin:0 auto;padding:44px 30px 26px;text-align:center;position:relative}
+  .masthead .kicker{font-size:12.5px;letter-spacing:5px;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .masthead h1{font-size:52px;font-weight:900;letter-spacing:-1px;margin:6px 0 4px}
+  .masthead .rule{display:flex;align-items:center;gap:14px;justify-content:center;margin:14px 0 8px;color:var(--muted);font-size:13px}
+  .masthead .rule::before,.masthead .rule::after{content:"";height:1px;background:var(--line);flex:1;max-width:180px}
+  .masthead .ed-note{max-width:680px;margin:8px auto 0;font-size:13.5px;color:var(--ink2);font-style:italic}
+  /* ---- 时间线 ---- */
+  .timeline{max-width:1160px;margin:0 auto;padding:0 30px 90px}
+  .tl-date{display:flex;align-items:baseline;gap:16px;margin:46px 0 6px}
+  .tl-date .d{font-size:26px;font-weight:800;letter-spacing:-.5px}
+  .tl-date .d small{font-size:13px;font-weight:400;color:var(--muted);letter-spacing:2px;margin-left:10px}
+  .tl-date .line{flex:1;height:1px;background:var(--ink);opacity:.85}
+  body[data-theme="dark"] .tl-date .line{background:#4a4338}
+  .tl-date .note{font-size:12.5px;color:var(--muted)}
+  /* ---- 封面大卡 ---- */
+  .hero{
+    display:grid;grid-template-columns:1.35fr 1fr;background:var(--card);
+    border:1px solid var(--line);border-radius:4px;overflow:hidden;box-shadow:var(--shadow);
+    margin-top:18px;
+  }
+  @media(max-width:860px){.hero{grid-template-columns:1fr}}
+  .hero .cover{min-height:380px;position:relative;display:flex;align-items:flex-end;padding:22px}
+  .hero .cover::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 100% at 80% 0%,rgba(255,255,255,.25),transparent 60%)}
+  .cover-tag{position:absolute;top:18px;left:18px;z-index:2;background:var(--accent);color:#fff;font-size:12px;
+    font-weight:800;letter-spacing:3px;padding:6px 14px;border-radius:2px}
+  .cover-label{position:relative;z-index:2;background:rgba(10,10,15,.6);color:rgba(255,255,255,.92);
+    font-size:11.5px;padding:6px 12px;line-height:1.5;border-radius:2px}
+  .hero .body{padding:34px 36px;display:flex;flex-direction:column;justify-content:center}
+  .hero h2{font-size:31px;line-height:1.28;font-weight:900;letter-spacing:-.4px}
+  .hero .meta{margin:12px 0 16px;font-size:13px;color:var(--muted)}
+  .hero .lead{font-size:15.5px;line-height:1.85;color:var(--ink2)}
+  .hero .lead strong{color:var(--accent)}
+  .ai-mark{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:1.5px;color:#fff;
+    background:#1d1a16;padding:2px 9px;border-radius:2px;margin-right:10px;vertical-align:3px}
+  body[data-theme="dark"] .ai-mark{background:#f0ebe0;color:#1d1a16}
+  .hero .why{margin-top:16px;padding:14px 16px;background:var(--quote);border-left:4px solid var(--accent);
+    font-size:14px;color:var(--ink2);font-style:italic;border-radius:0 2px 2px 0}
+  .hero .why b{font-style:normal;color:var(--accent)}
+  /* ---- 瀑布流 ---- */
+  .masonry{column-count:2;column-gap:22px;margin-top:22px}
+  @media(max-width:860px){.masonry{column-count:1}}
+  .m-card{
+    break-inside:avoid;background:var(--card);border:1px solid var(--line);border-radius:4px;
+    box-shadow:var(--shadow);margin-bottom:22px;overflow:hidden;
+  }
+  .m-fig{height:210px;position:relative;display:flex;align-items:flex-end;padding:14px}
+  .m-fig.tall{height:278px}
+  .m-fig::after{content:"";position:absolute;inset:0;background:radial-gradient(130% 100% at 15% 0%,rgba(255,255,255,.22),transparent 55%)}
+  .fig-tag{position:absolute;top:12px;left:12px;z-index:2;background:rgba(10,10,15,.62);color:#fff;
+    font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:2px}
+  .fig-label{position:relative;z-index:2;background:rgba(10,10,15,.55);color:rgba(255,255,255,.9);
+    font-size:10.5px;padding:4px 10px;border-radius:2px;line-height:1.45}
+  .g-nerf{background:linear-gradient(135deg,#3949ab,#29b6f6)}
+  .g-gs{background:linear-gradient(135deg,#fb8c00,#e53971)}
+  .g-genie{background:linear-gradient(135deg,#6a1b9a,#3949ab)}
+  .g-genie2{background:linear-gradient(135deg,#00838f,#3949ab)}
+  .g-dyna{background:linear-gradient(135deg,#2e7d32,#00acc1)}
+  .g-canvas{background:linear-gradient(135deg,#c62828,#f9a825)}
+  .m-body{padding:22px 24px 24px}
+  .m-body .catline{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+  .m-body .cat{font-size:10.5px;font-weight:800;letter-spacing:2px;color:var(--accent)}
+  .flag{font-size:10px;font-weight:800;padding:2px 8px;border-radius:2px;color:#fff}
+  .flag-classic{background:#8a6d1e}
+  .flag-sample{background:#b23b2e}
+  .flag-hot{background:#1d1a16}
+  body[data-theme="dark"] .flag-hot{background:#f0ebe0;color:#1d1a16}
+  .m-body h3{font-size:21px;font-weight:800;line-height:1.4;letter-spacing:-.2px}
+  .m-body .meta{font-size:12.5px;color:var(--muted);margin:8px 0 12px}
+  .m-body .lead{font-size:14px;line-height:1.8;color:var(--ink2)}
+  .m-body .lead strong{color:var(--accent)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .chip{font-size:11px;font-weight:700;padding:2px 9px;border:1px solid var(--line);border-radius:2px;color:var(--ink2);background:var(--paper)}
+  .chip.metric{border-color:var(--line);color:var(--muted)}
+  body[data-theme="dark"] .chip.metric{background:#24201a}
+  details{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+  details summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--accent);list-style:none;letter-spacing:.5px}
+  details summary::-webkit-details-marker{display:none}
+  details summary::before{content:"阅读全文 ✦ "}
+  details[open] summary::before{content:"收起 ✦ "}
+  .fields{display:grid;gap:9px;margin-top:12px}
+  .f h5{font-size:12.5px;font-weight:800;margin-bottom:1px}
+  .f h5 .n{color:var(--accent);margin-right:6px}
+  .f p{font-size:12.8px;color:var(--ink2);line-height:1.75}
+  .f p .pipe{color:var(--muted)}
+  /* 我的短评 */
+  .pane{margin-top:14px;background:var(--quote);border-radius:2px;padding:12px 14px}
+  .pane .ph{font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:8px}
+  .pane .ph .hint{font-weight:400;letter-spacing:0;color:var(--muted);margin-left:8px}
+  .pane .row{display:flex;gap:8px;flex-wrap:wrap}
+  .pv{border:1px solid var(--line);background:var(--card);color:var(--ink2);border-radius:2px;
+    padding:4px 13px;font-size:12.5px;cursor:pointer;font-family:inherit}
+  .pv:hover{border-color:var(--accent);color:var(--accent)}
+  .pv.lk.on{background:#2e7d32;border-color:#2e7d32;color:#fff}
+  .pv.dk.on{background:#b23b2e;border-color:#b23b2e;color:#fff}
+  .pv.reason{flex:1;min-width:200px;padding:5px 11px;font-size:12.5px}
+  .pv.reason:focus{outline:none;border-color:var(--accent)}
+  .pane .saved{width:100%;font-size:11px;color:#2e7d32;font-weight:700}
+  .colophon{text-align:center;color:var(--muted);font-size:12.5px;line-height:2;margin-top:50px}
+</style>
+</head>
+<body data-theme="light">
+
+<div class="scheme-bar">
+  <span class="s-name">方案 B · 杂志感方案</span>
+  <span class="sep">|</span>
+  <span class="s-item"><b>主参考</b> alphaXiv（大图 + AI 一句话总结）</span>
+  <span class="sep">·</span>
+  <span class="s-item"><b>混排</b> 封面大卡 + 瀑布流</span>
+  <span class="sep">·</span>
+  <span class="s-item"><b>气质</b> The Batch 编辑精选叙事</span>
+  <span class="sep">|</span>
+  <span class="s-item">定位：视觉冲击力优先，让「翻论文」像「翻杂志」</span>
+  <button class="theme-btn" id="themeBtn">◐ 暗色</button>
+</div>
+
+<header class="masthead">
+  <div class="kicker">Paper Daily · Issue No.142</div>
+  <h1 class="serif">每日论文精选</h1>
+  <div class="rule serif"><span>三维重建 × 世界模型</span><span>·</span><span>2026 年 8 月 27 日</span></div>
+  <p class="ed-note">编辑手记：本期封面是 DeepMind Genie 2——「一张图长出一个可玩 3D 世界」；同时重读 NeRF 与 3D Gaussian Splatting 两篇地基之作，看这条线如何从体渲染一路走到世界模型。</p>
+</header>
+
+<div class="timeline">
+
+  <div class="tl-date">
+    <span class="d serif">封面故事<small>COVER STORY · 本周最热</small></span>
+    <span class="line"></span>
+    <span class="note">大图 · 大标题 · 一句话抓住贡献与数字</span>
+  </div>
+
+  <!-- 封面：Genie 2 -->
+  <article class="hero">
+    <div class="cover g-genie2">
+      <span class="cover-tag">FEATURED</span>
+      <span class="cover-label">method figure（从论文 PDF 截取）<br>官方仅公开 demo，正式版放架构示意图</span>
+    </div>
+    <div class="body">
+      <div class="catline" style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+        <span class="chip" style="background:var(--accent-soft);color:var(--accent);border-color:transparent;font-weight:800;letter-spacing:1px;font-size:10.5px">WORLD MODEL</span>
+        <span class="chip">3D 交互</span><span class="chip">视频生成</span>
+        <span class="flag flag-hot">🔥 社区现象级</span>
+      </div>
+      <h2 class="serif">Genie 2：一张图像，长出一个可以走进去的 3D 世界</h2>
+      <div class="meta serif">Google DeepMind · 2024-12 技术报告 · 未开源无论文全文 · Genie 1 原班团队（ICML 2024 最佳论文）</div>
+      <p class="lead"><span class="ai-mark">AI 总结</span>只需<strong>一张图像</strong>即可生成可自由导航的 <strong>3D 世界</strong>：支持分钟级时长、第一人称移动与物体交互，已探索区域保持视角一致的「记忆」。DeepMind 称之为首个大规模<strong>基础世界模型</strong>——世界模型从 2D 游戏迈入 3D 物理一致空间。</p>
+      <div class="why"><b>编辑点评：</b>方向意义大于技术细节：它把「重建」与「想象」合并成同一件事。遗憾是不开源、无基准，热度里也有演示精选的水分——追方向必看，做复现慎入。</div>
+      <details>
+        <summary>展开全文总结（0–6 字段）</summary>
+        <div class="fields">
+          <div class="f"><h5><span class="n">0</span>Background</h5><p>Google DeepMind 2024-12 发布；技术报告 + 官方博客（无 arXiv 全文、未开源）；Genie 1（ICML 2024 Best Paper）续作；社区讨论热度极高。</p></div>
+          <div class="f"><h5><span class="n">1</span>Task</h5><p>从一张图像生成完整、可交互、可长时间导航的 3D 虚拟世界：第一人称移动、与物体交互，且保持几何/纹理/物理长时一致性。challenge：3D 一致性、长时记忆、响应延迟与动作多样性。</p></div>
+          <div class="f"><h5><span class="n">2</span>Insight</h5><p>把世界模型当作「大规模视频基础模型」训练：互联网规模视频 + 提示控制 + 未来帧预测；用持久 3D 记忆维持长时一致性；动作可来自键盘、Agent 策略或「提示动作」。</p></div>
+          <div class="f"><h5><span class="n">3</span>Pipeline</h5><p><span class="pipe">I/O：图像/文本提示初始化世界 → 输出可导航可交互的分钟级 3D 视频流。模块：</span>① 提示初始化世界 → ② 动作条件（键盘/策略/提示动作）驱动视角与交互 → ③ 大规模视频生成主干预测未来帧 → ④ 持久记忆维持已探索区域一致 → ⑤ 实时流式解码。</p></div>
+          <div class="f"><h5><span class="n">4</span>Methods</h5><p>报告未公开完整架构；已知：视频生成基础模型（扩散/自回归类）+ 动作控制条件 + 长时记忆/一致性机制；支持物体交互（捡起、推动）、场景传送；分钟级时长、3D 视角一致。</p></div>
+          <div class="f"><h5><span class="n">5</span>Experiment</h5><p>官方 demo：照片/手绘/AI 生图 → 可玩 3D 世界；多物体交互、长路径导航一致性；相较 Genie 1 在 3D、时长、交互丰富度上全面升级。注意：无公开论文与基准，结论均来自官方精选演示。</p></div>
+          <div class="f"><h5><span class="n">6</span>Limitation</h5><p>未开源、无论文细节、无法复现；分辨率/帧率/延迟未公开；demo 偶发物理违背（形变、漂浮）；算力成本未知；官方演示存在精选偏差。</p></div>
+        </div>
+      </details>
+      <div class="pane">
+        <div class="ph serif">✍️ 我的短评<span class="hint">喜欢/不喜欢 + 一句话原因，沉淀为你的精选日志</span></div>
+        <div class="row">
+          <button class="pv lk">喜欢</button><button class="pv dk">不喜欢</button>
+          <input class="pv reason" placeholder="例：想象力满分，但不开源对研究参考价值打折……">
+          <span class="saved" hidden>✓ 已记入本期日志（演示）</span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <div class="tl-date">
+    <span class="d serif">今日新刊<small>NEW · 2026-08-27</small></span>
+    <span class="line"></span>
+    <span class="note">新论文看作者影响力与热度</span>
+  </div>
+
+  <div class="masonry">
+
+    <!-- DynaSplat -->
+    <article class="m-card">
+      <div class="m-fig tall g-dyna">
+        <span class="fig-tag">PIPELINE</span>
+        <span class="fig-label">method figure（从论文 PDF 截取）· 渐变色块占位</span>
+      </div>
+      <div class="m-body">
+        <div class="catline"><span class="cat">WORLD MODEL × 4D 重建</span><span class="flag flag-sample">示例数据</span></div>
+        <h3 class="serif">DynaSplat：从行车视频「流式」长出 4D 高斯世界</h3>
+        <div class="meta serif">[示例] L. Chen 等 · Stanford Vision Lab × NVIDIA Research（虚构）· arXiv 2025.11 · ★342</div>
+        <p class="lead"><span class="ai-mark">AI</span>单目行车视频<strong>流式</strong>构建 4D 高斯世界（静态高斯 + 时变形变场），支持回放、<strong>3 秒未来预测</strong>与编辑：虚构 Waymax 基准上预测 FVD 较视频基线<strong>降低 31%</strong>，构建速度 <strong>12 FPS</strong>。</p>
+        <div class="chips">
+          <span class="chip metric">⌗ dynasplat/dynasplat</span><span class="chip metric">HF upvote 186</span>
+          <span class="chip">World Model</span><span class="chip">4DGS</span><span class="chip">自动驾驶</span>
+        </div>
+        <p style="margin-top:12px;font-size:12.5px;color:var(--ink2);background:var(--quote);padding:9px 12px;border-radius:2px">⭐ <b>作者影响力：</b>NVIDIA Research × Stanford Vision Lab（虚构）；一作近两篇均为 CVPR/NeurIPS 一作，关联仓库已上线。</p>
+        <details>
+          <summary>展开全文总结（0–6 字段）</summary>
+          <div class="fields">
+            <div class="f"><h5><span class="n">0</span>Background</h5><p>[示例数据] 虚构机构 Stanford × NVIDIA Research；2025-11 arXiv 预印本；仓库 dynasplat/dynasplat（★342，虚构）；HF upvote 186（虚构）。</p></div>
+            <div class="f"><h5><span class="n">1</span>Task</h5><p>[示例] 在线从无标注单目行车视频构建可回放、可预测、可编辑的 4D 世界。challenge：动静态联合建模、增量流式更新、200 米长距离几何一致性。</p></div>
+            <div class="f"><h5><span class="n">2</span>Insight</h5><p>[示例] 动态世界可拆成「规范空间 3D 高斯 + 时变偏移 MLP」；借鉴 Genie 把自车轨迹作为动作条件，重建模型即升级为世界模型。</p></div>
+            <div class="f"><h5><span class="n">3</span>Pipeline</h5><p><span class="pipe">I/O：连续单目帧（+可选 SLAM 位姿）→ 4D 高斯流。模块：</span>① 深度/位姿估计 → ② 静态高斯增量融合 → ③ 动态实例 4D 高斯（规范空间+形变 MLP）→ ④ 轨迹条件未来预测头 → ⑤ 流式致密化与剪枝。</p></div>
+            <div class="f"><h5><span class="n">4</span>Methods</h5><p>[示例] 4D 高斯形变场（canonical Gaussians + Δμ/ΔR/ΔS(t)）；动静态 2D/3D 一致性 loss；动作条件扩散式未来预测；16 帧滑窗流式训练。</p></div>
+            <div class="f"><h5><span class="n">5</span>Experiment</h5><p>[示例] 虚构 Waymax 合成段 + 200 段自采视频；回放 PSNR 27.4；3s 预测 FVD −31%；消融覆盖形变场、流式更新、预测头。</p></div>
+            <div class="f"><h5><span class="n">6</span>Limitation</h5><p>[示例] 严重遮挡区有残影；超 5 秒长时预测漂移；行人细粒度动作不准；上限受单目深度估计制约。</p></div>
+          </div>
+        </details>
+        <div class="pane">
+          <div class="ph serif">✍️ 我的短评</div>
+          <div class="row">
+            <button class="pv lk">喜欢</button><button class="pv dk">不喜欢</button>
+            <input class="pv reason" placeholder="例：4DGS + 世界模型正是我关注的交叉点……">
+            <span class="saved" hidden>✓ 已记入本期日志（演示）</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- WorldCanvas -->
+    <article class="m-card">
+      <div class="m-fig g-canvas">
+        <span class="fig-tag">PIPELINE</span>
+        <span class="fig-label">method figure（从论文 PDF 截取）· 渐变色块占位</span>
+      </div>
+      <div class="m-body">
+        <div class="catline"><span class="cat">WORLD MODEL × 具身智能</span><span class="flag flag-sample">示例数据</span></div>
+        <h3 class="serif">WorldCanvas：给世界模型一块「不遗忘」的高斯记忆</h3>
+        <div class="meta serif">[示例] Y. Wang 等 · Shanghai AI Lab × CUHK MMLab（虚构）· CVPR 2026 在投 · ★89</div>
+        <p class="lead"><span class="ai-mark">AI</span>针对 Genie 2「转一圈场景就重画」的长时漂移，提出可读写的<strong>持久化高斯记忆层</strong>：10 分钟漫游后回访起点，结构保持率 <strong>92%（基线 54%）</strong>，导航成功率<strong>提升 2.3 倍</strong>。</p>
+        <div class="chips">
+          <span class="chip metric">⌗ worldcanvas/worldcanvas</span>
+          <span class="chip">World Model</span><span class="chip">具身智能</span><span class="chip">3D 记忆</span>
+        </div>
+        <p style="margin-top:12px;font-size:12.5px;color:var(--ink2);background:var(--quote);padding:9px 12px;border-radius:2px">⭐ <b>作者影响力：</b>Shanghai AI Lab × MMLab（虚构）；通讯作者为世界模型方向知名 PI，代码已开源、社区复现活跃。</p>
+        <details>
+          <summary>展开全文总结（0–6 字段）</summary>
+          <div class="fields">
+            <div class="f"><h5><span class="n">0</span>Background</h5><p>[示例数据] 虚构机构 Shanghai AI Lab × CUHK MMLab；标注 CVPR 2026 在投（虚构）；仓库 worldcanvas/worldcanvas（★89，虚构）。</p></div>
+            <div class="f"><h5><span class="n">1</span>Task</h5><p>[示例] 让交互式世界模型具备长时记忆：长时漫游后回访已探索区域，几何/纹理/物体状态仍一致。challenge：纯视频生成无持久记忆，每次回访都在「重新想象」。</p></div>
+            <div class="f"><h5><span class="n">2</span>Insight</h5><p>[示例] 把 3DGS 当世界模型的「外部硬盘」：视频主干负责想象未探索区域，高斯记忆库负责记住已探索区域，注意力门控读写。</p></div>
+            <div class="f"><h5><span class="n">3</span>Pipeline</h5><p><span class="pipe">I/O：图像 + 动作流 → 一致交互视频。模块：</span>① 视频世界模型生成未来帧 → ② 每 K 帧将稳定区域蒸馏进高斯记忆库（write）→ ③ 回访时按视角检索渲染（read）→ ④ 门控融合记忆与想象 → ⑤ 输出。</p></div>
+            <div class="f"><h5><span class="n">4</span>Methods</h5><p>[示例] 可读写高斯记忆库；记忆-生成一致性 KL loss；注意力门控；探索时长递增的课程学习。</p></div>
+            <div class="f"><h5><span class="n">5</span>Experiment</h5><p>[示例] 虚构 10–30 分钟长时导航基准：回访一致性 92% vs 54%；导航成功率 ×2.3；消融读写频率与门控策略。</p></div>
+            <div class="f"><h5><span class="n">6</span>Limitation</h5><p>[示例] 记忆显存随探索面积线性增长；动态物体写入后状态混乱；仅仿真验证、未做真实机器人闭环。</p></div>
+          </div>
+        </details>
+        <div class="pane">
+          <div class="ph serif">✍️ 我的短评</div>
+          <div class="row">
+            <button class="pv lk">喜欢</button><button class="pv dk">不喜欢</button>
+            <input class="pv reason" placeholder="例：记忆机制很对味，但显存增长是硬伤……">
+            <span class="saved" hidden>✓ 已记入本期日志（演示）</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="tl-date">
+    <span class="d serif">经典重读<small>FROM THE ARCHIVE</small></span>
+    <span class="line"></span>
+    <span class="note">旧论文看被引 / star / 顶会</span>
+  </div>
+
+  <div class="masonry">
+
+    <!-- 3DGS -->
+    <article class="m-card">
+      <div class="m-fig tall g-gs">
+        <span class="fig-tag">PIPELINE</span>
+        <span class="fig-label">method figure（从论文 PDF 截取）· 渐变色块占位</span>
+      </div>
+      <div class="m-body">
+        <div class="catline"><span class="cat">NOVEL VIEW SYNTHESIS</span><span class="flag flag-classic">经典</span></div>
+        <h3 class="serif">3D Gaussian Splatting：让辐射场第一次「飞」起来</h3>
+        <div class="meta serif">Kerbl, Kopanas, Leimkühler, Drettakis · Inria · SIGGRAPH 2023 · ★9k+ · 被引 ≈4k+</div>
+        <p class="lead"><span class="ai-mark">AI</span>数百万个<strong>各向异性 3D 高斯</strong>显式表示场景 + tile-based 可微光栅化：画质与 Mip-NeRF360 持平，却做到 <strong>1080p 100+ FPS</strong>、训练 <strong>~40 分钟</strong>——直接引爆整个 3DGS 方向。</p>
+        <div class="chips">
+          <span class="chip metric">⌗ graphdeco-inria/gaussian-splatting</span>
+          <span class="chip">NVS</span><span class="chip">3D Reconstruction</span><span class="chip">实时渲染</span>
+        </div>
+        <details>
+          <summary>展开全文总结（0–6 字段）</summary>
+          <div class="fields">
+            <div class="f"><h5><span class="n">0</span>Background</h5><p>Inria / Université Côte d'Azur；SIGGRAPH 2023（ACM TOG）；被引 ≈4k+；代码 graphdeco-inria/gaussian-splatting（★9k+，生态衍生数百仓库）。</p></div>
+            <div class="f"><h5><span class="n">1</span>Task</h5><p>实时、高保真新视角合成。challenge：NeRF 画质好但训练慢、渲染慢；显式点/网格快但有洞、质量低——要同时拿到「NeRF 画质 + 实时速度 + 快速训练」。</p></div>
+            <div class="f"><h5><span class="n">2</span>Insight</h5><p>回归经典 point-based rendering / EWA splatting：显式高斯投影到屏幕做 α-blending，无需沿光线采样；关键是 tile GPU 光栅化 + 高斯属性全可微、可自适应增删。</p></div>
+            <div class="f"><h5><span class="n">3</span>Pipeline</h5><p><span class="pipe">I/O：SfM 稀疏点云 + 多视角图 → 实时可渲染高斯集。模块：</span>① SfM 初始化 → ② 挂载高斯参数（μ、Σ=RSSᵀRᵀ、α、SH 系数）→ ③ 屏幕投影 + tile 分块深度排序 → ④ front-to-back α-blending（CUDA）→ ⑤ L1+D-SSIM 反传 → ⑥ 自适应致密化（分裂/克隆/剪枝）。</p></div>
+            <div class="f"><h5><span class="n">4</span>Methods</h5><p>协方差分解为旋转四元数 + 缩放向量；tile 排序光栅化；SH 表达视角相关颜色；自适应密度控制；损失 (1−λ)L1 + λ·D_SSIM（λ=0.2）。</p></div>
+            <div class="f"><h5><span class="n">5</span>Experiment</h5><p>Mip-NeRF360 / Tanks &amp; Temples / Deep Blending 等 13 场景；PSNR 持平或超过 Mip-NeRF360、Instant-NGP；1080p 100+ FPS；训练 30–60 分钟；消融覆盖致密化、SH 阶数、初始化。</p></div>
+            <div class="f"><h5><span class="n">6</span>Limitation</h5><p>每场景独立训练、依赖 COLMAP 位姿；高斯数百万级时显存/存储高；视角外推与稀疏输入退化；mesh 提取不直接；原生不支持动态场景（4DGS 等后续补）。</p></div>
+          </div>
+        </details>
+        <div class="pane">
+          <div class="ph serif">✍️ 我的短评</div>
+          <div class="row">
+            <button class="pv lk">喜欢</button><button class="pv dk">不喜欢</button>
+            <input class="pv reason" placeholder="例：组里管线已切 3DGS，工程友好度远超 NeRF……">
+            <span class="saved" hidden>✓ 已记入本期日志（演示）</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- NeRF -->
+    <article class="m-card">
+      <div class="m-fig g-nerf">
+        <span class="fig-tag">PIPELINE</span>
+        <span class="fig-label">method figure（从论文 PDF 截取）· 渐变色块占位</span>
+      </div>
+      <div class="m-body">
+        <div class="catline"><span class="cat">NEURAL IMPLICIT</span><span class="flag flag-classic">经典</span></div>
+        <h3 class="serif">NeRF：一个 MLP，装下一整个场景</h3>
+        <div class="meta serif">Mildenhall 等 · UC Berkeley × Google Research × UCSD · ECCV 2020 Oral · CACM 最佳论文 · ★10k+ · 被引 ≈15k+</div>
+        <p class="lead"><span class="ai-mark">AI</span>MLP 把场景表示为连续 <strong>5D 神经辐射场</strong>（位置+视角 → 颜色+密度），配体渲染合成新视角：数十张图即照片级真实感，合成集 PSNR 较 SRN 前作<strong>提升 5–10 dB</strong>，一手开创 NeRF 方向。</p>
+        <div class="chips">
+          <span class="chip metric">⌗ bmild/nerf</span>
+          <span class="chip">NVS</span><span class="chip">神经隐式表示</span>
+        </div>
+        <details>
+          <summary>展开全文总结（0–6 字段）</summary>
+          <div class="fields">
+            <div class="f"><h5><span class="n">0</span>Background</h5><p>UC Berkeley × Google Research × UCSD；ECCV 2020 Oral，后获 CACM 年度最佳论文；被引 ≈15k+；代码 bmild/nerf（★10k+）。</p></div>
+            <div class="f"><h5><span class="n">1</span>Task</h5><p>稀疏多视角照片合成照片级任意新视角。challenge：连续、视角一致的几何+外观表示，有限视角下恢复高频细节；体素/光场受分辨率与内存限制，SRN 等欠拟合高频。</p></div>
+            <div class="f"><h5><span class="n">2</span>Insight</h5><p>场景 = 5D 向量函数 (x,y,z,θ,φ)→(RGB,σ)；颜色随视角变化作方向条件；灵感来自经典体渲染（连续密度场沿光线可微积分）；MLP 低频偏好用高频位置编码破解。</p></div>
+            <div class="f"><h5><span class="n">3</span>Pipeline</h5><p><span class="pipe">I/O：带位姿图像集 → 任意位姿 RGB。模块：</span>① 射线生成 + 粗网络均匀采样（64 点）→ ② MLP（8 层：位置→σ+特征，方向+特征→RGB）→ ③ 体渲染 α-compositing → ④ 粗分布引导细网络重要性采样（128 点）→ ⑤ coarse+fine MSE loss。</p></div>
+            <div class="f"><h5><span class="n">4</span>Methods</h5><p>位置编码 γ(p)=[sin(2ᵏp),cos(2ᵏp)]（位置 L=10/方向 L=4）；体渲染离散化 C=ΣTᵢαᵢcᵢ；coarse-to-fine 层级采样；视角方向仅条件化颜色；双网络 MSE。</p></div>
+            <div class="f"><h5><span class="n">5</span>Experiment</h5><p>8 场景（Blender 合成、LLFF 真实、DeepVoxels）；PSNR/SSIM/LPIPS 全面优于 NeRF Volumes、SRN、LLFF（合成 PSNR ≈31 vs ≈25）；消融证实位置编码、视角条件、层级采样各自关键。</p></div>
+            <div class="f"><h5><span class="n">6</span>Limitation</h5><p>单场景训练数小时、原版渲染约 30 秒/帧；每场景独立网络、无跨场景泛化；无界大场景与遮挡处理弱；网格提取麻烦；不支持动态场景。</p></div>
+          </div>
+        </details>
+        <div class="pane">
+          <div class="ph serif">✍️ 我的短评</div>
+          <div class="row">
+            <button class="pv lk">喜欢</button><button class="pv dk">不喜欢</button>
+            <input class="pv reason" placeholder="例：必读经典，但工程上我更常用 3DGS 系……">
+            <span class="saved" hidden>✓ 已记入本期日志（演示）</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Genie 1 -->
+    <article class="m-card">
+      <div class="m-fig g-genie">
+        <span class="fig-tag">PIPELINE</span>
+        <span class="fig-label">method figure（从论文 PDF 截取）· 渐变色块占位</span>
+      </div>
+      <div class="m-body">
+        <div class="catline"><span class="cat">WORLD MODEL</span><span class="flag flag-classic">经典</span></div>
+        <h3 class="serif">Genie：20 万小时无标注视频，自学成「可玩世界」</h3>
+        <div class="meta serif">Bruce, Rocktäschel 等 · Google DeepMind · ICML 2024 最佳论文 · 被引 ≈500+</div>
+        <p class="lead"><span class="ai-mark">AI</span>从 <strong>20 万小时</strong>无标注 2D 平台游戏视频自监督学会「潜在动作」：一张图 + 键盘即可实时生成<strong>可玩交互环境</strong>（11B 动力学模型），人评 <strong>77% 片段被判可玩</strong>。</p>
+        <div class="chips">
+          <span class="chip metric">未开源</span>
+          <span class="chip">World Model</span><span class="chip">交互环境</span><span class="chip">视频生成</span>
+        </div>
+        <details>
+          <summary>展开全文总结（0–6 字段）</summary>
+          <div class="fields">
+            <div class="f"><h5><span class="n">0</span>Background</h5><p>Google DeepMind；ICML 2024 Best Paper；arXiv:2402.15391；代码/权重未开源；被引 ≈500+。</p></div>
+            <div class="f"><h5><span class="n">1</span>Task</h5><p>从无标注互联网视频学习生成式交互环境：给定一张图，按键即实时生成一致响应的视频。challenge：视频无动作标签、无可交互接口；需无监督发现「动作」并保持长时一致性。</p></div>
+            <div class="f"><h5><span class="n">2</span>Insight</h5><p>动作不必人工标注——可在视频 token 空间自监督学习离散「潜在动作」；MaskGIT 式掩码预测做动力学，比逐帧自回归更快、时序更一致。</p></div>
+            <div class="f"><h5><span class="n">3</span>Pipeline</h5><p><span class="pipe">I/O：无标注视频训练；推理时单帧图像 + 按键序列 → 实时交互视频。模块：</span>① ST-ViViT 时空视频 tokenizer（VQ 离散 token）→ ② Latent Action Model（因果 Transformer 推断动作码）→ ③ Dynamics Model（MaskGIT 掩码 Transformer，11B，动作→未来帧 token）→ ④ 解码实时生成。</p></div>
+            <div class="f"><h5><span class="n">4</span>Methods</h5><p>时空 VQ-VAE tokenizer（ST-ViViT）；潜在动作 codebook 自监督；MaskGIT 双向并行解码；动作条件一致性目标；200k 小时视频、11B 参数大规模训练。</p></div>
+            <div class="f"><h5><span class="n">5</span>Experiment</h5><p>Platformers 数据集（20 万小时网络视频）；人评可玩性、可控性、时序一致性显著优于视频生成基线；真实截图甚至手绘草图也能生成可玩环境；消融验证 LAM 与掩码解码。</p></div>
+            <div class="f"><h5><span class="n">6</span>Limitation</h5><p>仅 2D、分辨率帧率有限；长时游玩漂移、记忆遗忘；潜在动作不可解释、动作空间粗；训练需海量视频与算力；未开源难复现。</p></div>
+          </div>
+        </details>
+        <div class="pane">
+          <div class="ph serif">✍️ 我的短评</div>
+          <div class="row">
+            <button class="pv lk">喜欢</button><button class="pv dk">不喜欢</button>
+            <input class="pv reason" placeholder="例：潜在动作思路对无标注世界模型很有启发……">
+            <span class="saved" hidden>✓ 已记入本期日志（演示）</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="colophon serif">
+    Paper Daily · 方案 B（杂志感方案）· 4 篇真实论文（NeRF / 3DGS / Genie / Genie 2）+ 2 篇标注「示例数据」的虚构占位论文<br>
+    method figure 均为渐变色块占位（正式版从 PDF 截取）· 单文件 HTML · 无外部依赖 · 离线可开
+  </div>
+</div>
+
+<script>
+(function(){
+  var btn = document.getElementById('themeBtn');
+  function setTheme(t){
+    document.body.setAttribute('data-theme', t);
+    btn.textContent = t==='dark' ? '☀ 浅色' : '◐ 暗色';
+    try{localStorage.setItem('pd-theme-b', t);}catch(e){}
+  }
+  var s=null; try{s=localStorage.getItem('pd-theme-b');}catch(e){}
+  if(s) setTheme(s);
+  btn.addEventListener('click', function(){
+    setTheme(document.body.getAttribute('data-theme')==='dark'?'light':'dark');
+  });
+  document.querySelectorAll('.pane .row').forEach(function(box){
+    var lk=box.querySelector('.lk'),dk=box.querySelector('.dk'),input=box.querySelector('.reason'),tip=box.querySelector('.saved');
+    lk.addEventListener('click',function(){lk.classList.toggle('on');dk.classList.remove('on');});
+    dk.addEventListener('click',function(){dk.classList.toggle('on');lk.classList.remove('on');});
+    input.addEventListener('input',function(){if(input.value.trim())tip.hidden=false;});
+  });
+})();
+</script>
+</body>
+</html>
