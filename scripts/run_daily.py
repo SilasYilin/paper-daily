@@ -174,14 +174,21 @@ def normalize_score(raw: float, prof: dict) -> float:
 
 
 # ---------------------------------------------------------------- LLM 总结（可选）
-LLM_JSON_INSTRUCTION = """你是论文精读助手。只输出一个 JSON 对象（不要 markdown 代码块、不要多余文字）：
+LLM_JSON_INSTRUCTION = """你是小红书风格的论文精读博主（参考「博士侃AI」「残月魔都」的讲法）。只输出一个 JSON 对象（不要 markdown 代码块、不要多余文字）：
 {
-  "summary": "3~5 句中文段落导读，基于摘要说明问题/方法/洞察，不要编造具体数字（数字一律写'以原文为准'）",
+  "title_zh": "中文标题（吸引人但准确，15~25字，像帖子标题）",
+  "summary": "3~5 句通俗导读：第一句场景化开场（这篇解决什么问题、为什么读者该关心），然后讲清方法核心思想，用比喻和外号讲人话，保留技术术语用反引号标注",
+  "hook": "一句话钩子：最抓眼球的点（如「老办法要802秒，它只要197秒」式的对比），不超过30字",
+  "cards": [
+    {"emoji": "🧠", "title": "它聪明在哪", "body": "2~4 句：核心洞察/关键设计，模块可起外号+一句话解释"},
+    {"emoji": "🎬", "title": "怎么做到的", "body": "2~4 句：流程怎么走，输入输出是什么"},
+    {"emoji": "⚠️", "title": "也别神话它", "body": "1~3 句：诚实的局限/适用边界"}
+  ],
   "category": "英文大写短标签，如 FEED-FORWARD 3D × 世界模型",
-  "influence": "一句话团队/机构影响力（摘要未提机构则写'待补充'）",
+  "influence": "一句话团队/机构影响力或热度（有 HF upvote 时写明）",
   "fields": {"background":"","task":"","insight":"","pipeline":"","methods":"","experiment":"","limitation":""}
 }
-七个 fields 键必须齐全，基于摘要逐项填写；摘要未覆盖的项写'以原文为准'。"""
+规则：cards 恰好 3 张；不要编造数字，摘要里的数字可以引用，没有的写「以原文为准」；fields 七键齐全（较专业表述，供深读）；summary 与 cards 面向通俗读者。"""
 
 
 def _load_agent_plan_cfg():
@@ -238,10 +245,48 @@ def _parse_llm_json(text):
     m = re.search(r"\{.*\}", t, re.S)
     if not m:
         return None
-    obj = json.loads(m.group(0))
-    if not isinstance(obj.get("fields"), dict):
+    raw = m.group(0)
+    obj = robust_parse(raw)
+    if not isinstance(obj, dict) or not isinstance(obj.get("fields"), dict):
         return None
     return obj
+
+
+def robust_parse(raw):
+    """宽容解析截断/尾逗号/未闭合引号的 LLM JSON 输出。"""
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        pass
+    fixed = raw
+    for _ in range(8):
+        try:
+            return json.loads(fixed)
+        except json.JSONDecodeError as e:
+            pos = e.pos
+            if e.msg.startswith("Expecting ',' delimiter"):
+                cut = fixed[:pos-1].rstrip().rstrip(",")
+            elif e.msg.startswith("Expecting property name"):
+                cut = fixed[:pos].rstrip().rstrip(",")
+            elif e.msg.startswith("Unterminated string"):
+                cut = fixed[:pos] + '"'
+            else:
+                cut = fixed[:pos].rstrip().rstrip(",")
+            stack = []
+            in_str = False; esc = False
+            for ch in cut:
+                if in_str:
+                    if esc: esc = False
+                    elif ch == "\\": esc = True
+                    elif ch == '"': in_str = False
+                else:
+                    if ch == '"': in_str = True
+                    elif ch in "{[": stack.append(ch)
+                    elif ch == "}" and stack and stack[-1] == "{": stack.pop()
+                    elif ch == "]" and stack and stack[-1] == "[": stack.pop()
+            if in_str: cut += '"'
+            fixed = cut + "".join("}" if c == "{" else "]" for c in reversed(stack))
+    return None
 
 
 def _call_deepseek(title, abstract):
@@ -270,13 +315,17 @@ def llm_summarize(title: str, abstract: str, provider=None):
         attempts.append(lambda: _call_agent_plan(ap_cfg, title, abstract))
     if os.environ.get("DEEPSEEK_API_KEY", "").strip():
         attempts.append(lambda: _call_deepseek(title, abstract))
+    import time as _t
     for fn in attempts:
-        try:
-            out = fn()
-            if out and out.get("summary"):
-                return out
-        except Exception as e:  # noqa: BLE001
-            print(f"    [LLM] 单次调用失败（{e}），尝试下一提供商/兜底", file=sys.stderr)
+        for attempt in range(2):  # 每个提供商试 2 次
+            try:
+                out = fn()
+                if out and out.get("summary"):
+                    return out
+                print(f"    [LLM] 返回无效（第 {attempt+1} 次），重试", file=sys.stderr)
+            except Exception as e:  # noqa: BLE001
+                print(f"    [LLM] 单次调用失败（{e}）第 {attempt+1} 次", file=sys.stderr)
+            _t.sleep(3)
     return None
 
 
@@ -285,9 +334,20 @@ def fallback_summarize(entry: dict, category: str):
     abstract = entry["abstract"]
     first_sent = re.split(r"(?<=[.!?])\s+", abstract)[:2]
     task_en = " ".join(first_sent)[:300]
+    first_abs_sent = first_sent[0] if first_sent else abstract[:200]
     return {
+        "title_zh": entry["title"][:60] + "（直译待润色）",
+        "hook": "新鲜出炉：详情以原文为准",
         "summary": (f"本文属 {category} 方向。任务概述：{task_en} "
                     f"方法与实验结论以原文为准（LLM 精读后自动补全中文导读）。"),
+        "cards": [
+            {"emoji": "🧠", "title": "它聪明在哪",
+             "body": "核心洞察待 LLM 精读补全；以原文 Abstract/Method 为准。"},
+            {"emoji": "🎬", "title": "怎么做到的",
+             "body": "流程与输入输出待 LLM 精读补全；以原文 Method 为准。"},
+            {"emoji": "⚠️", "title": "也别神话它",
+             "body": "适用边界与局限以原文 Limitation/Discussion 为准。"},
+        ],
         "influence": "新论文：作者影响力标注待补充",
         "fields": {
             "background": f"arXiv 新_submission（{entry['published']}），主分类 {', '.join(entry['categories'][:3])}。",
@@ -306,7 +366,10 @@ def main():
     ap = argparse.ArgumentParser(description="每日论文精选检索管道 v0.2")
     ap.add_argument("--categories", default="cs.CV,cs.AI,cs.LG,cs.RO")
     ap.add_argument("--max", type=int, default=8, help="精选篇数（5~8，默认 8）")
-    ap.add_argument("--fetch-limit", type=int, default=150, help="arXiv 抓取条数")
+    ap.add_argument("--fetch-limit", type=int, default=200, help="arXiv 抓取条数")
+    ap.add_argument("--window-days", type=int, default=120, help="时间窗：最近 N 天都算新论文")
+    ap.add_argument("--sources-extra", action="store_true", default=True, help="拉取 HF 热度数据（hf-mirror）")
+    ap.add_argument("--no-sources-extra", dest="sources_extra", action="store_false")
     ap.add_argument("--llm-top", type=int, default=12, help="送 LLM 总结的候选篇数")
     ap.add_argument("--profile", default=PROFILE_PATH)
     ap.add_argument("--dry-run", action="store_true", help="只产出 today.json，不调用 build_web_data、不覆盖 web/data.js")
@@ -317,7 +380,7 @@ def main():
     cats = [c.strip() for c in args.categories.split(",") if c.strip()]
 
     # 1) 抓取（失败则保留上期产物并退出）
-    print(f"[1/4] 抓取 arXiv: cats={cats} limit={args.fetch_limit}")
+    print(f"[1/5] 抓取 arXiv: cats={cats} limit={args.fetch_limit} window={args.window_days}d")
     try:
         entries = fetch_arxiv(cats, args.fetch_limit)
     except RuntimeError as e:
@@ -326,29 +389,113 @@ def main():
         sys.exit(1)
     print(f"    共 {len(entries)} 条")
 
-    # 2) 双轨硬过滤：必须命中任一偏好轴关键词；低优先命中且无强命中 -> 丢弃
+    # 1b) 扩展源：HF daily papers 热度（upvote>=30 写入 influence；热度加成 +0.08）
+    hf_hot, hf_all = {}, {}
+    if args.sources_extra:
+        se_path = os.path.join(DATA_DIR, "sources_extra.json")
+        try:
+            subprocess.run([sys.executable, os.path.join(BASE_DIR, "sources_extra.py")], capture_output=True, timeout=240)
+            with open(se_path, encoding="utf-8") as f:
+                se = json.load(f)
+            hf_all = se.get("hf_daily") or {}
+            hf_hot = se.get("hf_hot") or {}
+            print(f"    [HF] 热度数据：{len(hf_all)} 篇（热门 {len(hf_hot)}）")
+        except Exception as e:  # noqa: BLE001
+            print(f"    [HF] 扩展源失败（{e}），继续仅用 arXiv", file=sys.stderr)
+
+    # 1c) 中文媒体源（公众号/B站）：热度信号 + 论文关联
+    media_hot = {}   # arxiv_id -> [ {source,title,url} ]
+    media_kw_hot = []  # 标题关键词命中列表（英文论文名出现在中文标题里）
+    try:
+        mm_path = os.path.join(DATA_DIR, "media_mentions.json")
+        subprocess.run([sys.executable, os.path.join(BASE_DIR, "media_monitor.py")], capture_output=True, timeout=500)
+        with open(mm_path, encoding="utf-8") as f:
+            mm = json.load(f)
+        for mention in mm.get("mentions") or []:
+            aid = mention.get("arxiv_id")
+            if aid:
+                media_hot.setdefault(aid, []).append(mention)
+            media_kw_hot.append(mention)
+        print(f"    [媒体] 公众号/B站提及 {len(mm.get('mentions') or [])} 条（含 arXiv ID {len(media_hot)} 条）")
+    except Exception as e:  # noqa: BLE001
+        print(f"    [媒体] 扩展源失败（{e}），继续", file=sys.stderr)
+
+    def media_signal(e):
+        """论文在中文社区的提及信号：arXiv ID 直接命中 + 英文标题词命中中文标题。"""
+        sig = 0.0
+        hits = list(media_hot.get(e["arxiv_id"], []))
+        title_words = [w for w in re.findall(r"[A-Za-z]{5,}", e["title"]) if w.lower() not in
+                       ("about", "using", "towards", "model", "models", "learning", "based", "with")]
+        for m in media_kw_hot:
+            t = (m.get("title") or "") + (m.get("summary") or "")
+            if any(w in t for w in title_words[:6]):
+                hits.append(m)
+        if hits:
+            sig = min(0.10, 0.05 * len(hits))
+        return sig, hits
+
+    # 2) 时间窗 + 偏好轴硬过滤 + 偏门方向排除
+    cutoff = (datetime.date.today() - datetime.timedelta(days=args.window_days)).isoformat()
+    try:
+        import importlib
+        se_mod = importlib.import_module("sources_extra") if os.path.dirname(os.path.join(BASE_DIR, "sources_extra.py")) == BASE_DIR else None
+        exclude_kws = se_mod.EXCLUDE_KEYWORDS if se_mod else []
+    except Exception:  # noqa: BLE001
+        exclude_kws = []
+    if not exclude_kws:
+        try:
+            sys.path.insert(0, BASE_DIR)
+            from sources_extra import EXCLUDE_KEYWORDS as _ek  # noqa
+            exclude_kws = _ek
+        except Exception:  # noqa: BLE001
+            exclude_kws = []
     cands = []
+    skipped_window = skipped_excl = 0
     for e in entries:
         if not e["title"] or not e["abstract"]:
+            continue
+        if e["published"] < cutoff:
+            skipped_window += 1
+            continue
+        text_low = (e["title"] + " " + e["abstract"]).lower()
+        if any(k in text_low for k in exclude_kws):
+            skipped_excl += 1
             continue
         score, hit_axes, hit_boosts, low_hit = score_paper(e, prof)
         if not hit_axes:
             continue
         if low_hit and max((ax["weight"] for ax in prof["axes"] if ax["name"] in hit_axes), default=0) < 0.9:
             continue
-        cands.append({**e, "_score": normalize_score(score, prof), "_axes": hit_axes, "_boosts": hit_boosts})
-    cands.sort(key=lambda x: x["_score"], reverse=True)
-    print(f"[2/4] 粗筛+硬过滤后候选: {len(cands)} 篇（命中偏好轴）")
+        hf_bonus = 0.08 if e["arxiv_id"] in hf_hot else 0.0
+        med_bonus, med_hits = media_signal(e)
+        cands.append({**e, "_score": round(normalize_score(score, prof) + hf_bonus + med_bonus, 2), "_axes": hit_axes,
+                      "_boosts": hit_boosts, "_hf_up": hf_hot.get(e["arxiv_id"], {}).get("upvotes", 0),
+                      "_media_hits": med_hits[:3]})
+    cands.sort(key=lambda x: (x["_score"], x["_hf_up"]), reverse=True)
+    print(f"[2/5] 粗筛：窗口外剔除 {skipped_window}，偏门排除 {skipped_excl}，命中偏好轴候选 {len(cands)} 篇")
 
     if not cands:
-        print("[!] 无候选：保留上期产物，退出。")
-        sys.exit(1)
+        print("[!] 今日窗口内无合适论文 -> 写入「今日无精选」而非退出。")
+        today = datetime.date.today()
+        empty = {"issue": f"No.{today.strftime('%j')}", "date": today.isoformat(),
+                 "axes": AXES_TITLE, "empty": True, "reason": "今日时间窗内无命中偏好方向的合适论文",
+                 "papers": []}
+        with open(TODAY_JSON, "w", encoding="utf-8") as f:
+            json.dump(empty, f, ensure_ascii=False, indent=2)
+        if not args.dry_run:
+            subprocess.run([sys.executable, BUILD_SCRIPT, "--input", TODAY_JSON,
+                            "--output", os.path.join(ROOT, "web", "data.js"),
+                            "--issue", f"No.{today.strftime('%j')}", "--date", today.isoformat(),
+                            "--axes", AXES_TITLE,
+                            "--ed-note", "今日窗口内无合适论文，明天见。"], capture_output=True, text=True)
+        print("[!] 已写空状态 today.json / data.js")
+        sys.exit(0)
 
     # 3) LLM 总结（top N；agent_plan -> DeepSeek -> 兜底）
     ap_cfg = _load_agent_plan_cfg()
     has_key = bool(ap_cfg or os.environ.get("DEEPSEEK_API_KEY", "").strip())
     src = "agent_plan(glm-5.3)" if ap_cfg else ("DeepSeek" if has_key else "无任何 LLM key -> 保守兜底")
-    print(f"[3/4] 总结 top {min(args.llm_top, len(cands))} 篇（{src}）")
+    print(f"[3/5] 总结 top {min(args.llm_top, len(cands))} 篇（{src}）")
     papers = []
     for e in cands[:args.llm_top]:
         category = e["_axes"][0] + (f" × {e['_axes'][1]}" if len(e["_axes"]) > 1 else "")
@@ -361,15 +508,24 @@ def main():
         venue = f"arXiv {e['published'][:7].replace('-', '.')}"
         if e["comment"]:
             venue += f" · {e['comment'][:60]}"
+        influence = info.get("influence", "") or ""
+        if e.get("_hf_up"):
+            influence = f"HF upvote {e['_hf_up']} · " + influence
+        if e.get("_media_hits"):
+            srcs = "、".join(sorted({("公众号" if h["source"] == "weixin" else "B站") for h in e["_media_hits"]}))
+            influence = f"中文社区 {srcs} 热议 · " + influence
         papers.append({
             "title": e["title"],
+            "title_zh": (info.get("title_zh") or "") if isinstance(info, dict) else "",
+            "hook": (info.get("hook") or "") if isinstance(info, dict) else "",
+            "cards": (info.get("cards") or []) if isinstance(info, dict) else [],
             "authors": authors_disp,
             "venue": venue,
             "summary": info["summary"],
             "paper_url": f"https://arxiv.org/abs/{e['arxiv_id']}",
             "score": e["_score"],
             "category": category,
-            "influence": info.get("influence", ""),
+            "influence": influence,
             "figure_url": None,  # 红线 2：简洁无图
             "figure_caption": "",
             "fields": {k: (info.get("fields", {}).get(k, "") or "") for k in
@@ -382,11 +538,13 @@ def main():
         p.pop("_boosts", None)
     with open(TODAY_JSON, "w", encoding="utf-8") as f:
         json.dump(chosen, f, ensure_ascii=False, indent=2)
-    print(f"[4/4] 写出 {TODAY_JSON}（{len(chosen)} 篇，score 最高: {chosen[0]['title'][:48]}… -> hero）")
+    print(f"[4/5] 写出 {TODAY_JSON}（{len(chosen)} 篇，score 最高: {chosen[0]['title'][:48]}… -> hero）")
 
     if args.dry_run:
         print("[dry-run] 到此为止：未调用 build_web_data.py，web/data.js 未动。")
         return
+
+    print("[5/5] 生成网页数据 ...")
 
     today = datetime.date.today()
     cmd = [sys.executable, BUILD_SCRIPT,

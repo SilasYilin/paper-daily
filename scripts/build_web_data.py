@@ -19,6 +19,9 @@ def normalize(p: dict) -> dict:
     fig = p.get("figure_url") or None
     return {
         "title": p.get("title", ""),
+        "titleZh": p.get("title_zh", "") or "",
+        "hook": p.get("hook", "") or "",
+        "cards": p.get("cards", []) or [],
         "authors": p.get("authors", ""),
         "venue": p.get("venue", ""),
         "summary": summary,

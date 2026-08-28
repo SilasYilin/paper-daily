@@ -1,170 +1,242 @@
 [
   {
     "title": "Thinking on Shots: Consistent Multi-Shot Video Editing with Agentic Reasoning",
+    "title_zh": "按镜头思考的AI剪辑师：长视频多指令编辑不翻车",
+    "hook": "固定切片全翻车，它按镜头思考，赢了Seedance 2.0",
+    "cards": [
+      {
+        "emoji": "🧠",
+        "title": "它聪明在哪",
+        "body": "核心洞察一句话：别再按固定时长切豆腐块，要像人类剪辑师一样按「镜头」思考。`LLM` 是总导演，负责把多条混杂指令拆开、精准排期到具体镜头；`VLM` 是场记，负责看懂每段画面里有谁有啥。这套分工直接对齐三大目标：跨镜头一致 `CSEC`、多指令互不干扰 `MID`、时空结构不崩 `ZDSS`。"
+      },
+      {
+        "emoji": "🎬",
+        "title": "怎么做到的",
+        "body": "流程像剧组开工：输入一条长视频+一堆编辑指令 → 先做镜头级解耦，把片子切成语义完整的 shot → `VLM` 逐镜头理解内容（谁出现、在哪出现）→ `LLM` 解析指令，把「改什么」分配到「哪一段」→ 逐镜头编辑并做跨镜头一致性约束 → 输出无缝衔接的成品长片。输入是原始长视频加指令集，输出是改完还连贯的整条片子。"
+      },
+      {
+        "emoji": "⚠️",
+        "title": "也别神话它",
+        "body": "摘要没给具体分数和耗时，定量表现以原文为准。评测主要基于团队自建的 `MMLVE-Bench`，「自出题自考」难免有偏。另外智能体路线很吃 `LLM`/`VLM` 的理解与推理质量，指令特别刁钻、实体极稀疏时稳不稳，还得看原文的消融实验。"
+      }
+    ],
     "authors": "Chenyang Wu et al.",
     "venue": "arXiv 2026.08 · Project Page: https://wucy0519.github.io/MMLVE/ and see sour",
-    "summary": "现有生成式AI视频编辑方法主要聚焦单镜头或短视频片段，长视频多指令编辑仍是难题：朴素的固定时长分块策略容易导致实体碎片化、严重编辑幻觉和时间连续性被破坏。本文提出多指令多镜头长视频编辑任务（MMLVE），围绕跨镜头编辑一致性（CSEC）、多指令解耦（MID）与时空结构零破坏（ZDSS）三大核心目标展开。方法上提出智能体编辑框架 MMLVE-Agent，利用 LLM 与 VLM 的协同实现镜头级视频解耦与精准指令解析。同时构建了面向 MMLVE 的基准数据集 MMLVE-Bench 及三项专用评测指标。实验表明该方法优于 Seedance 2.0 等闭源 SOTA 方案，能消除编辑幻觉、保持跨镜头一致并实现无缝时空过渡（具体数值以原文为准）。",
+    "summary": "想象你让AI改一条多镜头长视频：「主角换皮衣、加雪景、后半段改夜景」——结果一切镜头它就失忆：主角变脸、前后接不上，还凭空P出不存在的东西。这篇论文正面硬刚这个痛点：先定义了新任务 `MMLVE`（多指令多镜头长视频编辑），立下三条硬规矩——跨镜头一致性 `CSEC`、多指令解耦 `MID`、时空结构零破坏 `ZDSS`。方法上的主角叫 `MMLVE-Agent`，像剧组一样分工：`LLM` 当总导演拆解指令，`VLM` 当场记看懂每个镜头拍了啥，按「镜头」而不是固定时长来切视频再精修。团队还顺手出了一套专门考卷 `MMLVE-Bench` 加三个新指标。实验里它把闭源SOTA `Seedance 2.0` 比了下去，编辑幻觉基本清零（具体数字以原文为准）。",
     "paper_url": "https://arxiv.org/abs/2608.26809",
     "score": 0.59,
-    "category": "AGENTIC VIDEO EDITING × LLM/VLM 智能体",
-    "influence": "待补充",
+    "category": "AGENTIC REASONING × 长视频编辑",
+    "influence": "摘要未披露机构与热度（HF upvote 以项目页为准）；但「新任务定义+自建Benchmark+打赢闭源SOTA」三件套齐活，预计在视频生成/编辑社区讨论度不低。",
     "figure_url": null,
     "figure_caption": "",
     "fields": {
-      "background": "生成式AI显著推进了视频编辑，但现有方法主要面向单镜头或短片段；长视频多指令编辑中，朴素分块策略（如固定时长切分）会导致实体碎片化、严重编辑幻觉和时间连续性中断。",
-      "task": "提出多指令多镜头长视频编辑（MMLVE）任务，包含三大核心目标：跨镜头编辑一致性（CSEC）、多指令解耦（MID）、时空结构零破坏（ZDSS）。",
-      "insight": "将长视频编辑转化为镜头级解耦与指令解析问题：通过 LLM 与 VLM 的智能体协同推理在镜头粒度上理解视频结构与指令，从而替代固定时长切块并保障跨镜头一致性与时序连续性。",
-      "pipeline": "智能体编辑框架：利用 LLM 与 VLM 协同完成镜头级视频解耦与精准指令解析，进而执行一致的多镜头编辑（具体流程细节以原文为准）。",
-      "methods": "基于 LLM 与 VLM 协同的智能体编辑框架（MMLVE-Agent）；具体模型模块与算法设计以原文为准。",
-      "experiment": "构建 MMLVE-Bench 数据集（具备复杂真实时空动态、高密度异构指令、稀疏随机实体分布）并提出三项 MMLVE 专用评测指标；大量实验显示 MMLVE-Agent 优于 Seedance 2.0 等闭源 SOTA，消除编辑幻觉、保持跨镜头编辑一致并实现无缝时空过渡（具体数据以原文为准）。",
-      "limitation": "以原文为准"
+      "background": "现有生成式视频编辑方法集中于单镜头/短片段；对长视频采用朴素分块（如固定时长切分）会导致实体割裂、严重编辑幻觉与时间连续性破坏",
+      "task": "提出 MMLVE（Multi-Instruction Multi-Shot Long-Video Editing）任务，围绕三大目标：Cross-Shot Editing Consistency（CSEC）、Multi-Instruction Decoupling（MID）、Zero-Destruction on Spatiotemporal Structure（ZDSS）",
+      "insight": "以镜头级语义解耦替代固定时长切块；通过 LLM+VLM 协同的 agentic 推理实现指令精准解析与「镜头-指令」对齐，从机制上抑制编辑幻觉并维持跨镜头一致",
+      "pipeline": "长视频 + 多指令输入 → 镜头级视频解耦 → VLM 逐镜头内容理解 → LLM 指令解析与分配 → 逐镜头编辑 + 跨镜头一致性约束 → 输出具备无缝时空过渡的长视频",
+      "methods": "MMLVE-Agent（LLM/VLM agentic 编辑框架）；构建 MMLVE-Bench（复杂真实世界时空动态、高密度异构指令、稀疏随机实体分布）及三项 MMLVE 专用评测指标",
+      "experiment": "在 MMLVE-Bench 上超越闭源 SOTA 方法（如 Seedance 2.0），成功消除编辑幻觉、保持跨镜头编辑一致性并实现无缝时空过渡；具体定量数字以原文为准",
+      "limitation": "摘要未详述局限；可预期依赖 LLM/VLM 推理质量与镜头切分准确性、长视频编辑计算开销大；评测基于自建基准，跨域泛化与适用边界以原文为准"
     }
   },
   {
-    "title": "SpatialCrafter: Single Image World Modeling with Generative 3D Proxies",
-    "authors": "Chuan Fang et al.",
-    "venue": "arXiv 2026.08 · 12 pages",
-    "summary": "SpatialCrafter 面向单张图像生成可探索场景的任务，指出基于视频扩散模型（VDM）的现有方法依赖稀疏点云或二维全景等不完整条件信号，易产生随机幻觉、长期漂移和欠佳的三维一致性。其提出两阶段框架：先用 PaSS Flow 模块预测空间对齐、几何一致的全局三维代理，再将 VDM 重构为生成式延迟精修器（Generative Deferred Refiner），在代理定义的场景几何上合成高频真实感细节。为与预训练 VDM 兼容，引入 Parallel Geometry Injection 与 Proxy-Aware Corruption 两种训练策略，在不破坏预训练生成流形的前提下提升对代理伪影的鲁棒性。作者还构建了首个面向图像到场景生成的混合大规模数据集（场景规模以原文为准）。实验表明该方法在合成与真实数据上优于 SOTA，缓解长期漂移，并在快速相机运动与极端视角变化下保持稳健一致。",
-    "paper_url": "https://arxiv.org/abs/2608.27073",
-    "score": 0.5,
-    "category": "IMAGE-TO-SCENE 世界模型 × 生成式3D代理",
-    "influence": "待补充",
-    "figure_url": null,
-    "figure_caption": "",
-    "fields": {
-      "background": "可探索的图像到场景生成对游戏、机器人与虚拟现实等应用至关重要；现有基于视频扩散模型（VDM）的方法普遍依赖稀疏点云或二维全景等不完整条件信号，导致随机幻觉、长期漂移与欠佳的三维一致性。",
-      "task": "单张图像驱动的可探索场景生成（image-to-scene 世界建模），需在高保真外观的同时保证三维几何一致性，并支持快速相机运动与极端视角变化下的场景漫游。",
-      "insight": "将生成过程解耦为'全局三维代理生成 + 外观精修'两阶段：以空间对齐、几何一致的全局 3D 代理为扩散生成提供强几何锚定，从源头抑制幻觉与长期漂移；并以不破坏预训练生成流形的方式向 VDM 注入几何信息。",
-      "pipeline": "两阶段流程：第一阶段由 Point-anchored Sparse Structure (PaSS) Flow 模块从单图预测空间对齐、几何一致的全局三维代理；第二阶段将预训练 VDM 重构为 Generative Deferred Refiner，在代理定义的场景几何之上合成高频真实感细节；训练侧配合 Parallel Geometry Injection 与 Proxy-Aware Corruption 策略以增强对代理伪影的鲁棒性。",
-      "methods": "PaSS Flow（点锚定稀疏结构流模块）、Generative Deferred Refiner（生成式延迟精 refin 阶段）、Parallel Geometry Injection 与 Proxy-Aware Corruption 训练策略；另构建首个面向图像到场景生成的混合大规模数据集（规模以原文为准）。",
-      "experiment": "在合成与真实世界数据集上开展大量实验，结果显示其优于 SOTA 方法，缓解了长期漂移，并在快速相机运动与极端视角变化下保持鲁棒与一致；代码、模型与新构建数据集将公开发布。",
-      "limitation": "以原文为准"
-    }
-  },
-  {
-    "title": "CLAP: Cross-Embodiment Video World Models are Zero-Shot Physical Simulators",
-    "authors": "Kechen Liu et al.",
+    "title": "PAWBench: How Far Are We from Probabilistically Aligned World Modeling?",
+    "title_zh": "视频模型=世界模型？PAWBench出题，11个选手全挂",
+    "hook": "50个场景测11个模型：没有一个能押对物理结局的概率",
+    "cards": [
+      {
+        "emoji": "🧠",
+        "title": "它聪明在哪",
+        "body": "核心洞察是把评测维度整个升了一级：从「单条视频像不像物理」升级到「重复采样后分布对不对」。外号叫「随机采样器测试」——世界模型本质上该是个能掷骰子的采样器，而不是复读机。PAWEval 就是配套的「结局投票器」：不看画面好不好看，只统计每次 `rollout` 落到了哪个物理结局，重复多次得到频率分布，再和参考概率对表。这个视角直接把「演得像」和「懂物理」区分开了。"
+      },
+      {
+        "emoji": "🎬",
+        "title": "怎么做到的",
+        "body": "流程走法：给所有模型喂同一份初始观测 + 动作，让它们独立生成很多条视频；PAWEval 把每条视频判定为某种物理行为结局（比如多种可能结果之一），统计频率得到经验分布；再与场景的参考概率比较，同时看模型能不能覆盖所有有效行为。覆盖 50 个场景、横测 11 个系统之后，作者还做了「干预实验」：改语言提示、重采样初始噪声、动模型训练，检验预测分布能不能被重塑。输入是视频模型，输出是一张概率成绩单。"
+      },
+      {
+        "emoji": "⚠️",
+        "title": "也别神话它",
+        "body": "这是把「差距有多大」量出来的尺子，不是修好模型的方法——结论是全员不及格，但没给解药。结局判定和参考概率的构造本身是否可靠、50 个场景能否代表五花八门的物理随机性，都要打问号（细节以原文为准）。干预实验（提示词/噪声/训练）的有效性边界也需谨慎外推。"
+      }
+    ],
+    "authors": "Yuandong Pu et al.",
     "venue": "arXiv 2026.08",
-    "summary": "现有动作条件视频模型大多局限于单一机器人本体，无法利用互联网规模异构视频中蕴含的丰富物理信号。CLAP 提出跨本体动作条件视频生成框架，基于“普适物理定律支配时空动态而与执行者无关”的洞察，用末端执行器位姿、语言指令与潜在动作统一异构动作空间。其课程式训练先用潜在动作在无标注视频上学习物理先验，再接地到末端执行器动作空间以实现零样本真实任务部署。在 DROID 等挑战性环境中，CLAP 接近或超越单本体 SOTA 视频模型，并通过少样本适应确立训练单本体视频世界模型的新范式，覆盖跨本体、DROID、Bridge、双臂 YAM 与 G1 人形等多种设置；代码与模型全部开源。",
-    "paper_url": "https://arxiv.org/abs/2608.27406",
-    "score": 0.48,
-    "category": "VIDEO WORLD MODEL × CROSS-EMBODIMENT",
-    "influence": "待补充",
+    "summary": "大家都在喊Sora这类视频生成模型是「世界模型」，这篇论文却问了个扎心问题：同一个物理起手式可能有多种合理结局，你的模型能把这些结局出现的概率都押对吗？作者把这种分布级要求命名为 `probabilistic alignment`（概率对齐）——光演得像不算数，还得像骰子一样把每种可能性的比例掷准。为此他们做了 PAWBench：一张覆盖 50 个物理场景的考卷，让同一个模型在相同初始条件下反复生成，再用 PAWEval 这套「结局投票器」把一堆视频汇总成行为分布，和物理参考概率对答案。结果是 11 个当红模型没有一个能稳定及格——要么概率押不准，要么该有的多样性都出不来。作者还顺手试了改提示词、换初始噪声、上训练，看能不能掰正模型的「直觉」。",
+    "paper_url": "https://arxiv.org/abs/2608.27345",
+    "score": 0.49,
+    "category": "VIDEO WORLD MODEL × BENCHMARK",
+    "influence": "中文社区 公众号 热议 · HF upvote 73 · 新提出的评测基准工作，机构与热度信息以原文为准，暂无 HF upvote 数据可引用。",
     "figure_url": null,
     "figure_caption": "",
     "fields": {
-      "background": "最先进的动作条件视频模型通常局限于单一机器人本体，难以利用互联网规模的异构视频（含人类与机器人智能体）中利于学习可泛化物理的信号；且跨机器人平台动作表示差异极大、人类视频普遍缺少动作标注。",
-      "task": "跨本体动作条件视频生成，作为零样本物理模拟器/视频世界模型，并零样本部署到真实世界任务。",
-      "insight": "普适物理定律支配时空动态而与执行者无关，因此可在异构本体数据上学习统一物理先验，再接地到具体动作空间以部署。",
-      "pipeline": "课程式两阶段：先在无标注视频数据上用潜在动作学习基础物理先验，随后在末端执行器动作空间中接地，实现零样本真实任务部署，并可经少样本适应进一步提升。",
-      "methods": "用末端执行器位姿、语言指令与潜在动作三类表示统一异构动作空间，并结合课程式跨本体学习配方；具体网络结构与训练细节以原文为准。",
-      "experiment": "在 DROID、Bridge、双臂 YAM、G1 人形及跨本体等多种动作空间与机器人形态上评估，接近或超越单本体 SOTA 视频模型，少样本适应带来额外增益；具体指标数字以原文为准。",
-      "limitation": "以原文为准"
-    }
-  },
-  {
-    "title": "R2M-Bench: Evaluating Revisit Memory via Relative Consistency in Interactive Video World Models",
-    "authors": "Qiwen Gu et al.",
-    "venue": "arXiv 2026.08 · Code: https://github.com/AMAP-ML/R2MBench",
-    "summary": "该工作针对交互式视频世界模型中“重访记忆”评测的歧义：首访与重访帧高度相似未必说明模型记住了场景，可能只是中间 rollout 几乎没有变化，使绝对重访分数易受渲染稳定性、重复内容和运动失败的干扰。为此提出 R2M-Bench，为每个检测到的返回在相同 rollout 内构造两个对照——间隔匹配的非重访对（度量一般时间稳定性）与短程对（估计短程一致性），并定义 MemoryGain 与 Normalized Memory Ratio 来衡量超出一般时间稳定性的重访优势。基准由参考场景与离开-返回轨迹组合构成若干实例（具体数量以原文为准），从外观保真、场景与物体身份、局部几何及持久状态等维度评测。在多个动作条件视频世界模型上，Overall NMR 与人类一致性判断呈正相关（相关系数以原文为准），且相比原始重访相似度显著降低与生成运动的相关性、削弱“慢运动捷径”；DreamX-World-Memo 在被评测模型中取得最高 Overall NMR。",
-    "paper_url": "https://arxiv.org/abs/2608.27328",
-    "score": 0.48,
-    "category": "VIDEO WORLD MODEL × 记忆一致性评测基准",
-    "influence": "待补充",
-    "figure_url": null,
-    "figure_caption": "",
-    "fields": {
-      "background": "交互式视频世界模型需要在离开并返回先前场景时维持记忆与一致性，但绝对重访相似度分数易受渲染稳定性、重复内容和运动失败（如慢运动）等混杂因素影响，难以真实反映模型是否记住了场景。",
-      "task": "构建评测基准，量化动作条件视频世界模型的“重访记忆”能力，将重访特异的一致性与一般时间稳定性区分开来。",
-      "insight": "首访-重访帧相似度高不等于模型记住了场景，可能只是 rollout 变化极小；利用同一 rollout 内的对照对做相对校准，可以剥离一般时间稳定性并抑制慢运动捷径。",
-      "pipeline": "对每次检测到的返回，在同一次 rollout 中选取两个对照：间隔匹配的非重visit对（度量一般时间稳定性）与短程对（估计短程一致性），据此计算 MemoryGain（相对时间基线的重访优势）与 Normalized Memory Ratio（以短程-基线动态范围归一化）；基准由参考场景与三条离开-返回轨迹组合构成实例（具体数量以原文为准），评测维度涵盖外观保真、场景与物体身份、局部几何和持久状态。",
-      "methods": "相对一致性校准、MemoryGain、Normalized Memory Ratio、重访检测、多维度一致性评测（外观/身份/几何/持久状态）、与人类一致性判断的相关性分析；具体实现细节以原文为准。",
-      "experiment": "在多个动作条件视频世界模型上评测（数量以原文为准），Overall NMR 与人类一致性判断呈 Spearman 正相关（数值以原文为准）；NMR 与生成运动的模型内相关幅度显著低于原始重访相似度（数值以原文为准），表明相对校准大幅削弱慢运动捷径；DreamX-World-Memo 获得被评测视频模型中最高的 Overall NMR。",
-      "limitation": "以原文为准"
-    }
-  },
-  {
-    "title": "Glass Surface Detection Grounded in 3D Visual Geometry",
-    "authors": "Yiwei Lu et al.",
-    "venue": "arXiv 2026.08 · 9 pages, 10 figures. Accepted by ACM Multimedia 2026",
-    "summary": "玻璃表面检测（GSD）对场景理解与重建至关重要，但玻璃的透明性与反光性使其极具挑战，且现有方法多依赖二维外观线索，在几何歧义场景中容易失效。本文提出范式转变：将 GSD 锚定于三维视觉几何，显式建模玻璃的物理存在。方法先从视觉几何基础模型 VGGT 中蒸馏三维先验并生成玻璃感知的三维表征，再通过多任务学习框架与新型玻璃检测头完成检测：其中 FSAM 模块识别玻璃特有的频谱特征用于定位，GeGB 模块将二维特征选择性锚定到三维几何以完成分割。实验表明该方法在多个标准 GSD 基准上达到 SOTA，可泛化到视频/多模态数据，并显著改善含玻璃场景的重建效果（具体数字以原文为准）。",
-    "paper_url": "https://arxiv.org/abs/2608.26752",
-    "score": 0.48,
-    "category": "GLASS SURFACE DETECTION × 3D VISUAL GEOMETRY",
-    "influence": "待补充",
-    "figure_url": null,
-    "figure_caption": "",
-    "fields": {
-      "background": "玻璃因透明与反光特性，其检测对场景理解与重建既关键又困难；现有 GSD 方法主要依赖二维外观线索，在几何歧义场景下容易失效。",
-      "task": "玻璃表面检测与分割：以三维视觉几何为基础，实现玻璃表面的定位与分割，并进一步支持视频/多模态输入以及含玻璃场景的三维重建改善。",
-      "insight": "提出范式转变：将 GSD 锚定于三维视觉几何以显式建模玻璃的物理存在，而非仅依赖易失效的二维外观线索；同时利用玻璃特有的频谱特征作为检测信号。",
-      "pipeline": "先从 VGGT 蒸馏丰富的三维先验并生成玻璃感知的三维表征；随后在多任务学习框架中通过新型玻璃检测头完成检测：FSAM 识别玻璃特异频谱特征用于定位，GeGB 将二维特征选择性锚定于三维几何以完成分割。",
-      "methods": "VGGT 三维先验蒸馏、玻璃感知三维表征生成、多任务学习、频率自注意力模块 FSAM（Frequency Self-Attention Module）、几何锚定模块 GeGB（Geometry Grounding Block）。",
-      "experiment": "在多个标准 GSD 基准上取得 SOTA 性能（基准数量与指标数值以原文为准），可良好泛化到视频/多模态数据，并显著提升含玻璃场景的重建质量；代码已开源。",
-      "limitation": "以原文为准"
+      "background": "视频生成模型日益被视为世界模型，但许多物理过程在相同条件下存在多种合法演化路径；现有评测仅衡量单条视频的合理性，无法检验重复生成是否恢复真实的行为分布，作者将这一分布级要求形式化为 probabilistic alignment。",
+      "task": "提出分布级世界模型评测准则，构建基准 PAWBench 将视频生成器作为世界动态的随机采样器进行评估，并系统考察语言提示、初始噪声采样与模型训练能否重塑模型的预测分布。",
+      "insight": "概率对齐：合格的世界模型应在相同初始观测与动作下复现可能行为的完整分布；评测粒度应从单视频升级为多次 rollout 构成的经验分布，同时要求概率匹配与行为范围覆盖。",
+      "pipeline": "固定初始条件 → 视频模型多次独立 rollout → PAWEval 将每条视频归类到 outcome 级物理行为 → 统计得到经验分布 → 与参考概率及有效行为集合比对；随后进行 prompt / 初始噪声 / 训练三类干预实验分析预测分布的可塑性。",
+      "methods": "50 个多解物理场景的基准设计；outcome-level 评测协议 PAWEval（将重复视频 rollout 转化为经验分布）；分布级指标（概率一致性 + 行为覆盖范围）；针对提示词、噪声采样与训练方式的干预分析。",
+      "experiment": "在 50 个场景上评测 11 个当前视频生成系统：没有任何模型能在匹配参考概率的同时稳定恢复有效行为的完整范围；干预实验量化了 prompt、初始噪声与训练对预测分布的重塑效果。",
+      "limitation": "作为诊断型基准而非改进方法；场景数量与物理过程类型覆盖有限；视频到结局的自动判定及参考概率构造的可靠性存在偏差风险；干预结论的泛化性需以原文为准。"
     }
   },
   {
     "title": "TADP: Task-Aware Deformable Prediction for Single-Stage 3D Object Detection",
+    "title_zh": "3D检测特征别再一锅炖！TADP给每个任务发专属变形头",
+    "hook": "car mAP 80.91%超一票SOTA，变形头还即插即用",
+    "cards": [
+      {
+        "emoji": "🧠",
+        "title": "它聪明在哪",
+        "body": "老方法默认「一套特征走天下」，但论文点破了：不存在一个让所有任务都舒服的公共特征空间。TADP干脆让每个任务的预测头「各自变形」——这个外号叫「变形金刚头」的`task-aware deformation head`能感知每个任务的强调点和任务间的互动，相当于给分类、回归各配一位私人教练。"
+      },
+      {
+        "emoji": "🎬",
+        "title": "怎么做到的",
+        "body": "流程三步走：先用三级特征精炼聚合模块自适应地抽出三级特征；再用多尺度特征聚合块把不同尺度的特征按尺度感知的方式融合，大车小车都不漏；最后各任务预测经过变形头处理，输出类别、边界框等结果。整个变形头是即插即用的，输入输出不挑检测器，装到别的方法上照样能用。"
+      },
+      {
+        "emoji": "⚠️",
+        "title": "也别神话它",
+        "body": "主战场是KITTI，80.91%是car类别的mAP，行人、骑行者等类别表现以原文为准。换到nuScenes、Waymo这类大规模数据集效果如何、推理开销多大，摘要里没提，以原文为准。"
+      }
+    ],
     "authors": "Su Wang et al.",
     "venue": "arXiv 2026.08 · Accepted to the 2023 IEEE Intelligent Vehicles Symposium (IV",
-    "summary": "现有单阶段3D目标检测器通常对分类、回归等不同任务复用同一套提取特征，但难以将特征投影到对所有任务都自适应的公共空间。为此本文提出任务感知可变形预测方法TADP：先由三重特征精炼聚合模块自适应提取三级特征，再通过多尺度特征聚合模块以尺度感知方式融合多尺度特征。其核心是即插即用的任务感知可变形预测头，对每个任务的预测施加变形，从而感知各任务的侧重点与相互作用。在KITTI数据集上车类mAP超越众多SOTA方法（具体数值以原文为准），且该变形头迁移到其他检测方法上同样取得良好效果。",
+    "summary": "刷KITTI榜的同学看过来：单阶段3D检测器一直有个祖传毛病——分类、框回归、朝向估计全用同一套提取特征硬扛，可一套特征空间根本不可能对所有任务都最优，就像一把钥匙想开所有的锁。TADP的解法很直接：给每个任务配一个会「变形」的预测头（`task-aware deformation head`），能感知各任务的侧重点和任务间的相互影响。前面再配上三级特征精炼聚合模块和`multi-scale feature aggregation`做多尺度融合，最后在KITTI上跑出car mAP 80.91%，超了一票SOTA。最香的是这个变形头即插即用，装到别的检测方法上也有效。",
     "paper_url": "https://arxiv.org/abs/2608.27282",
-    "score": 0.44,
-    "category": "SINGLE-STAGE 3D DETECTION × TASK-AWARE DEFORMATION",
-    "influence": "待补充",
+    "score": 0.49,
+    "category": "SINGLE-STAGE 3D DETECTION × TASK-AWARE DEFORMABLE HEAD",
+    "influence": "中文社区 B站 热议 · 暂无HF upvote与团队热度信息；论文自称在KITTI基准上超越多项SOTA，社区热度以原文为准。",
     "figure_url": null,
     "figure_caption": "",
     "fields": {
-      "background": "多数单阶段3D目标检测器对不同任务使用相同提取的特征，而无法将特征投影到对所有任务都自适应的公共空间，导致各任务的需求难以同时满足。",
-      "task": "单阶段3D目标检测，并在KITTI基准上验证（含车类检测）。",
-      "insight": "不同任务对特征的侧重点与相互交互各不相同，应让每个任务的预测过程具备任务感知能力，通过可变形操作自适应地匹配各任务需求。",
-      "pipeline": "首先由三重特征精炼聚合模块自适应提取三级特征；随后用多尺度特征聚合块以尺度感知方式融合多尺度特征；最后通过即插即用的任务感知可变形头对每个任务的预测进行变形。",
-      "methods": "三重特征精炼聚合模块、尺度感知的多尺度特征聚合块、即插即用的任务感知可变形预测头，并设计了三种不同的变形模块。",
-      "experiment": "在KITTI数据集上车类mAP超越众多SOTA方法（具体数值以原文为准）；可变形头应用于其他检测方法也表现良好，验证了即插即用性与通用性。",
-      "limitation": "以原文为准"
+      "background": "多数单阶段3D目标检测器将同一组提取特征直接复用于分类、边界框回归等所有子任务，但不存在对所有任务均最优的统一公共特征空间，任务间存在侧重与交互差异。",
+      "task": "单阶段3D目标检测，重点在于面向多任务预测头的任务感知特征适配（KITTI基准）。",
+      "insight": "与其强行把特征投影到对全任务共享的空间，不如让各任务的预测过程按任务自身的侧重与交互进行可学习变形，以即插即用方式补齐共享特征的适配缺口。",
+      "pipeline": "输入特征 → triple feature refinement aggregation模块自适应提取三级特征 → multi-scale feature aggregation block按尺度感知方式融合多尺度特征 → 各任务经task-aware deformation head变形后输出预测。",
+      "methods": "triple feature refinement aggregation module；scale-aware的multi-scale feature aggregation block；即插即用的task-aware deformation head，并设计了三种不同的变形模块变体。",
+      "experiment": "KITTI上car mAP达80.91%，超越多项SOTA方法；变形头在其他检测方法上验证了即插即用增益；消融与完整对比数据以原文为准。",
+      "limitation": "摘要仅报告KITTI的car类别指标，未涉及nuScenes/Waymo等大规模数据集的跨场景泛化；其他类别性能、计算开销与三种变形模块的适用边界以原文为准。"
     }
   },
   {
-    "title": "Anatomy-Guided Foundation Model Adaptation with Within-Case Prototype Supervision for Standard Plane Detection in Fetal Ultrasound Blind Sweeps",
-    "authors": "Yuzhe Zhao",
+    "title": "R2M-Bench: Evaluating Revisit Memory via Relative Consistency in Interactive Video World Models",
+    "title_zh": "世界模型真有记忆吗？R2M-Bench专治“假记忆”",
+    "hook": "慢动作作弊现形：相关从0.207压到0.072",
+    "cards": [
+      {
+        "emoji": "🧠",
+        "title": "它聪明在哪",
+        "body": "关键洞察：绝对相似度是“糊弄分”——渲染越稳、内容越重复、动作越摆烂，重游画面越容易白拿高分。R2M-Bench 把评分改成“同一次 `rollout` 内打擂台”：重游对 vs 同间隔对照对 vs 短程对照对。`MemoryGain`（外号“记忆增益”）量出重游比基线多赢多少，`NMR` 再按动态范围拉曲线，把“懒得动所以像”和“真记得住所以像”彻底分开。"
+      },
+      {
+        "emoji": "🎬",
+        "title": "怎么做到的",
+        "body": "输入是 100 个参考场景，每个配 3 条“离开再返回”轨迹，拼成 300 个实例。模型生成 `rollout` 后先检测每一次返回，再从同一 `rollout` 抽出重游对和两个对照对，按外观保真、场景与物体身份、局部几何、持久状态四个维度比较。最后汇总出 `MemoryGain` 和 `NMR`，已经给 7 个动作条件视频世界模型做完体检，DreamX-World-Memo 分数最高。"
+      },
+      {
+        "emoji": "⚠️",
+        "title": "也别神话它",
+        "body": "它测的是“可观测的重游选择性一致性”，不等于模型内部真有记忆表征。ρ=0.547 说明与人类判断之间仍有不小解释空间；指标还依赖返回检测与对照配对的质量，配对翻车会连带污染结果，对没有回访模式的任务意义有限。"
+      }
+    ],
+    "authors": "Qiwen Gu et al.",
+    "venue": "arXiv 2026.08 · Code: https://github.com/AMAP-ML/R2MBench",
+    "summary": "你让视频世界模型走出房间再折返，画面跟初见时几乎一样——这能证明它“记住”了场景吗？不一定，可能只是它全程慢动作、画面懒得变。R2M-Bench 就是来拆穿这种“假记忆”的体检基准：像新药临床试验配对照组一样，它给每次“故地重游”配两个来自同一次 `rollout` 的对照片段——同间隔但不重游的对（量普通时间稳定性）和短程对（量短时程一致性）。核心指标 `MemoryGain`（记忆增益）= 重游比“时间稳定性基线”多出来的那部分一致性，`NMR` 再按短程到基线的动态范围归一。基准由 100 个参考场景 × 3 条“离开再返回”轨迹 = 300 个实例构成，考外观保真、场景与物体身份、局部几何、持久状态四门课。跨 7 个动作条件视频世界模型，Overall NMR 与人类一致性判断的相关达 `Spearman ρ=0.547`；慢动作作弊嫌疑（与生成运动的相关）从原始相似度的 0.207 降到 0.072，DreamX-World-Memo 拿下全场最高 NMR。",
+    "paper_url": "https://arxiv.org/abs/2608.27328",
+    "score": 0.48,
+    "category": "BENCHMARK × VIDEO WORLD MODEL × MEMORY",
+    "influence": "摘要未披露团队机构与热度数据，影响力以原文及项目页为准。",
+    "figure_url": null,
+    "figure_caption": "",
+    "fields": {
+      "background": "交互式视频世界模型在长程 rollout 中常出现“重游”（回到先前见过的位置），是检验场景记忆的重要探针；但首访-返回画面的绝对相似度受渲染稳定性、重复内容和运动失败（慢动作捷径）混淆，相似度高不能证明模型记住了场景。",
+      "task": "提出 R2M-Bench：一个评测可观测重游选择性一致性的基准，将“重游专属记忆”与“通用时间稳定性”解耦，并提供两个相对校准指标 `MemoryGain` 与 `Normalized Memory Ratio`。",
+      "insight": "同 rollout 相对校准：对每个检测到的返回，将重游对与两个对照比较——间隔匹配的非重游对（通用时间稳定性基线）与短程对（短时程一致性）；重游相对对照的优势才反映记忆，从而抑制慢动作与渲染稳定带来的捷径。",
+      "pipeline": "100 个参考场景 × 3 条离开-返回轨迹 = 300 实例 → 模型生成 rollout → 检测返回事件 → 构造重游对 + 两个同 rollout 对照对 → 在外观保真、场景与物体身份、局部几何、持久状态四轴上计算 `MemoryGain` 与 `NMR` → 汇总为 Overall NMR。",
+      "methods": "相对一致性指标：`MemoryGain`（MG，重游对相对时间基线的一致性优势）；`Normalized Memory Ratio`（NMR，用短程到基线的动态范围对 MG 归一）；四轴一致性评测维度；以 Spearman 相关验证与人类一致性判断的对齐，并比较指标与生成运动的相关以量化捷径抑制。",
+      "experiment": "在 7 个动作条件视频世界模型上评测：Overall NMR 与人类一致性判断的 Spearman ρ=0.547（95% CI [0.45, 0.63]）；指标与生成运动的模型内相关为 0.072，而原始重游相似度为 0.207，说明相对校准显著削弱慢动作捷径；DreamX-World-Memo 在受测视频模型中取得最高 Overall NMR。",
+      "limitation": "度量的是可观测的重游选择性一致性，而非模型内部记忆机制；ρ=0.547 仍留有大量人类判断方差未解释；依赖可靠的返回检测与同 rollout 对照的可得性；结论基于 100 场景/3 轨迹/7 模型的评测范围，外推需谨慎。"
+    }
+  },
+  {
+    "title": "Glass Surface Detection Grounded in 3D Visual Geometry",
+    "title_zh": "Glass Surface Detection Grounded in 3D Visual Geometry（直译待润色）",
+    "hook": "新鲜出炉：详情以原文为准",
+    "cards": [
+      {
+        "emoji": "🧠",
+        "title": "它聪明在哪",
+        "body": "核心洞察待 LLM 精读补全；以原文 Abstract/Method 为准。"
+      },
+      {
+        "emoji": "🎬",
+        "title": "怎么做到的",
+        "body": "流程与输入输出待 LLM 精读补全；以原文 Method 为准。"
+      },
+      {
+        "emoji": "⚠️",
+        "title": "也别神话它",
+        "body": "适用边界与局限以原文 Limitation/Discussion 为准。"
+      }
+    ],
+    "authors": "Yiwei Lu et al.",
+    "venue": "arXiv 2026.08 · 9 pages, 10 figures. Accepted by ACM Multimedia 2026",
+    "summary": "本文属 FEED-FORWARD 3D × Spatial LLM/VLM 方向。任务概述：Glass surface detection (GSD) is critical for scene understanding and reconstruction, and yet remains challenging due to the transparency and reflectivity of glass surfaces. Existing GSD methods typically rely on 2D appearance cues, which may fail in geometrically ambiguous scenes. 方法与实验结论以原文为准（LLM 精读后自动补全中文导读）。",
+    "paper_url": "https://arxiv.org/abs/2608.26752",
+    "score": 0.48,
+    "category": "FEED-FORWARD 3D × Spatial LLM/VLM",
+    "influence": "新论文：作者影响力标注待补充",
+    "figure_url": null,
+    "figure_caption": "",
+    "fields": {
+      "background": "arXiv 新_submission（2026-08-27），主分类 cs.CV。",
+      "task": "Glass surface detection (GSD) is critical for scene understanding and reconstruction, and yet remains challenging due to the transparency and reflectivity of glass surfaces. Existing GSD methods typically rely on 2D appearance cues, which may fail in geometrically ambiguous scenes.",
+      "insight": "核心洞察以原文 Abstract/Method 为准（待 LLM 精读补全）。",
+      "pipeline": "I/O 与模块拆解待 LLM 精读填充；以原文 Method 部分与流程图为准。",
+      "methods": "方法细节以原文为准。",
+      "experiment": "实验数据集与消融详见原文 Experiments（数字以原文为准）。",
+      "limitation": "局限以原文 Limitation/Discussion 为准。"
+    }
+  },
+  {
+    "title": "CGS-SLAM: Collaborative Gaussian Splatting based SLAM for Multi-Agent Reconstruction",
+    "title_zh": "手机组队搞重建：协作版3DGS-SLAM来了",
+    "hook": "不用深度相机、不靠GPS，普通手机组队重建照片级3D世界",
+    "cards": [
+      {
+        "emoji": "🧠",
+        "title": "它聪明在哪",
+        "body": "核心是'去中心+中心'的混合分工：每台设备本地跑跟踪和建图（像各自写小作文），中央服务器只负责最后的拼图。尺度感全靠`Depth Pro`这个度量单目深度模型兜底，纯RGB也能建出有真实尺寸的地图。最巧的是动态关键帧策略：只有当某块区域被队友也拍到时才多插关键帧，重叠区对齐更稳，通信还省。"
+      },
+      {
+        "emoji": "🎬",
+        "title": "怎么做到的",
+        "body": "三步走：①每个agent以IMU为运动先验做本地跟踪，用`Depth Pro`估计度量深度，建自己的`3DGS`子地图；②agent间交换`关键帧编码`，检测到空间重叠就在那儿动态加关键帧；③中央服务器用`VGGT`做视图对齐，把所有子地图配准成全局一致的大图。输入就是手机RGB视频+IMU，输出是照片级3D重建。"
+      },
+      {
+        "emoji": "⚠️",
+        "title": "也别神话它",
+        "body": "它重度依赖`Depth Pro`和`VGGT`这类预训练大模型，深度或对齐出错地图就跟着歪；子地图对齐质量取决于agent间视野重叠够不够，各拍各的角落容易翻车。另外它仍需要中央服务器，并非完全去中心化；渲染质量和跟踪的具体提升幅度以原文为准。"
+      }
+    ],
+    "authors": "Jean-Daniel de Ambrogi et al.",
     "venue": "arXiv 2026.08",
-    "summary": "该论文针对低成本产科胎儿超声盲扫中的腹围标准切面检测：正帧占比极低、仅形成短连续片段，属于高度不平衡的帧分类问题，现成超声与视觉基础模型难以有效处理。作者提出轻量序列级框架 AnatoProto，在冻结 BiomedCLIP 编码器上通过四个组件完成适配：以 nnU-Net 腹部区域概率为空间先验的解剖加权空间池化、利用同次扫查正帧均值的案例内原型损失、由帧到片段再到案例级拒绝器的三阶段级联精化，以及联合建模帧稳定性与帧间边界转移的混合预测头。在 ACOUSLIC-AI 基准上，AnatoProto 的测试 F1 显著超过最强基础模型基线与最强视频时序动作检测基线（具体数字以原文为准）。协同性研究进一步揭示原型损失与解剖加权池化并非可加关系：单独使用原型损失反而降低召回，二者组合后召回反转为提升，作者将这一符号翻转归因于案例内原型的准确性。",
-    "paper_url": "https://arxiv.org/abs/2608.27051",
-    "score": 0.44,
-    "category": "FETAL ULTRASOUND × FOUNDATION-MODEL ADAPTATION",
-    "influence": "待补充",
+    "summary": "想象几个队友分头逛一栋大楼，回来后直接拼出一张照片级的3D地图——CGS-SLAM干的就是这件事。它的妙处是只要`RGB`+`IMU`（普通手机自带），不需要RGB-D深度相机，靠`Depth Pro`这位单目深度大师给画面补上真实尺度，各agent再用`3DGS`渲出自己的高保真子地图。队友之间只互发轻量的`关键帧编码`当'暗号'，发现视野重叠就动态多插几帧，方便后面对齐。最后由中央服务器请出`VGGT`做视图对齐，把各家子地图拼成全局大图，通信开销低，连没有`GNSS`/GPS的环境也照样跑。",
+    "paper_url": "https://arxiv.org/abs/2608.26868",
+    "score": 0.43,
+    "category": "COLLABORATIVE 3DGS-SLAM × MULTI-AGENT RECONSTRUCTION",
+    "influence": "中文社区 B站、公众号 热议 · 瞄准消费级手机的纯RGB协作3DGS-SLAM新方向，同时踩中3DGS与VGGT两大热点（热度以原文为准）",
     "figure_url": null,
     "figure_caption": "",
     "fields": {
-      "background": "胎儿腹围标准切面检测在低成本产科盲扫中是高度不平衡的帧分类问题：正帧占比不足序列的3%、仅形成短连续片段，现成的超声与视觉基础模型均难以有效处理。",
-      "task": "在低资源胎儿超声盲扫序列中检测胎儿腹围（AC）标准切面，即不平衡视频序列上的帧级分类并提升到结构约束的片段级定位。",
-      "insight": "冻结基础模型的语义特征需要解剖空间先验引导聚合才能落到有意义区域；帧级监督之外还可利用案例级结构（同一次扫查内正帧的均值原型）。二者存在非可加的协同效应：原型损失单独使用会损害召回，与解剖加权池化组合后反转为提升，根源在于案例内原型的准确性。",
-      "pipeline": "冻结 BiomedCLIP 提取 patch token → nnU-Net 输出腹部区域概率作为空间先验，重加权聚合 patch token 得到解剖加权的帧嵌入 → 案例内原型损失将各帧嵌入拉向同扫查正帧均值 → 三阶段级联精化：帧级 → 片段级 → 案例级拒绝器 → 混合预测头联合建模帧内稳定性与帧间边界转移，抑制边界假阳性并输出最终预测。",
-      "methods": "冻结基础模型适配（BiomedCLIP 编码器）；基于 nnU-Net 腹部区域概率的解剖加权空间池化；within-case 原型损失；三阶段级联精化（frame→segment→case-level rejecter）；混合预测头（帧稳定性 + 边界转移建模）；评估辅以嵌入几何分析与配对 bootstrap 置信区间。",
-      "experiment": "在 ACOUSLIC-AI 基准上取得测试 F1 = 67.72，超过最强基础模型基线 FetalCLIP + PRS（F1 = 54.52，+13.20 F1）与最强视频时序动作检测基线 TriDet + PRS（+15.76 F1）；协同性（消融）研究显示原型损失单独使用使召回下降 12 点，与解剖加权池化组合后召回提升 6.5 点，呈现非可加的符号翻转现象。",
-      "limitation": "以原文为准"
-    }
-  },
-  {
-    "title": "Decoupling Planning and Control for Instructable Agents",
-    "authors": "Zineng Tang et al.",
-    "venue": "arXiv 2026.08 · Published as a conference paper at COLM 2026. Project page: ",
-    "summary": "该论文针对指令可遵循智能体中规划与控制的矛盾：指令微调的视觉语言模型（VLM）擅长从指令与观察生成高层计划，但难以在陌生环境中输出可靠的低延迟动作序列；而世界模型控制器擅长快速的观察到动作控制，却缺乏开放式任务引导。作者提出 Instruct-to-Act，将两者解耦结合：VLM 规划器稀疏地生成高层文本指令，世界模型控制器据此进行高频自主控制。为使控制器可被语言指令驱动，训练时对控制器策略轨迹片段用合成指令重标注，并将行为克隆目标与原有的奖励最大化和世界建模目标联合优化。该方法在多个具身环境（含多智能体环境，VLM 规划器通过语言协调、控制器充当执行器）中评估，在匹配的观察与动作空间下持续优于仅控制器和 VLM 直接生成动作的变体，保持快速控制且无需微调即可更换不同的预训练 VLM 规划器，并在绝大多数任务上（具体数量以原文为准）与强视觉-语言-动作及多智能体强化学习基线保持竞争力。",
-    "paper_url": "https://arxiv.org/abs/2608.26788",
-    "score": 0.42,
-    "category": "PLAN-CONTROL DECOUPLING × VLM规划器 × 世界模型控制器",
-    "influence": "待补充",
-    "figure_url": null,
-    "figure_caption": "",
-    "fields": {
-      "background": "指令微调的视觉语言模型（VLM）能很好地将指令与观察映射为高层计划，但难以在陌生环境中将其实现为可靠的低延迟动作序列；世界模型控制器擅长快速的观察到动作控制，却缺乏开放式任务引导，两者各有短板。",
-      "task": "构建指令可遵循的具身智能体系统 Instruct-to-Act：由 VLM 规划器生成稀疏、高延迟容忍的高层文本指令，世界模型控制器据此进行高频自主动作执行；并在多个具身环境（含多智能体环境）中验证。",
-      "insight": "将规划与控制解耦可互补两者优势——用高层语义规划弥补控制器缺乏任务引导，用低延迟控制器弥补 VLM 动作生成不可靠；并通过合成指令重标注让本无语言接口的世界模型控制器变得可被指令驱动。",
-      "pipeline": "VLM 规划器根据指令与观察生成稀疏高层文本指令 → 以该指令为条件，世界模型控制器以高频率自主输出动作 → 训练阶段对控制器策略 rollout 片段用合成指令重标注，联合优化行为克隆、奖励最大化与世界建模三个目标；多智能体场景中 VLM 规划器通过语言协调，控制器作为其执行器。",
-      "methods": "世界模型控制器（观察到动作的高频控制）；VLM 高层规划器（生成稀疏文本指令）；合成指令对 rollout 片段进行重标注；行为克隆目标与奖励最大化目标、世界建模目标的联合优化；模块化解耦设计支持免微调更换预训练 VLM 规划器。",
-      "experiment": "在多个具身环境（具体数量以原文为准，含多智能体环境）中评估；在匹配的观察与动作空间下，持续优于仅控制器与 VLM 直接生成动作两类变体，保持快速控制；可免微调更换不同预训练 VLM 规划器；与强视觉-语言-动作（VLA）及多智能体强化学习基线相比，在大多数任务上保持竞争力（具体比例以原文为准）。",
-      "limitation": "与强 VLA 及多智能体强化学习基线相比，在少数任务上未能保持竞争力（即在七个任务中的一个上落后，具体以原文为准）；摘要未说明合成指令重标注与真实指令之间的分布差异及可扩展性等潜在问题。"
+      "background": "基于3DGS的SLAM多数依赖RGB-D输入（消费级手机不可用），且鲜有工作将3DGS整合进多智能体协作框架",
+      "task": "仅用单目RGB+IMU的多智能体稠密SLAM，实现照片级3DGS重建、子地图配准与全局一致地图，适用于GNSS拒止环境",
+      "insight": "混合去中心/中心架构：agent本地以IMU为运动先验跟踪并借度量单目深度（Depth Pro）恢复尺度；共享关键帧编码实现重叠区动态关键帧；以VGGT为视图对齐模型在服务器端配准子地图，兼顾低通信开销与全局一致性",
+      "pipeline": "各agent本地跟踪（IMU先验）→Depth Pro度量深度→本地3DGS子地图→agent间交换关键帧编码并在重叠区动态插入关键帧→中央服务器用VGGT对齐子地图→双向低通信开销的全局重建",
+      "methods": "3D Gaussian Splatting建图；惯性运动先验跟踪；度量单目深度估计（Depth Pro）；VGGT视图对齐/子地图配准；基于编码共享的动态关键帧管理",
+      "experiment": "在多个数据集上验证：跟踪性能与SOTA相当、渲染质量优于现有方法、子地图对齐准确（具体数值以原文为准）",
+      "limitation": "性能依赖预训练基础模型（Depth Pro、VGGT）的深度/对齐质量；对齐需要agent间足够的视觉重叠；依赖中央服务器而非完全去中心化；量化指标与计算开销以原文为准"
     }
   }
 ]
