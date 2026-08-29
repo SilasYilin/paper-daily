@@ -24,7 +24,8 @@ DATA_DIR = os.path.join(ROOT, "data")
 ENV = dict(os.environ, OPENCLI_CDP_ENDPOINT="http://127.0.0.1:9222")
 
 # 查询词（按偏好方向）
-QUERIES_WX = ["三维重建", "世界模型", "3DGS 高斯泼溅", "前馈式三维重建", "世界模型 论文"]
+QUERIES_WX = ["机器之心 三维重建", "量子位 世界模型", "世界模型", "3DGS 高斯泼溅", "前馈式三维重建",
+              "3D基础模型", "Glob3R", "VGGT", "新视学院 论文", "PaperWeekly"]
 QUERIES_BILI = ["世界模型 论文", "3D reconstruction 论文解读", "3DGS 新工作", "前馈 3D 重建"]
 RECENT_DAYS = 120
 # arXiv ID 匹配（2608.19583 风格）

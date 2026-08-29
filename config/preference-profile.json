@@ -2,25 +2,108 @@
   "version": "v0",
   "created": "2026-08-27",
   "weights": {
-    "FEED-FORWARD 3D": 1.00,
+    "FEED-FORWARD 3D": 1.0,
     "World Model": 0.95,
-    "4D/Dynamic": 0.90,
-    "Spatial LLM/VLM": 0.80,
+    "4D/Dynamic": 0.9,
+    "Spatial LLM/VLM": 0.8,
     "Perception/Seg": 0.75,
-    "Generative 3D/Video": 0.70
+    "Generative 3D/Video": 0.7
   },
   "frontier_bonus": {
     "rl_world_model": 0.15,
-    "long_term_memory": 0.10
+    "long_term_memory": 0.1
   },
-  "low_priority": ["pure 2D gen", "pure NLP", "unrelated ML"],
+  "low_priority": [
+    "pure 2D gen",
+    "pure NLP",
+    "unrelated ML"
+  ],
   "keywords": {
-    "FEED-FORWARD 3D": ["3d reconstruction", "feed-forward", "gaussian splatting", "nerf", "duster", "mast3r", "vggt", "point cloud", "pose estimation", "novel view synthesis", "sfm", "mvs", "bundle adjustment", "depth estimation"],
-    "World Model": ["world model", "worldmodel", "world-score", "world score", "genie", "latent world", "world simulator", "video world model", "embodied world", "latent action"],
-    "4D/Dynamic": ["4d reconstruction", "dynamic scene", "4d gaussian", "video-to-4d", "temporal", "deformable", "camera trajectory", "long horizon"],
-    "Spatial LLM/VLM": ["spatial reasoning", "3d + llm", "vision-language", "spatial vlm", "scene graph", "grounding", "vlm3", "referring"],
-    "Perception/Seg": ["sam2", "sam3", "referdino", "dinov3", "segmentation", "seg", "detection", "tracking", "object detection"],
-    "Generative 3D/Video": ["3d generation", "video generation", "diffusion", "dit", "wan2.1", "gen3r", "text-to-3d", "image-to-3d"]
+    "FEED-FORWARD 3D": [
+      "3d reconstruction",
+      "feed-forward",
+      "gaussian splatting",
+      "nerf",
+      "duster",
+      "mast3r",
+      "vggt",
+      "point cloud",
+      "pose estimation",
+      "novel view synthesis",
+      "sfm",
+      "mvs",
+      "bundle adjustment",
+      "depth estimation",
+      "scale drift",
+      "trajectory drift",
+      "long sequence reconstruction",
+      "consistent reconstruction",
+      "sliding window",
+      "glob3r",
+      "pi3",
+      "dense matching",
+      "implicit decoder",
+      "3d foundation model"
+    ],
+    "World Model": [
+      "world model",
+      "worldmodel",
+      "world-score",
+      "world score",
+      "genie",
+      "latent world",
+      "world simulator",
+      "video world model",
+      "embodied world",
+      "latent action",
+      "navigation simulation",
+      "world model benchmark"
+    ],
+    "4D/Dynamic": [
+      "4d reconstruction",
+      "dynamic scene",
+      "4d gaussian",
+      "video-to-4d",
+      "temporal",
+      "deformable",
+      "camera trajectory",
+      "long horizon"
+    ],
+    "Spatial LLM/VLM": [
+      "spatial reasoning",
+      "3d + llm",
+      "vision-language",
+      "spatial vlm",
+      "scene graph",
+      "grounding",
+      "vlm3",
+      "referring"
+    ],
+    "Perception/Seg": [
+      "sam2",
+      "sam3",
+      "referdino",
+      "dinov3",
+      "segmentation",
+      "seg",
+      "detection",
+      "tracking",
+      "object detection"
+    ],
+    "Generative 3D/Video": [
+      "3d generation",
+      "video generation",
+      "diffusion",
+      "dit",
+      "wan2.1",
+      "gen3r",
+      "text-to-3d",
+      "image-to-3d",
+      "gaussiangpt",
+      "autoregressive 3d",
+      "native 3d generation",
+      "auto-regressive gaussian"
+    ]
   },
   "feedback_log": []
 }
