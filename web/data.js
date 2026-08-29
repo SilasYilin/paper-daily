@@ -2,263 +2,231 @@ window.PAPER_DAILY_DATA = {
   "issue": "No.241",
   "date": "2026-08-29",
   "axes": "三维重建 × 世界模型",
-  "edNote": "本期精选基于偏好画像筛选与排序。",
+  "edNote": "本期基于偏好画像+HF热度+公众号/B站媒体信号筛选。",
   "hero": {
     "title": "Thinking on Shots: Consistent Multi-Shot Video Editing with Agentic Reasoning",
-    "titleZh": "按镜头思考的AI剪辑师：长视频多指令编辑不翻车",
-    "hook": "固定切片全翻车，它按镜头思考，赢了Seedance 2.0",
+    "titleZh": "镜头级思考：智能体推理实现多镜头长视频一致性编辑",
+    "hook": "给AI装上导演大脑：长视频多镜头编辑零穿帮",
     "cards": [
       {
-        "emoji": "🧠",
-        "title": "它聪明在哪",
-        "body": "核心洞察一句话：别再按固定时长切豆腐块，要像人类剪辑师一样按「镜头」思考。`LLM` 是总导演，负责把多条混杂指令拆开、精准排期到具体镜头；`VLM` 是场记，负责看懂每段画面里有谁有啥。这套分工直接对齐三大目标：跨镜头一致 `CSEC`、多指令互不干扰 `MID`、时空结构不崩 `ZDSS`。"
+        "emoji": "🎯",
+        "title": "问题与背景",
+        "body": "生成式 AI 已显著提升视频编辑能力，但现有方法大多局限于单镜头或短片段，难以应对携带多条编辑指令的长视频。朴素的分块策略（如固定时长切分）会切断叙事结构，导致实体碎片化、严重的编辑幻觉以及时间连续性破坏。其根源在于长视频天然由多个镜头构成，指令与镜头之间存在复杂的多对多耦合，而短片段编辑模型缺乏全局理解与调度能力。为此，作者提出多指令多镜头长视频编辑任务`MMLVE`，并将其拆解为跨镜头编辑一致性（`CSEC`）、多指令解耦（`MID`）与时空结构零破坏（`ZDSS`）三大核心目标。"
       },
       {
-        "emoji": "🎬",
-        "title": "怎么做到的",
-        "body": "流程像剧组开工：输入一条长视频+一堆编辑指令 → 先做镜头级解耦，把片子切成语义完整的 shot → `VLM` 逐镜头理解内容（谁出现、在哪出现）→ `LLM` 解析指令，把「改什么」分配到「哪一段」→ 逐镜头编辑并做跨镜头一致性约束 → 输出无缝衔接的成品长片。输入是原始长视频加指令集，输出是改完还连贯的整条片子。"
+        "emoji": "⚙️",
+        "title": "方法设计",
+        "body": "作者提出智能体编辑框架`MMLVE-Agent`，核心是以`LLM`与`VLM`的协同实现「先感知、再推理、后执行」的编辑流程。其一，`VLM`完成镜头级视频解耦，识别各镜头的实体分布与时空动态，形成对长视频的结构化感知。其二，`LLM`承担精确的指令解析，将高密度、异构的多条指令映射到对应镜头，实现`MID`。其三，框架依据解析结果调度视频编辑模型逐镜头执行修改，并通过智能体层面的推理约束保障`CSEC`与`ZDSS`。整体设计将「怎么剪」的决策权交给可推理的智能体，而非固定规则切分。"
+      },
+      {
+        "emoji": "📊",
+        "title": "实验结果",
+        "body": "作者构建了面向`MMLVE`的基准数据集`MMLVE-Bench`，其特点为复杂真实世界时空动态、高密度异构指令以及稀疏随机的实体分布，并设计了三项任务专属评估指标。大量实验表明，`MMLVE-Agent`在该基准上优于以 Seedance 2.0 为代表的闭源 SOTA 方法。定性结果显示其成功消除编辑幻觉、保持跨镜头编辑一致性并实现无缝时空过渡。具体量化数字详见原文。"
       },
       {
         "emoji": "⚠️",
-        "title": "也别神话它",
-        "body": "摘要没给具体分数和耗时，定量表现以原文为准。评测主要基于团队自建的 `MMLVE-Bench`，「自出题自考」难免有偏。另外智能体路线很吃 `LLM`/`VLM` 的理解与推理质量，指令特别刁钻、实体极稀疏时稳不稳，还得看原文的消融实验。"
+        "title": "局限与展望",
+        "body": "摘要中未明确列出方法局限。可判断的边界包括：框架性能依赖`LLM`/`VLM`对镜头内容与指令的解析精度，解析错误可能沿流水线传播放大；逐镜头的多阶段推理与多次模型调用也带来较高计算与时间开销。此外`MMLVE-Bench`虽贴近真实场景，其指令分布与镜头复杂度未必覆盖极端拍摄条件。未来可探索更高效的端到端方案与开放指令泛化能力。"
+      }
+    ],
+    "figureNote": "流程图预计呈现：长视频输入后，`VLM`先执行镜头级解耦与内容理解，`LLM`随后完成多指令解析与编辑规划，二者共同构成智能体推理核心；规划结果被分发给视频编辑模型逐镜头执行，最终合成保持跨镜头一致与时空连贯的长视频输出。具体模块衔接以原文流程图为准。",
+    "figures": [
+      {
+        "file": "2608_26809-fig1.jpg",
+        "caption": "Figure 2: An overview of our MMLVE-Agent framework. The pipeline comprises three core modules: (1) Instruction &amp; Video Analysis, where the input long-video is segmented into physical shots via PyD",
+        "kind": "pipeline"
       }
     ],
     "authors": "Chenyang Wu et al.",
     "venue": "arXiv 2026.08 · Project Page: https://wucy0519.github.io/MMLVE/ and see sour",
-    "summary": "想象你让AI改一条多镜头长视频：「主角换皮衣、加雪景、后半段改夜景」——结果一切镜头它就失忆：主角变脸、前后接不上，还凭空P出不存在的东西。这篇论文正面硬刚这个痛点：先定义了新任务 `MMLVE`（多指令多镜头长视频编辑），立下三条硬规矩——跨镜头一致性 `CSEC`、多指令解耦 `MID`、时空结构零破坏 `ZDSS`。方法上的主角叫 `MMLVE-Agent`，像剧组一样分工：`LLM` 当总导演拆解指令，`VLM` 当场记看懂每个镜头拍了啥，按「镜头」而不是固定时长来切视频再精修。团队还顺手出了一套专门考卷 `MMLVE-Bench` 加三个新指标。实验里它把闭源SOTA `Seedance 2.0` 比了下去，编辑幻觉基本清零（具体数字以原文为准）。",
+    "summary": "给一条几分钟的长视频按多条指令做后期——换背景、改风格、替换某个物体——现在的 AI 剪辑工具基本只能搞定十几秒的短片，硬切长视频会让人像「分身」、画面穿帮、前后接不上。这篇论文干脆定义了新任务`MMLVE`（多指令多镜头长视频编辑），并给 AI 配上一位「导演大脑」：先用`VLM`按镜头把视频拆开看懂，再用`LLM`把每条指令精确分派到对应镜头，最后逐镜头执行编辑。就像导演先拆分镜、再下指令，每个镜头改得准，镜头之间还连得顺。它的`MMLVE-Agent`在自建基准`MMLVE-Bench`上击败了 Seedance 2.0 等闭源 SOTA。",
     "paperUrl": "https://arxiv.org/abs/2608.26809",
     "score": 0.59,
-    "category": "AGENTIC REASONING × 长视频编辑",
-    "influence": "摘要未披露机构与热度（HF upvote 以项目页为准）；但「新任务定义+自建Benchmark+打赢闭源SOTA」三件套齐活，预计在视频生成/编辑社区讨论度不低。",
+    "category": "LONG-VIDEO EDITING × AGENTIC REASONING",
+    "influence": "首次系统定义多指令多镜头长视频编辑任务并构建专属基准 MMLVE-Bench，正面超越 Seedance 2.0 等闭源旗舰，有望带动长视频编辑与智能体推理交叉方向的跟进研究。",
     "figure": {
-      "url": null,
-      "caption": ""
+      "url": "2608_26809-fig1.jpg",
+      "caption": "Figure 2: An overview of our MMLVE-Agent framework. The pipeline comprises three core modules: (1) Instruction &amp; Video Analysis, where the input long-video is segmented into physical shots via PyD"
     },
     "fields": {
-      "background": "现有生成式视频编辑方法集中于单镜头/短片段；对长视频采用朴素分块（如固定时长切分）会导致实体割裂、严重编辑幻觉与时间连续性破坏",
-      "task": "提出 MMLVE（Multi-Instruction Multi-Shot Long-Video Editing）任务，围绕三大目标：Cross-Shot Editing Consistency（CSEC）、Multi-Instruction Decoupling（MID）、Zero-Destruction on Spatiotemporal Structure（ZDSS）",
-      "insight": "以镜头级语义解耦替代固定时长切块；通过 LLM+VLM 协同的 agentic 推理实现指令精准解析与「镜头-指令」对齐，从机制上抑制编辑幻觉并维持跨镜头一致",
-      "pipeline": "长视频 + 多指令输入 → 镜头级视频解耦 → VLM 逐镜头内容理解 → LLM 指令解析与分配 → 逐镜头编辑 + 跨镜头一致性约束 → 输出具备无缝时空过渡的长视频",
-      "methods": "MMLVE-Agent（LLM/VLM agentic 编辑框架）；构建 MMLVE-Bench（复杂真实世界时空动态、高密度异构指令、稀疏随机实体分布）及三项 MMLVE 专用评测指标",
-      "experiment": "在 MMLVE-Bench 上超越闭源 SOTA 方法（如 Seedance 2.0），成功消除编辑幻觉、保持跨镜头编辑一致性并实现无缝时空过渡；具体定量数字以原文为准",
-      "limitation": "摘要未详述局限；可预期依赖 LLM/VLM 推理质量与镜头切分准确性、长视频编辑计算开销大；评测基于自建基准，跨域泛化与适用边界以原文为准"
+      "background": "现有生成式视频编辑聚焦单镜头或短片段；固定时长等朴素分块策略导致实体碎片化、编辑幻觉与时间连续性破坏。",
+      "task": "提出 Multi-Instruction Multi-Shot Long-Video Editing（MMLVE）任务，含三大目标：跨镜头编辑一致性（CSEC）、多指令解耦（MID）、时空结构零破坏（ZDSS）；并构建基准 MMLVE-Bench 与三项专属评估指标。",
+      "insight": "将长视频编辑重构为镜头级感知与指令级推理问题：以 LLM+VLM 智能体协同完成视频解耦与指令解析，取代固定规则切分。",
+      "pipeline": "长视频输入 → VLM 镜头级解耦与结构化理解 → LLM 多指令解析与规划 → 逐镜头调度编辑执行 → 跨镜头一致性合成输出。",
+      "methods": "MMLVE-Agent：LLM/VLM 协同的智能体编辑框架；MMLVE-Bench 基准数据集；三项 MMLVE 专属评估指标。",
+      "experiment": "在 MMLVE-Bench 上，MMLVE-Agent 优于 Seedance 2.0 等闭源 SOTA，消除编辑幻觉、保持跨镜头一致并实现无缝时空过渡；量化数字详见原文。",
+      "limitation": "摘要未明示局限；判断其受制于 LLM/VLM 解析精度、多阶段智能体推理的计算开销，以及基准对极端场景与开放指令的覆盖度。"
     }
   },
   "papers": [
     {
       "title": "PAWBench: How Far Are We from Probabilistically Aligned World Modeling?",
-      "titleZh": "视频模型=世界模型？PAWBench出题，11个选手全挂",
-      "hook": "50个场景测11个模型：没有一个能押对物理结局的概率",
+      "titleZh": "PAWBench：视频世界模型离「概率对齐」还有多远？",
+      "hook": "50 个场景、11 个模型，无一能掷准『物理骰子』",
       "cards": [
         {
-          "emoji": "🧠",
-          "title": "它聪明在哪",
-          "body": "核心洞察是把评测维度整个升了一级：从「单条视频像不像物理」升级到「重复采样后分布对不对」。外号叫「随机采样器测试」——世界模型本质上该是个能掷骰子的采样器，而不是复读机。PAWEval 就是配套的「结局投票器」：不看画面好不好看，只统计每次 `rollout` 落到了哪个物理结局，重复多次得到频率分布，再和参考概率对表。这个视角直接把「演得像」和「懂物理」区分开了。"
+          "emoji": "🎯",
+          "title": "问题与背景",
+          "body": "视频生成模型正被日益视为世界模型，但真实物理过程往往存在多条合法演化路径，因此世界模型不仅要生成单条合理轨迹，还需在同一初始观测与动作下复现可能行为集合及其分布。作者将这一分布层面的要求形式化为 `probabilistic alignment`（概率对齐）。然而现有评测大多聚焦单条视频的合理性，无法检验重复生成能否恢复正确分布。如何量化度量当前视频生成器与概率对齐世界建模之间的差距，构成本文的核心问题。"
         },
         {
-          "emoji": "🎬",
-          "title": "怎么做到的",
-          "body": "流程走法：给所有模型喂同一份初始观测 + 动作，让它们独立生成很多条视频；PAWEval 把每条视频判定为某种物理行为结局（比如多种可能结果之一），统计频率得到经验分布；再与场景的参考概率比较，同时看模型能不能覆盖所有有效行为。覆盖 50 个场景、横测 11 个系统之后，作者还做了「干预实验」：改语言提示、重采样初始噪声、动模型训练，检验预测分布能不能被重塑。输入是视频模型，输出是一张概率成绩单。"
+          "emoji": "⚙️",
+          "title": "方法设计",
+          "body": "论文首先将概率对齐确立为一项分布级准则：世界模型应作为世界动力学的随机采样器，其输出分布需与真实参考分布一致。`PAWBench` 基准提供受控场景，每个初始观测与动作对应多种可能物理结局及已知参考概率。`PAWEval` 是一套结局级评测协议，将模型的重复视频 rollout 转换为物理行为层面的经验分布：对每次生成识别其结局类别，再统计频率并与参考概率比较。基于该框架，作者进一步检验语言提示、初始噪声采样与模型训练三类干预能否重塑模型的预测分布，为缩小对齐差距提供可行方向。"
+        },
+        {
+          "emoji": "📊",
+          "title": "实验结果",
+          "body": "实验覆盖 50 个场景与 11 个当前系统。结果显示，没有任何模型能够同时做到与参考概率一致并覆盖全部合理行为范围，揭示了当前视频生成器与世界模型之间的本质差距。干预实验进一步考察了语言提示、初始噪声采样与模型训练对预测分布的塑造作用。各系统具体概率误差与覆盖度数值详见原文。"
         },
         {
           "emoji": "⚠️",
-          "title": "也别神话它",
-          "body": "这是把「差距有多大」量出来的尺子，不是修好模型的方法——结论是全员不及格，但没给解药。结局判定和参考概率的构造本身是否可靠、50 个场景能否代表五花八门的物理随机性，都要打问号（细节以原文为准）。干预实验（提示词/噪声/训练）的有效性边界也需谨慎外推。"
+          "title": "局限与展望",
+          "body": "作者坦承目前尚无系统达到概率对齐，基准与协议旨在为后续研究奠定基础而非给出终局答案。场景规模为 50 个，且以受控物理情境为主，向开放世界长时程多样性的外推仍待验证。此外，结局级分布评测依赖行为识别的准确性，复杂或模糊结局下的判定鲁棒性值得关注。"
+        }
+      ],
+      "figureNote": "流程图假设呈现 PAWBench→PAWEval 全景：固定同一初始观测与动作，被测视频生成器执行多次 rollout；`PAWEval` 将每次 rollout 归类为特定物理结局，汇总为经验分布并与场景参考概率比较，输出概率对齐得分。后半段示意通过语言提示、初始噪声采样与训练干预重塑预测分布的探索路径，以原文流程图为准。",
+      "figures": [
+        {
+          "file": "2608_27345-fig1.jpg",
+          "caption": "Figure 1: One plausible future is not enough. A single rollout from a video generation model can appear physically plausible, yet repeated rollouts from the same initial observation and action may rev",
+          "kind": "other"
         }
       ],
       "authors": "Yuandong Pu et al.",
       "venue": "arXiv 2026.08",
-      "summary": "大家都在喊Sora这类视频生成模型是「世界模型」，这篇论文却问了个扎心问题：同一个物理起手式可能有多种合理结局，你的模型能把这些结局出现的概率都押对吗？作者把这种分布级要求命名为 `probabilistic alignment`（概率对齐）——光演得像不算数，还得像骰子一样把每种可能性的比例掷准。为此他们做了 PAWBench：一张覆盖 50 个物理场景的考卷，让同一个模型在相同初始条件下反复生成，再用 PAWEval 这套「结局投票器」把一堆视频汇总成行为分布，和物理参考概率对答案。结果是 11 个当红模型没有一个能稳定及格——要么概率押不准，要么该有的多样性都出不来。作者还顺手试了改提示词、换初始噪声、上训练，看能不能掰正模型的「直觉」。",
+      "summary": "想象掷一枚骰子：同一个动作，结果可以是 1 到 6 中任何一个，而且各点数出现的频率应该符合真实概率。把视频生成模型当『世界模型』用也该如此——同一初始画面加动作，反复生成应该还原物理演化的各种可能及其分布。这篇论文把这一要求正式定义为 `probabilistic alignment`（概率对齐），并推出基准 `PAWBench` 和评测协议 `PAWEval`，把多次生成的视频回放汇总成物理行为的经验分布来打分。结果有点扎心：在 50 个场景、11 个系统上，没有一个模型既能命中参考概率、又能覆盖全部合理行为。",
       "paperUrl": "https://arxiv.org/abs/2608.27345",
       "score": 0.49,
-      "category": "VIDEO WORLD MODEL × BENCHMARK",
-      "influence": "中文社区 公众号 热议 · HF upvote 73 · 新提出的评测基准工作，机构与热度信息以原文为准，暂无 HF upvote 数据可引用。",
+      "category": "WORLD MODEL × 概率对齐评测",
+      "influence": "中文社区 公众号 热议 · HF upvote 73 · 摘要未披露作者机构；其提出的分布级评测维度有望成为视频世界模型评测领域的重要新基准。",
       "figure": {
-        "url": null,
-        "caption": ""
+        "url": "2608_27345-fig1.jpg",
+        "caption": "Figure 1: One plausible future is not enough. A single rollout from a video generation model can appear physically plausible, yet repeated rollouts from the same initial observation and action may rev"
       },
       "fields": {
-        "background": "视频生成模型日益被视为世界模型，但许多物理过程在相同条件下存在多种合法演化路径；现有评测仅衡量单条视频的合理性，无法检验重复生成是否恢复真实的行为分布，作者将这一分布级要求形式化为 probabilistic alignment。",
-        "task": "提出分布级世界模型评测准则，构建基准 PAWBench 将视频生成器作为世界动态的随机采样器进行评估，并系统考察语言提示、初始噪声采样与模型训练能否重塑模型的预测分布。",
-        "insight": "概率对齐：合格的世界模型应在相同初始观测与动作下复现可能行为的完整分布；评测粒度应从单视频升级为多次 rollout 构成的经验分布，同时要求概率匹配与行为范围覆盖。",
-        "pipeline": "固定初始条件 → 视频模型多次独立 rollout → PAWEval 将每条视频归类到 outcome 级物理行为 → 统计得到经验分布 → 与参考概率及有效行为集合比对；随后进行 prompt / 初始噪声 / 训练三类干预实验分析预测分布的可塑性。",
-        "methods": "50 个多解物理场景的基准设计；outcome-level 评测协议 PAWEval（将重复视频 rollout 转化为经验分布）；分布级指标（概率一致性 + 行为覆盖范围）；针对提示词、噪声采样与训练方式的干预分析。",
-        "experiment": "在 50 个场景上评测 11 个当前视频生成系统：没有任何模型能在匹配参考概率的同时稳定恢复有效行为的完整范围；干预实验量化了 prompt、初始噪声与训练对预测分布的重塑效果。",
-        "limitation": "作为诊断型基准而非改进方法；场景数量与物理过程类型覆盖有限；视频到结局的自动判定及参考概率构造的可靠性存在偏差风险；干预结论的泛化性需以原文为准。"
+        "background": "视频生成模型被日益视为世界模型，但物理过程天然具有多解性，世界模型需在分布层面复现同一初始条件下的可能行为集合",
+        "task": "形式化 probabilistic alignment（概率对齐）准则，并构建基准评测视频生成器作为世界动力学随机采样器的分布还原能力",
+        "insight": "评测应从单条视频合理性升级为重复生成所恢复的行为分布——单条轨迹合理并不等于分布正确",
+        "pipeline": "固定初始观测与动作 → 视频生成器重复 rollout → PAWEval 识别每次结局类别 → 汇总为经验分布 → 与参考概率对比得出对齐结论",
+        "methods": "PAWBench 受控基准 + PAWEval 结局级评测协议 + 语言提示、初始噪声采样与模型训练三类分布重塑干预实验",
+        "experiment": "50 个场景、11 个系统，无一模型能同时匹配参考概率并覆盖全部合理行为；干预实验检验了预测分布的可塑性",
+        "limitation": "尚无模型达到概率对齐；场景规模与结局判定鲁棒性有限，开放世界与长时程多样性的外推待验证"
       }
     },
     {
       "title": "TADP: Task-Aware Deformable Prediction for Single-Stage 3D Object Detection",
-      "titleZh": "3D检测特征别再一锅炖！TADP给每个任务发专属变形头",
-      "hook": "car mAP 80.91%超一票SOTA，变形头还即插即用",
+      "titleZh": "任务感知可变形预测：让单阶段3D检测各司其职",
+      "hook": "一份特征打天下？给每个任务定制“可变形”专属预测头",
       "cards": [
         {
-          "emoji": "🧠",
-          "title": "它聪明在哪",
-          "body": "老方法默认「一套特征走天下」，但论文点破了：不存在一个让所有任务都舒服的公共特征空间。TADP干脆让每个任务的预测头「各自变形」——这个外号叫「变形金刚头」的`task-aware deformation head`能感知每个任务的强调点和任务间的互动，相当于给分类、回归各配一位私人教练。"
+          "emoji": "🎯",
+          "title": "问题与背景",
+          "body": "单阶段3D目标检测器通常从共享的骨干特征出发，同时完成分类、定位与朝向估计等多个预测任务。然而作者指出，不存在一个能同时适配所有任务的公共特征空间——各任务对特征的需求存在内在冲突。已有方法多在特征层面统一处理，缺乏对任务差异的显式建模，导致表征在任务间被迫妥协。这一问题制约了单阶段检测器的性能上限，亟需任务感知的解耦式设计。"
         },
         {
-          "emoji": "🎬",
-          "title": "怎么做到的",
-          "body": "流程三步走：先用三级特征精炼聚合模块自适应地抽出三级特征；再用多尺度特征聚合块把不同尺度的特征按尺度感知的方式融合，大车小车都不漏；最后各任务预测经过变形头处理，输出类别、边界框等结果。整个变形头是即插即用的，输入输出不挑检测器，装到别的方法上照样能用。"
+          "emoji": "⚙️",
+          "title": "方法设计",
+          "body": "TADP构建了从特征提取到任务预测的逐级解耦框架。首先，`三重特征精炼聚合模块`（triple feature refinement aggregation module）自适应地抽取三个层级的特征。其次，`多尺度特征聚合块`（multi-scale feature aggregation block）以尺度感知的方式融合不同尺度特征，缓解尺度差异造成的表征不一致。最后，核心的`任务感知可变形头`（task-aware deformation head）对每个任务的预测施加可变形变换，可感知各任务的侧重点与任务间交互。该头部为即插即用设计，可直接嵌入其他检测框架。作者还设计了三种不同的变形模块，以适配不同任务的预测需求。"
+        },
+        {
+          "emoji": "📊",
+          "title": "实验结果",
+          "body": "在KITTI数据集上，TADP取得80.91%的car mAP，超越KITTI基准上众多state-of-the-art方法。同时，将`任务感知可变形头`即插即用地移植到其他检测方法上同样取得良好效果，验证了模块的通用性。消融实验与更多细粒度对比详见原文。"
         },
         {
           "emoji": "⚠️",
-          "title": "也别神话它",
-          "body": "主战场是KITTI，80.91%是car类别的mAP，行人、骑行者等类别表现以原文为准。换到nuScenes、Waymo这类大规模数据集效果如何、推理开销多大，摘要里没提，以原文为准。"
+          "title": "局限与展望",
+          "body": "摘要未明确报告方法的开销与失效场景；从设计看，三层级特征抽取与多任务可变形头可能引入额外计算成本，实时性需权衡。实验仅在KITTI的car类别上验证，跨数据集（如nuScenes、Waymo）与跨类别泛化能力有待检验。未来可探索更轻量的变形设计以及任务间协同的端到端建模。"
+        }
+      ],
+      "figureNote": "假设流程图呈现方法全景：骨干特征先经`三重特征精炼聚合模块`生成三层级自适应特征，随后由`多尺度特征聚合块`完成尺度感知融合。融合后的特征分发至各任务分支，经`任务感知可变形头`进行任务定制化形变后输出最终预测，体现“特征解耦—尺度融合—任务变形”的递进衔接。",
+      "figures": [
+        {
+          "file": "2608_27282-fig1.jpg",
+          "caption": "Fig. 1: Visualization of detection in street scenes. It shows the different detection results of SECOND [ 5 ] and our TADP. We use red arrows to indicate the biased optimization of our method compared",
+          "kind": "pipeline"
         }
       ],
       "authors": "Su Wang et al.",
       "venue": "arXiv 2026.08 · Accepted to the 2023 IEEE Intelligent Vehicles Symposium (IV",
-      "summary": "刷KITTI榜的同学看过来：单阶段3D检测器一直有个祖传毛病——分类、框回归、朝向估计全用同一套提取特征硬扛，可一套特征空间根本不可能对所有任务都最优，就像一把钥匙想开所有的锁。TADP的解法很直接：给每个任务配一个会「变形」的预测头（`task-aware deformation head`），能感知各任务的侧重点和任务间的相互影响。前面再配上三级特征精炼聚合模块和`multi-scale feature aggregation`做多尺度融合，最后在KITTI上跑出car mAP 80.91%，超了一票SOTA。最香的是这个变形头即插即用，装到别的检测方法上也有效。",
+      "summary": "想象车间里一位工人拿着同一把“万能扳手”去拧所有型号的螺丝——大多数单阶段3D检测器就是这样，让分类、定位、朝向估计共用同一份特征，难免顾此失彼。TADP的思路是“专人专用”：先用`三重特征精炼聚合模块`自适应抽取三层特征，再用`多尺度特征聚合块`把不同尺度信息按需融合。最妙的是给每个任务配上`任务感知可变形头`，像给不同工种定制可变形的专属工具，还能感知各任务的侧重与互动。这个头即插即用，装到别的检测器上也照样好用。",
       "paperUrl": "https://arxiv.org/abs/2608.27282",
       "score": 0.49,
-      "category": "SINGLE-STAGE 3D DETECTION × TASK-AWARE DEFORMABLE HEAD",
-      "influence": "中文社区 B站 热议 · 暂无HF upvote与团队热度信息；论文自称在KITTI基准上超越多项SOTA，社区热度以原文为准。",
+      "category": "SINGLE-STAGE 3D DETECTION × TASK-AWARE HEAD",
+      "influence": "摘要未披露机构信息；凭KITTI上80.91% car mAP与即插即用头设计，该方法具备较强的迁移潜力与社区关注度。",
       "figure": {
-        "url": null,
-        "caption": ""
+        "url": "2608_27282-fig1.jpg",
+        "caption": "Fig. 1: Visualization of detection in street scenes. It shows the different detection results of SECOND [ 5 ] and our TADP. We use red arrows to indicate the biased optimization of our method compared"
       },
       "fields": {
-        "background": "多数单阶段3D目标检测器将同一组提取特征直接复用于分类、边界框回归等所有子任务，但不存在对所有任务均最优的统一公共特征空间，任务间存在侧重与交互差异。",
-        "task": "单阶段3D目标检测，重点在于面向多任务预测头的任务感知特征适配（KITTI基准）。",
-        "insight": "与其强行把特征投影到对全任务共享的空间，不如让各任务的预测过程按任务自身的侧重与交互进行可学习变形，以即插即用方式补齐共享特征的适配缺口。",
-        "pipeline": "输入特征 → triple feature refinement aggregation模块自适应提取三级特征 → multi-scale feature aggregation block按尺度感知方式融合多尺度特征 → 各任务经task-aware deformation head变形后输出预测。",
-        "methods": "triple feature refinement aggregation module；scale-aware的multi-scale feature aggregation block；即插即用的task-aware deformation head，并设计了三种不同的变形模块变体。",
-        "experiment": "KITTI上car mAP达80.91%，超越多项SOTA方法；变形头在其他检测方法上验证了即插即用增益；消融与完整对比数据以原文为准。",
-        "limitation": "摘要仅报告KITTI的car类别指标，未涉及nuScenes/Waymo等大规模数据集的跨场景泛化；其他类别性能、计算开销与三种变形模块的适用边界以原文为准。"
+        "background": "单阶段3D检测器以同一份共享特征服务分类、定位、朝向估计等多个任务，但不存在对全部任务均自适应的公共特征空间，各任务需求存在内在冲突。",
+        "task": "单阶段3D目标检测（KITTI基准），核心是多任务预测的任务感知解耦与即插即用模块设计。",
+        "insight": "与其强行将特征压入统一空间，不如让每个任务的预测显式感知自身侧重点与任务间交互，进行任务感知的可变形化。",
+        "pipeline": "三重特征精炼聚合 → 多尺度尺度感知融合 → 任务感知可变形头（含三种变形模块）→ 各任务预测输出。",
+        "methods": "triple feature refinement aggregation module；multi-scale feature aggregation block；task-aware deformation head；plug-and-play即插即用设计；三种deformation模块。",
+        "experiment": "KITTI数据集car mAP达80.91%，超越多项SOTA；可变形头移植至其他检测方法亦取得良好效果。",
+        "limitation": "摘要未述明局限；预计存在额外计算开销、实时性权衡，以及跨数据集与跨类别泛化未经检验的边界。"
       }
     },
     {
       "title": "R2M-Bench: Evaluating Revisit Memory via Relative Consistency in Interactive Video World Models",
-      "titleZh": "世界模型真有记忆吗？R2M-Bench专治“假记忆”",
-      "hook": "慢动作作弊现形：相关从0.207压到0.072",
+      "titleZh": "R2M-Bench：用相对一致性检验世界模型的重访记忆",
+      "hook": "画面没变≠有记忆：对照校准拆穿慢动作作弊",
       "cards": [
         {
-          "emoji": "🧠",
-          "title": "它聪明在哪",
-          "body": "关键洞察：绝对相似度是“糊弄分”——渲染越稳、内容越重复、动作越摆烂，重游画面越容易白拿高分。R2M-Bench 把评分改成“同一次 `rollout` 内打擂台”：重游对 vs 同间隔对照对 vs 短程对照对。`MemoryGain`（外号“记忆增益”）量出重游比基线多赢多少，`NMR` 再按动态范围拉曲线，把“懒得动所以像”和“真记得住所以像”彻底分开。"
+          "emoji": "🎯",
+          "title": "问题与背景",
+          "body": "交互式视频世界模型在智能体重访先前场景时能否保持一致，是衡量其场景记忆能力的关键问题。现有评测普遍以首次访问帧与重访帧之间的绝对相似度为指标，但该指标存在根本性歧义：高相似度既可能源于真实记忆，也可能仅因中间 rollout 变化极小。因此绝对重访分数对渲染稳定性、重复内容与运动失败高度敏感。症结在于单条 rollout 内重访特异的一致性与一般性时间稳定性相互纠缠，缺乏可控对照，难以有效分离。"
         },
         {
-          "emoji": "🎬",
-          "title": "怎么做到的",
-          "body": "输入是 100 个参考场景，每个配 3 条“离开再返回”轨迹，拼成 300 个实例。模型生成 `rollout` 后先检测每一次返回，再从同一 `rollout` 抽出重游对和两个对照对，按外观保真、场景与物体身份、局部几何、持久状态四个维度比较。最后汇总出 `MemoryGain` 和 `NMR`，已经给 7 个动作条件视频世界模型做完体检，DreamX-World-Memo 分数最高。"
+          "emoji": "⚙️",
+          "title": "方法设计",
+          "body": "R2M-Bench 提出“同 rollout 相对校准”的评测范式：对每个被检测到的重访，从同一 rollout 中构造两个对照——`gap-matched 非重访对照对`（度量一般时间稳定性基线）与 `short-range 对照对`（估计短程一致性上界）。在此基础上定义 `MemoryGain`（MG），即重访对相对时间基线的相似度增益；再以短程-基线动态范围归一化得到 `Normalized Memory Ratio`（NMR）。基准由 100 个参考场景与 3 条离开-返回轨迹组合为 300 个实例，并从外观保真、场景与物体身份、局部几何、持久状态四个维度评测。该设计使重访特异一致性得以与一般时间稳定性解耦。"
+        },
+        {
+          "emoji": "📊",
+          "title": "实验结果",
+          "body": "在 7 个动作条件视频世界模型上，Overall NMR 与人类一致性判断的 Spearman 相关系数为 ρ=0.547（95% CI [0.45, 0.63]）。模型内相关性方面，NMR 与生成运动的相关幅度仅 0.072，而原始重访相似度为 0.207，表明相对校准显著削弱了“慢动作捷径”。在受测模型中，DreamX-World-Memo 取得最高的 Overall NMR。结果支持同 rollout 相对校准可作为区分重访特异一致性与一般时间稳定性的实用手段。"
         },
         {
           "emoji": "⚠️",
-          "title": "也别神话它",
-          "body": "它测的是“可观测的重游选择性一致性”，不等于模型内部真有记忆表征。ρ=0.547 说明与人类判断之间仍有不小解释空间；指标还依赖返回检测与对照配对的质量，配对翻车会连带污染结果，对没有回访模式的任务意义有限。"
+          "title": "局限与展望",
+          "body": "作者承认，尽管 NMR 降低了运动相关性，其与生成运动的模型内相关（0.072）仍非零，慢运动捷径只是被削弱而非根除。与人类判断的相关（ρ=0.547）属中等水平，校准方案仍有改进空间。此外，基准依赖可检测的重访事件，且限于 100 个参考场景与 3 种往返轨迹，对长时程与语义层面的记忆能力未作覆盖；笔者认为其对“记忆”的操作化定义（可观测的重访选择性一致性）可能低估非视觉形态的状态保持。"
+        }
+      ],
+      "figureNote": "流程图应展示相对校准的全景：给定一段交互 rollout，系统先检测重访事件并抽取重访帧对，随后在同一 rollout 中采样两个对照——等间隔非重访对（时间基线）与近邻对（短程上界）。三者的相似度经差分得到 MemoryGain，再经短程-基线动态范围归一化为 NMR，最终按外观保真、场景与物体身份、局部几何与持久状态四个维度聚合为 Overall NMR。",
+      "figures": [
+        {
+          "file": "2608_27328-fig1.jpg",
+          "caption": "Figure 2 : Overview of R2M-Bench. (a) Absolute first-visit/revisit similarity is not sufficient evidence of memory because motion magnitude and rendering stability can inflate the raw score. (b) R2M-B",
+          "kind": "pipeline"
         }
       ],
       "authors": "Qiwen Gu et al.",
       "venue": "arXiv 2026.08 · Code: https://github.com/AMAP-ML/R2MBench",
-      "summary": "你让视频世界模型走出房间再折返，画面跟初见时几乎一样——这能证明它“记住”了场景吗？不一定，可能只是它全程慢动作、画面懒得变。R2M-Bench 就是来拆穿这种“假记忆”的体检基准：像新药临床试验配对照组一样，它给每次“故地重游”配两个来自同一次 `rollout` 的对照片段——同间隔但不重游的对（量普通时间稳定性）和短程对（量短时程一致性）。核心指标 `MemoryGain`（记忆增益）= 重游比“时间稳定性基线”多出来的那部分一致性，`NMR` 再按短程到基线的动态范围归一。基准由 100 个参考场景 × 3 条“离开再返回”轨迹 = 300 个实例构成，考外观保真、场景与物体身份、局部几何、持久状态四门课。跨 7 个动作条件视频世界模型，Overall NMR 与人类一致性判断的相关达 `Spearman ρ=0.547`；慢动作作弊嫌疑（与生成运动的相关）从原始相似度的 0.207 降到 0.072，DreamX-World-Memo 拿下全场最高 NMR。",
+      "summary": "玩开放世界游戏时，你离开一个房间再折返，房间理应保持原样——可模型是“真的记得”这个房间，还是画面本来就懒得动？这篇论文就是给世界模型的“重访记忆”做体检。诀窍像科学实验设对照组：每次重访都在同一段视频里另挑两对帧做参照——一对“隔同样久但没重访”、一对“相邻很近”，再用 `MemoryGain` 和 `NMR` 算出重访带来的“超额相似度”。这样一来，模型就没法靠“少动、慢动作”白拿记忆高分了。",
       "paperUrl": "https://arxiv.org/abs/2608.27328",
       "score": 0.48,
-      "category": "BENCHMARK × VIDEO WORLD MODEL × MEMORY",
-      "influence": "摘要未披露团队机构与热度数据，影响力以原文及项目页为准。",
+      "category": "EVALUATION BENCHMARK × 视频世界模型记忆",
+      "influence": "摘要未披露团队信息；该基准横评 7 个动作条件视频世界模型（DreamX-World-Memo 居首），有望成为世界模型记忆评测的社区新标准。",
       "figure": {
-        "url": null,
-        "caption": ""
+        "url": "2608_27328-fig1.jpg",
+        "caption": "Figure 2 : Overview of R2M-Bench. (a) Absolute first-visit/revisit similarity is not sufficient evidence of memory because motion magnitude and rendering stability can inflate the raw score. (b) R2M-B"
       },
       "fields": {
-        "background": "交互式视频世界模型在长程 rollout 中常出现“重游”（回到先前见过的位置），是检验场景记忆的重要探针；但首访-返回画面的绝对相似度受渲染稳定性、重复内容和运动失败（慢动作捷径）混淆，相似度高不能证明模型记住了场景。",
-        "task": "提出 R2M-Bench：一个评测可观测重游选择性一致性的基准，将“重游专属记忆”与“通用时间稳定性”解耦，并提供两个相对校准指标 `MemoryGain` 与 `Normalized Memory Ratio`。",
-        "insight": "同 rollout 相对校准：对每个检测到的返回，将重游对与两个对照比较——间隔匹配的非重游对（通用时间稳定性基线）与短程对（短时程一致性）；重游相对对照的优势才反映记忆，从而抑制慢动作与渲染稳定带来的捷径。",
-        "pipeline": "100 个参考场景 × 3 条离开-返回轨迹 = 300 实例 → 模型生成 rollout → 检测返回事件 → 构造重游对 + 两个同 rollout 对照对 → 在外观保真、场景与物体身份、局部几何、持久状态四轴上计算 `MemoryGain` 与 `NMR` → 汇总为 Overall NMR。",
-        "methods": "相对一致性指标：`MemoryGain`（MG，重游对相对时间基线的一致性优势）；`Normalized Memory Ratio`（NMR，用短程到基线的动态范围对 MG 归一）；四轴一致性评测维度；以 Spearman 相关验证与人类一致性判断的对齐，并比较指标与生成运动的相关以量化捷径抑制。",
-        "experiment": "在 7 个动作条件视频世界模型上评测：Overall NMR 与人类一致性判断的 Spearman ρ=0.547（95% CI [0.45, 0.63]）；指标与生成运动的模型内相关为 0.072，而原始重游相似度为 0.207，说明相对校准显著削弱慢动作捷径；DreamX-World-Memo 在受测视频模型中取得最高 Overall NMR。",
-        "limitation": "度量的是可观测的重游选择性一致性，而非模型内部记忆机制；ρ=0.547 仍留有大量人类判断方差未解释；依赖可靠的返回检测与同 rollout 对照的可得性；结论基于 100 场景/3 轨迹/7 模型的评测范围，外推需谨慎。"
-      }
-    },
-    {
-      "title": "Glass Surface Detection Grounded in 3D Visual Geometry",
-      "titleZh": "Glass Surface Detection Grounded in 3D Visual Geometry（直译待润色）",
-      "hook": "新鲜出炉：详情以原文为准",
-      "cards": [
-        {
-          "emoji": "🧠",
-          "title": "它聪明在哪",
-          "body": "核心洞察待 LLM 精读补全；以原文 Abstract/Method 为准。"
-        },
-        {
-          "emoji": "🎬",
-          "title": "怎么做到的",
-          "body": "流程与输入输出待 LLM 精读补全；以原文 Method 为准。"
-        },
-        {
-          "emoji": "⚠️",
-          "title": "也别神话它",
-          "body": "适用边界与局限以原文 Limitation/Discussion 为准。"
-        }
-      ],
-      "authors": "Yiwei Lu et al.",
-      "venue": "arXiv 2026.08 · 9 pages, 10 figures. Accepted by ACM Multimedia 2026",
-      "summary": "本文属 FEED-FORWARD 3D × Spatial LLM/VLM 方向。任务概述：Glass surface detection (GSD) is critical for scene understanding and reconstruction, and yet remains challenging due to the transparency and reflectivity of glass surfaces. Existing GSD methods typically rely on 2D appearance cues, which may fail in geometrically ambiguous scenes. 方法与实验结论以原文为准（LLM 精读后自动补全中文导读）。",
-      "paperUrl": "https://arxiv.org/abs/2608.26752",
-      "score": 0.48,
-      "category": "FEED-FORWARD 3D × Spatial LLM/VLM",
-      "influence": "新论文：作者影响力标注待补充",
-      "figure": {
-        "url": null,
-        "caption": ""
-      },
-      "fields": {
-        "background": "arXiv 新_submission（2026-08-27），主分类 cs.CV。",
-        "task": "Glass surface detection (GSD) is critical for scene understanding and reconstruction, and yet remains challenging due to the transparency and reflectivity of glass surfaces. Existing GSD methods typically rely on 2D appearance cues, which may fail in geometrically ambiguous scenes.",
-        "insight": "核心洞察以原文 Abstract/Method 为准（待 LLM 精读补全）。",
-        "pipeline": "I/O 与模块拆解待 LLM 精读填充；以原文 Method 部分与流程图为准。",
-        "methods": "方法细节以原文为准。",
-        "experiment": "实验数据集与消融详见原文 Experiments（数字以原文为准）。",
-        "limitation": "局限以原文 Limitation/Discussion 为准。"
-      }
-    },
-    {
-      "title": "CGS-SLAM: Collaborative Gaussian Splatting based SLAM for Multi-Agent Reconstruction",
-      "titleZh": "手机组队搞重建：协作版3DGS-SLAM来了",
-      "hook": "不用深度相机、不靠GPS，普通手机组队重建照片级3D世界",
-      "cards": [
-        {
-          "emoji": "🧠",
-          "title": "它聪明在哪",
-          "body": "核心是'去中心+中心'的混合分工：每台设备本地跑跟踪和建图（像各自写小作文），中央服务器只负责最后的拼图。尺度感全靠`Depth Pro`这个度量单目深度模型兜底，纯RGB也能建出有真实尺寸的地图。最巧的是动态关键帧策略：只有当某块区域被队友也拍到时才多插关键帧，重叠区对齐更稳，通信还省。"
-        },
-        {
-          "emoji": "🎬",
-          "title": "怎么做到的",
-          "body": "三步走：①每个agent以IMU为运动先验做本地跟踪，用`Depth Pro`估计度量深度，建自己的`3DGS`子地图；②agent间交换`关键帧编码`，检测到空间重叠就在那儿动态加关键帧；③中央服务器用`VGGT`做视图对齐，把所有子地图配准成全局一致的大图。输入就是手机RGB视频+IMU，输出是照片级3D重建。"
-        },
-        {
-          "emoji": "⚠️",
-          "title": "也别神话它",
-          "body": "它重度依赖`Depth Pro`和`VGGT`这类预训练大模型，深度或对齐出错地图就跟着歪；子地图对齐质量取决于agent间视野重叠够不够，各拍各的角落容易翻车。另外它仍需要中央服务器，并非完全去中心化；渲染质量和跟踪的具体提升幅度以原文为准。"
-        }
-      ],
-      "authors": "Jean-Daniel de Ambrogi et al.",
-      "venue": "arXiv 2026.08",
-      "summary": "想象几个队友分头逛一栋大楼，回来后直接拼出一张照片级的3D地图——CGS-SLAM干的就是这件事。它的妙处是只要`RGB`+`IMU`（普通手机自带），不需要RGB-D深度相机，靠`Depth Pro`这位单目深度大师给画面补上真实尺度，各agent再用`3DGS`渲出自己的高保真子地图。队友之间只互发轻量的`关键帧编码`当'暗号'，发现视野重叠就动态多插几帧，方便后面对齐。最后由中央服务器请出`VGGT`做视图对齐，把各家子地图拼成全局大图，通信开销低，连没有`GNSS`/GPS的环境也照样跑。",
-      "paperUrl": "https://arxiv.org/abs/2608.26868",
-      "score": 0.43,
-      "category": "COLLABORATIVE 3DGS-SLAM × MULTI-AGENT RECONSTRUCTION",
-      "influence": "中文社区 B站、公众号 热议 · 瞄准消费级手机的纯RGB协作3DGS-SLAM新方向，同时踩中3DGS与VGGT两大热点（热度以原文为准）",
-      "figure": {
-        "url": null,
-        "caption": ""
-      },
-      "fields": {
-        "background": "基于3DGS的SLAM多数依赖RGB-D输入（消费级手机不可用），且鲜有工作将3DGS整合进多智能体协作框架",
-        "task": "仅用单目RGB+IMU的多智能体稠密SLAM，实现照片级3DGS重建、子地图配准与全局一致地图，适用于GNSS拒止环境",
-        "insight": "混合去中心/中心架构：agent本地以IMU为运动先验跟踪并借度量单目深度（Depth Pro）恢复尺度；共享关键帧编码实现重叠区动态关键帧；以VGGT为视图对齐模型在服务器端配准子地图，兼顾低通信开销与全局一致性",
-        "pipeline": "各agent本地跟踪（IMU先验）→Depth Pro度量深度→本地3DGS子地图→agent间交换关键帧编码并在重叠区动态插入关键帧→中央服务器用VGGT对齐子地图→双向低通信开销的全局重建",
-        "methods": "3D Gaussian Splatting建图；惯性运动先验跟踪；度量单目深度估计（Depth Pro）；VGGT视图对齐/子地图配准；基于编码共享的动态关键帧管理",
-        "experiment": "在多个数据集上验证：跟踪性能与SOTA相当、渲染质量优于现有方法、子地图对齐准确（具体数值以原文为准）",
-        "limitation": "性能依赖预训练基础模型（Depth Pro、VGGT）的深度/对齐质量；对齐需要agent间足够的视觉重叠；依赖中央服务器而非完全去中心化；量化指标与计算开销以原文为准"
+        "background": "交互式视频世界模型在智能体离开并重返场景时应保持场景一致（重访记忆），但已有评测以首次访问帧与重访帧的绝对相似度为指标，易被渲染稳定性、重复内容与运动失败混淆。",
+        "task": "构建能区分“重访特异一致性”与“一般时间稳定性”的世界模型记忆评测基准 R2M-Bench，并提出抗慢动作作弊的指标。",
+        "insight": "绝对重访相似度高不等于有记忆：可能只是 rollout 变化极小；在同一条 rollout 内引入对照对做相对校准，可剥离一般时间稳定性、显式度量记忆增益。",
+        "pipeline": "检测重访 → 组装重访对与两个同 rollout 对照（gap-matched 非重访对、short-range 近邻对）→ 计算 MemoryGain（重访对相对时间基线的增益）→ 以短程-基线动态范围归一化为 NMR → 按四个维度聚合 Overall NMR。",
+        "methods": "`MemoryGain`、`Normalized Memory Ratio`、gap-matched 非重访对照、short-range 对照、同 rollout 相对校准、多维度评测（外观保真/场景与物体身份/局部几何/持久状态）。",
+        "experiment": "100 个参考场景 × 3 条往返轨迹 = 300 实例；评测 7 个动作条件视频世界模型；Overall NMR 与人类一致性判断的 Spearman ρ=0.547（95% CI [0.45, 0.63]）；NMR 与生成运动的模型内相关为 0.072（原始重访相似度 0.207）；DreamX-World-Memo 取得最高 Overall NMR。",
+        "limitation": "与人类判断相关性仍为中等（ρ≈0.547）；慢运动捷径仅被削弱（0.072 仍非零）而非消除；基准限定于可检测的往返轨迹与 100 个参考场景，未覆盖长时程与语义层面记忆。"
       }
     }
   ],
   "counts": {
-    "total": 6,
-    "new": 5
+    "total": 4,
+    "new": 3
   }
 };

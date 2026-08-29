@@ -6,110 +6,137 @@
 <title>Paper 卡片 · 三维重建 × 世界模型</title>
 <style>
   :root{
-    --bg:#f5f5f5; --ink:#222; --ink2:#555; --muted:#999;
-    --card:#fff; --line:#eee; --accent:#ff4d6d; --accent2:#ff7b54;
-    --soft:#fff0f2; --tagbg:#f2f3f5;
-    --shadow:0 1px 3px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.06);
+    --bg:#f7f7f5; --ink:#1a1a1a; --ink2:#4a4a48; --muted:#9a9a96;
+    --card:#ffffff; --line:#e8e8e4; --accent:#c8402a; --soft:#faf6f3;
+    --tagbg:#f2f1ee;
   }
   body[data-theme="dark"]{
-    --bg:#101014; --ink:#f0ece6; --ink2:#b8b2aa; --muted:#777;
-    --card:#1b1b21; --line:#2a2a32; --accent:#ff6b85; --accent2:#ff9b7a;
-    --soft:#2a1d22; --tagbg:#26262e;
-    --shadow:0 1px 3px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.4);
+    --bg:#141412; --ink:#ecebe6; --ink2:#b5b3ac; --muted:#6f6e69;
+    --card:#1e1e1b; --line:#2c2c28; --accent:#e8664f; --soft:#242220;
+    --tagbg:#262622;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-    font-size:15px;line-height:1.65;transition:background .25s,color .25s}
+    font-size:15px;line-height:1.7;transition:background .25s,color .25s}
   a{color:inherit;text-decoration:none}
 
-  /* 顶栏 */
+  /* 顶栏：细线极简 */
   .topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line);
-    padding:10px 16px;display:flex;align-items:center;gap:10px;font-size:13px}
-  .topbar .logo{font-weight:900;font-size:16px;letter-spacing:.5px}
-  .topbar .logo em{color:var(--accent);font-style:normal}
-  .topbar .meta{color:var(--muted)}
+    padding:12px 20px;display:flex;align-items:baseline;gap:12px}
+  .topbar .logo{font-weight:700;font-size:15px;letter-spacing:.3px}
+  .topbar .logo i{color:var(--accent);font-style:normal}
+  .topbar .meta{color:var(--muted);font-size:12px}
   .topbar .sp{flex:1}
-  .tbtn{border:1px solid var(--line);background:var(--card);color:var(--ink2);border-radius:999px;
-    padding:5px 14px;font-size:12.5px;cursor:pointer;font-family:inherit}
+  .tbtn{border:1px solid var(--line);background:transparent;color:var(--ink2);border-radius:6px;
+    padding:4px 12px;font-size:12px;cursor:pointer;font-family:inherit}
   .tbtn:hover{border-color:var(--accent);color:var(--accent)}
-  .tbtn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+  .tbtn.primary{background:var(--ink);border-color:var(--ink);color:var(--bg);font-weight:600}
+
+  /* 论文选择条：横向页码 */
+  .selector{max-width:760px;margin:26px auto 0;padding:0 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .selector .lbl{font-size:11px;color:var(--muted);letter-spacing:2px;margin-right:4px}
+  .pnum{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--card);
+    color:var(--ink2);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:all .15s}
+  .pnum.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
+  .pnum:hover{border-color:var(--accent)}
+
+  /* 舞台：一张卡占满视口中心 */
+  .stage{max-width:760px;margin:14px auto 40px;padding:0 20px;position:relative}
+
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,.03),0 12px 40px rgba(0,0,0,.05);
+    min-height:540px;display:flex;flex-direction:column;overflow:hidden;
+    animation:fadeUp .35s ease}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  /* 封面页 */
+  .cover{flex:1;display:flex;flex-direction:column;padding:44px 40px 30px;position:relative}
+  .cover .kicker{font-size:11px;letter-spacing:3px;color:var(--accent);font-weight:700;margin-bottom:18px;text-transform:uppercase}
+  .cover h1{font-size:30px;font-weight:800;line-height:1.4;letter-spacing:-.3px;margin-bottom:14px}
+  .cover .orig{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:20px;font-style:italic}
+  .cover .hook{font-size:16px;color:var(--accent);font-weight:600;margin-bottom:26px}
+  .cover .foot{margin-top:auto;padding-top:18px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}
+  .cover .score{background:var(--soft);padding:3px 12px;border-radius:999px;font-weight:700;color:var(--accent)}
+
+  /* 内容页 */
+  .page{flex:1;display:none;flex-direction:column;padding:38px 40px 26px}
+  .page .pgtag{font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:6px;text-transform:uppercase}
+  .page h2{font-size:21px;font-weight:800;margin-bottom:4px}
+  .page h2 .em{margin-right:10px}
+  .page .rule{width:34px;height:3px;background:var(--accent);border-radius:2px;margin:12px 0 18px}
+  .page .txt{font-size:14.5px;color:var(--ink2);line-height:1.85}
+  .page .txt code{background:var(--tagbg);padding:1px 6px;border-radius:5px;font-size:13px;
+    font-family:ui-monospace,Menlo,Consolas,monospace}
+  .page .txt p{margin-bottom:10px}
+  .page .note{margin-top:auto;padding-top:14px;font-size:11.5px;color:var(--muted);border-top:1px dashed var(--line)}
+
+  /* 导读页（通俗） */
+  .page.intro .txt{font-size:15.5px;color:var(--ink)}
+  .page.intro .txt::first-letter{font-size:34px;font-weight:800;color:var(--accent);float:left;
+    line-height:1;margin:4px 8px 0 0}
+
+  /* 流程图页 */
+  .page.fig .figwrap{flex:1;display:flex;flex-direction:column;min-height:0}
+  .page.fig img{max-width:100%;max-height:380px;object-fit:contain;border-radius:10px;
+    border:1px solid var(--line);background:var(--bg);align-self:center}
+  .page.fig .cap{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
+  .page.fig .explain{margin-top:12px;font-size:13.5px;color:var(--ink2);line-height:1.8}
+  .figmiss{padding:40px 20px;text-align:center;color:var(--muted);font-size:13px}
+  .figmiss .ico{font-size:40px;display:block;margin-bottom:10px;opacity:.5}
+
+  /* 字段页（深读） */
+  .page.fields .flist{display:grid;gap:13px}
+  .page.fields .f h5{font-size:12px;font-weight:800;letter-spacing:.5px}
+  .page.fields .f h5 .n{color:var(--accent);margin-right:7px}
+  .page.fields .f p{font-size:12.8px;color:var(--ink2);line-height:1.75}
+
+  /* 卡片底部导航 */
+  .navbar{display:flex;align-items:center;gap:10px;padding:16px 24px;border-top:1px solid var(--line);background:var(--soft)}
+  .navbar .dots{flex:1;display:flex;gap:6px;justify-content:center}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--line);cursor:pointer;transition:all .2s}
+  .dot.on{background:var(--accent);width:20px;border-radius:4px}
+  .nav{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 16px;
+    font-size:13px;color:var(--ink2);cursor:pointer;font-family:inherit}
+  .nav:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+  .nav:disabled{opacity:.3;cursor:default}
+  .pgno{font-size:11px;color:var(--muted);min-width:52px;text-align:center}
+
+  /* 底部 */
+  .colophon{text-align:center;color:var(--muted);font-size:12px;line-height:1.9;padding:8px 16px 46px}
+  #toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(14px);opacity:0;
+    background:var(--ink);color:var(--bg);font-size:13px;padding:9px 20px;border-radius:8px;z-index:99;
+    transition:all .3s;pointer-events:none;max-width:86vw}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
   /* 空状态 */
-  .empty{max-width:640px;margin:80px auto;text-align:center;padding:0 24px}
-  .empty .big{font-size:56px;margin-bottom:14px}
-  .empty h2{font-size:20px;margin-bottom:8px}
+  .empty{max-width:640px;margin:90px auto;text-align:center;padding:0 24px}
+  .empty .big{font-size:52px;margin-bottom:14px}
+  .empty h2{font-size:19px;margin-bottom:8px}
   .empty p{color:var(--muted);font-size:14px}
 
-  /* 瀑布流 */
-  .feed{max-width:1000px;margin:0 auto;padding:16px 14px 90px;column-count:2;column-gap:14px}
-  @media(min-width:1100px){.feed{column-count:3}}
-  @media(max-width:680px){.feed{column-count:1;padding:12px 10px 80px}}
-  .card{break-inside:avoid;background:var(--card);border-radius:14px;box-shadow:var(--shadow);
-    margin-bottom:14px;overflow:hidden;border:1px solid var(--line)}
-  .card .cover{padding:16px 16px 12px;position:relative;background:linear-gradient(135deg,var(--soft),var(--card))}
-  .card .cat{position:absolute;top:12px;right:12px;background:var(--accent);color:#fff;font-size:10px;
-    font-weight:800;letter-spacing:1px;padding:3px 10px;border-radius:999px}
-  .card .tzh{font-size:19px;font-weight:800;line-height:1.35;margin:0 0 6px;letter-spacing:-.2px}
-  .card .hook{color:var(--accent2);font-size:13.5px;font-weight:600;margin-bottom:10px}
-  .card .hook::before{content:"✦ "}
-  .card .meta{font-size:11.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
-  .card .body{padding:2px 16px 14px}
-  .card .lead{font-size:14px;color:var(--ink2);line-height:1.75}
-  .card .lead code{background:var(--tagbg);padding:1px 6px;border-radius:5px;font-size:12.5px;
-    font-family:ui-monospace,Menlo,Consolas,monospace}
-  .influence{margin:10px 0 0;font-size:12px;color:var(--ink2);background:var(--tagbg);
-    padding:7px 11px;border-radius:9px}
-  .influence b{color:var(--accent)}
-
-  /* 内容子卡 */
-  .subcards{padding:0 16px 14px;display:grid;gap:9px}
-  .sub{background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
-  .sub .sh{font-size:13px;font-weight:800;margin-bottom:3px}
-  .sub .sh .em{margin-right:7px}
-  .sub .sb{font-size:13px;color:var(--ink2);line-height:1.7}
-  .sub .sb code{background:var(--card);padding:1px 5px;border-radius:4px;font-size:12px;
-    font-family:ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--line)}
-
-  /* 展开深读 */
-  .more{padding:0 16px 14px}
-  .more summary{list-style:none;cursor:pointer;font-size:12.5px;font-weight:700;color:var(--accent);
-    padding:8px 0;border-top:1px dashed var(--line)}
-  .more summary::-webkit-details-marker{display:none}
-  .more summary::before{content:"📖 深读版 · 0-6 字段 "}
-  .more[open] summary::before{content:"收起深读 "}
-  .fields{display:grid;gap:8px;padding-top:4px}
-  .f h5{font-size:12px;font-weight:800}
-  .f h5 .n{color:var(--accent);margin-right:5px}
-  .f p{font-size:12.5px;color:var(--ink2);line-height:1.7}
-
-  /* 底部操作 */
-  .acts{display:flex;gap:8px;align-items:center;padding:0 16px 15px;flex-wrap:wrap}
-  .alnk{flex:1;min-width:130px;text-align:center;border:1px solid var(--line);border-radius:999px;
-    padding:7px 10px;font-size:12.5px;font-weight:700;color:var(--ink2)}
-  .alnk:hover{border-color:var(--accent);color:var(--accent)}
-  .fb{display:flex;gap:6px}
-  .fb button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);
-    cursor:pointer;font-size:15px;color:var(--muted)}
-  .fb button.on-lk{background:#2e7d32;border-color:#2e7d32;color:#fff}
-  .fb button.on-dk{background:var(--accent);border-color:var(--accent);color:#fff}
-
-  .colophon{text-align:center;color:var(--muted);font-size:12px;line-height:1.9;padding:20px 16px 40px}
-  #toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(16px);opacity:0;
-    background:#222;color:#fff;font-size:13px;padding:10px 22px;border-radius:999px;z-index:99;
-    transition:all .3s;pointer-events:none;max-width:88vw}
-  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  /* 键盘左右翻页提示 */
+  .kbd{position:fixed;right:18px;bottom:18px;font-size:11px;color:var(--muted);opacity:.7}
+  @media(max-width:640px){
+    .cover{padding:32px 24px 22px}
+    .page{padding:28px 24px 20px}
+    .cover h1{font-size:24px}
+    .pcard{min-height:520px}
+    .kbd{display:none}
+  }
 </style>
 </head>
 <body data-theme="light">
 
 <div class="topbar">
-  <span class="logo">Paper<em>卡片</em></span>
+  <span class="logo">Paper<i>卡片</i></span>
   <span class="meta" id="tbMeta"></span>
   <span class="sp"></span>
-  <button class="tbtn" id="themeBtn">◐ 暗色</button>
-  <button class="tbtn primary" id="copyBtn">📤 复制文案</button>
+  <button class="tbtn" id="themeBtn">暗色</button>
+  <button class="tbtn primary" id="copyBtn">复制文案</button>
 </div>
 
 <div class="empty" id="emptyState" hidden>
@@ -118,7 +145,11 @@
   <p id="emptyReason"></p>
 </div>
 
-<div class="feed" id="feedMount"></div>
+<div id="appMount" hidden>
+  <div class="selector" id="selector"><span class="lbl">本期论文</span></div>
+  <div class="stage"><div class="pcard" id="pcard"></div></div>
+  <div class="kbd">← → 键翻页</div>
+</div>
 
 <div class="colophon" id="colophon"></div>
 <div id="toast"></div>
@@ -128,89 +159,179 @@
 (function(){
   var D = window.PAPER_DAILY_DATA || {};
   function esc(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML;}
-  function fmtLead(s){return esc(s).replace(/`([^`]+)`/g,"<code>$1</code>");}
+  function fmt(s){return esc(s).replace(/`([^`]+)`/g,"<code>$1</code>").replace(/\n/g,"<br>");}
 
   document.getElementById("tbMeta").textContent =
     (D.axes||"三维重建 × 世界模型") + " · " + (D.date||"") + " · " + ((D.counts&&D.counts.total)||0) + " 篇";
 
-  // 空状态
-  if(D.empty || !(D.papers||[]).length && !D.hero){
+  if(D.empty || !((D.papers||[]).length || D.hero)){
     document.getElementById("emptyState").hidden = false;
     document.getElementById("emptyReason").textContent = D.reason || "今日时间窗内无命中偏好方向的合适论文，明天见。";
-    document.getElementById("colophon").textContent = "Paper卡片 · 每天几张卡片读懂一篇论文";
+    document.getElementById("colophon").textContent = "Paper卡片 · 每篇论文一组卡片";
     return;
   }
 
   var all = [].concat(D.hero?[D.hero]:[], D.papers||[]);
+  var cur = 0, sub = 0;
 
-  function cardHtml(p, i){
-    var subs = (p.cards||[]).map(function(c){
-      return '<div class="sub"><div class="sh"><span class="em">'+esc(c.emoji||"💡")+'</span>'+esc(c.title||"")+'</div>'+
-             '<div class="sb">'+fmtLead(c.body||"")+'</div></div>';
-    }).join("");
-    var F=[["background","Background"],["task","Task"],["insight","Insight"],["pipeline","Pipeline"],
-           ["methods","Methods"],["experiment","Experiment"],["limitation","Limitation"]];
-    var flds = (p.fields||{}) ? F.map(function(x,ix){
-      var v=(p.fields[x[0]]||"");
-      return v?'<div class="f"><h5><span class="n">'+ix+'</span>'+x[1]+'</h5><p>'+esc(v)+'</p></div>':"";
-    }).join("") : "";
-    return '<article class="card" data-i="'+i+'">'+
-      '<div class="cover">'+
-        '<span class="cat">'+esc(p.category||"PAPER")+'</span>'+
-        '<h3 class="tzh">'+esc(p.titleZh||p.title||"")+'</h3>'+
-        (p.hook?'<div class="hook">'+esc(p.hook)+'</div>':'')+
-        '<div class="meta">'+esc(p.authors||"")+' · '+esc(p.venue||"")+'</div>'+
-      '</div>'+
-      '<div class="body"><p class="lead">'+fmtLead(p.summary||"")+'</p>'+
-        (p.influence?'<div class="influence">⭐ <b>热度/影响力</b>：'+esc(p.influence)+'</div>':'')+
-      '</div>'+
-      (subs?'<div class="subcards">'+subs+'</div>':'')+
-      '<div class="more"><details><summary></summary><div class="fields">'+flds+'</div></details></div>'+
-      '<div class="acts">'+
-        '<a class="alnk" href="'+esc(p.paperUrl||"#")+'" target="_blank" rel="noopener">论文原文 ↗</a>'+
-        '<span class="fb"><button class="lk" title="喜欢">👍</button><button class="dk" title="不喜欢">👎</button></span>'+
-      '</div>'+
-    '</article>';
+  // 每篇论文的页组：封面 / 导读(通俗) / 4 张内容卡(专业) / 流程图 / 深读字段
+  function pagesOf(p){
+    var pg = [];
+    pg.push({t:"cover", p:p});
+    if(p.summary) pg.push({t:"intro", p:p});
+    (p.cards||[]).forEach(function(c){ pg.push({t:"card", c:c, p:p}); });
+    if((p.figures&&p.figures.length) || p.figureNote) pg.push({t:"fig", p:p});
+    pg.push({t:"fields", p:p});
+    pg.push({t:"end", p:p});
+    return pg;
+  }
+  var deck = all.map(pagesOf);
+
+  var mount = document.getElementById("pcard");
+
+  function render(){
+    var pages = deck[cur];
+    var page = pages[sub];
+    var p = page.p;
+    var h = "";
+    if(page.t==="cover"){
+      h = '<div class="cover">'+
+        '<div class="kicker">'+esc(p.category||"PAPER")+'</div>'+
+        '<h1>'+esc(p.titleZh||p.title||"")+'</h1>'+
+        '<div class="orig">'+esc(p.title||"")+'</div>'+
+        (p.hook?'<div class="hook">「'+esc(p.hook)+'」</div>':'')+
+        '<div class="foot"><span>'+esc(p.authors||"")+' · '+esc(p.venue||"")+'</span>'+
+        '<span class="score">匹配度 '+esc(String(p.score!=null?p.score:""))+'</span></div>'+
+        '<div style="margin-top:14px;font-size:12px;color:var(--muted)">'+(p.influence?("⭐ "+esc(p.influence)):"")+'</div>'+
+        '</div>';
+    } else if(page.t==="intro"){
+      h = '<div class="page intro" style="display:flex">'+
+        '<div class="pgtag">导读 · 通俗版</div>'+
+        '<h2>这篇在讲什么</h2><div class="rule"></div>'+
+        '<div class="txt">'+fmt(p.summary)+'</div>'+
+        '<div class="note">导读为通俗版，便于快速理解；后续卡片为专业表述。</div></div>';
+    } else if(page.t==="card"){
+      var c = page.c;
+      h = '<div class="page" style="display:flex">'+
+        '<div class="pgtag">'+esc(p.titleZh||"")+'</div>'+
+        '<h2><span class="em">'+esc(c.emoji||"◆")+'</span>'+esc(c.title||"")+'</h2><div class="rule"></div>'+
+        '<div class="txt">'+fmt(c.body||"")+'</div></div>';
+    } else if(page.t==="fig"){
+      var fig = (p.figures&&p.figures[0]);
+      h = '<div class="page fig" style="display:flex">'+
+        '<div class="pgtag">PIPELINE</div>'+
+        '<h2><span class="em">🧩</span>流程图</h2><div class="rule"></div>'+
+        '<div class="figwrap">'+
+        (fig?('<img src="figs/'+esc(fig.file)+'" alt="pipeline figure">'+
+              (fig.caption?'<div class="cap">'+esc(fig.caption)+'</div>':''))
+            :'<div class="figmiss"><span class="ico">🧩</span>本文暂无 HTML 版流程图</div>')+
+        (p.figureNote?'<div class="explain">'+fmt(p.figureNote)+'</div>':'')+
+        '</div></div>';
+    } else if(page.t==="fields"){
+      var F=[["background","Background","背景"],["task","Task","任务"],["insight","Insight","核心洞察"],
+             ["pipeline","Pipeline","流程"],["methods","Methods","方法"],["experiment","Experiment","实验"],
+             ["limitation","Limitation","局限"]];
+      var fl=(p.fields||{});
+      var items=F.map(function(x,i){var v=fl[x[0]];return v?
+        '<div class="f"><h5><span class="n">'+i+'</span>'+x[1]+' · '+x[2]+'</h5><p>'+esc(v)+'</p></div>':"";
+      }).join("");
+      h = '<div class="page fields" style="display:flex">'+
+        '<div class="pgtag">DEEP READ</div>'+
+        '<h2><span class="em">📚</span>深读 · 0-6 字段</h2><div class="rule"></div>'+
+        '<div class="flist">'+(items||'<p style="color:var(--muted)">以原文为准。</p>')+'</div></div>';
+    } else if(page.t==="end"){
+      h = '<div class="page" style="display:flex">'+
+        '<div class="pgtag">LINKS</div>'+
+        '<h2><span class="em">📎</span>原文与反馈</h2><div class="rule"></div>'+
+        '<div class="txt"><p>标题：'+esc(p.title||"")+'</p>'+
+        '<p>原文：<a href="'+esc(p.paperUrl||"#")+'" target="_blank" rel="noopener" style="color:var(--accent)">'+esc(p.paperUrl||"")+'</a></p>'+
+        '<p style="margin-top:18px">这篇对你的研究有帮助吗？</p></div>'+
+        '<div style="display:flex;gap:10px;margin-top:6px">'+
+        '<button class="nav" onclick="vote(1)">👍 有帮助</button>'+
+        '<button class="nav" onclick="vote(-1)">👍 不对口</button></div>'+
+        '<div class="note">反馈会进入偏好画像，影响后续筛选。</div></div>';
+    }
+    mount.innerHTML = h;
+    mount.style.animation = "none"; void mount.offsetWidth; mount.style.animation = "";
+    renderNav(pages.length);
+    renderSelector();
   }
 
-  var mount = document.getElementById("feedMount");
-  mount.innerHTML = all.map(cardHtml).join("");
+  var navbar = document.createElement("div"); navbar.className="navbar";
+  mount.parentNode.appendChild(navbar);
+  function renderNav(total){
+    var dots = "";
+    for(var i=0;i<total;i++) dots += '<span class="dot'+(i===sub?" on":"")+'" data-i="'+i+'"></span>';
+    navbar.innerHTML = '<button class="nav" id="prevB" '+(sub===0?"disabled":"")+'>‹ 上一篇卡</button>'+
+      '<div class="dots">'+dots+'</div><span class="pgno">'+(sub+1)+' / '+total+'</span>'+
+      '<button class="nav" id="nextB">'+(sub===total-1?"下一篇论文 →":"下一张卡 ›")+'</button>';
+    navbar.querySelectorAll(".dot").forEach(function(d){
+      d.addEventListener("click",function(){sub=+d.dataset.i;render();});
+    });
+    document.getElementById("prevB").addEventListener("click",prev);
+    document.getElementById("nextB").addEventListener("click",next);
+  }
+  var selEl = document.getElementById("selector");
+  function renderSelector(){
+    selEl.innerHTML = '<span class="lbl">本期论文</span>' + all.map(function(p,i){
+      return '<button class="pnum'+(i===cur?" on":"")+'" data-i="'+i+'">'+(i+1)+'</button>';
+    }).join("");
+    selEl.querySelectorAll(".pnum").forEach(function(b){
+      b.addEventListener("click",function(){cur=+b.dataset.i;sub=0;render();});
+    });
+  }
+  function prev(){ if(sub>0){sub--;render();} else if(cur>0){cur--;sub=deck[cur].length-1;render();} }
+  function next(){ if(sub<deck[cur].length-1){sub++;render();} else if(cur<deck.length-1){cur++;sub=0;render();} }
 
-  // 反馈按钮
-  mount.querySelectorAll(".fb").forEach(function(fb){
-    var lk=fb.querySelector(".lk"), dk=fb.querySelector(".dk");
-    lk.addEventListener("click",function(){lk.classList.toggle("on-lk");dk.classList.remove("on-dk");toast("已记：喜欢（可截图反馈给助手）");});
-    dk.addEventListener("click",function(){dk.classList.toggle("on-dk");lk.classList.remove("on-lk");toast("已记：不喜欢（可截图反馈给助手）");});
+  document.addEventListener("keydown",function(e){
+    if(e.key==="ArrowRight"||e.key==="PageDown")next();
+    else if(e.key==="ArrowLeft"||e.key==="PageUp")prev();
   });
+
+  // 触摸滑动
+  var tx=null;
+  document.addEventListener("touchstart",function(e){tx=e.touches[0].clientX;},{passive:true});
+  document.addEventListener("touchend",function(e){
+    if(tx==null)return; var dx=e.changedTouches[0].clientX-tx;
+    if(dx<-40)next(); else if(dx>40)prev(); tx=null;
+  },{passive:true});
+
+  window.vote = function(v){
+    try{
+      var fb = JSON.parse(localStorage.getItem("pd-feedback")||"[]");
+      fb.push({title:all[cur].title, v:v, at:Date.now()});
+      localStorage.setItem("pd-feedback", JSON.stringify(fb));
+    }catch(e){}
+    toast(v>0?"已记录：有帮助 ✓（下次同步给助手）":"已记录：不对口（用于调低同类）");
+  };
 
   // 主题
   var btn=document.getElementById("themeBtn");
-  function setTheme(t){document.body.setAttribute("data-theme",t);btn.textContent=t==="dark"?"☀ 浅色":"◐ 暗色";
+  function setTheme(t){document.body.setAttribute("data-theme",t);btn.textContent=t==="dark"?"浅色":"暗色";
     try{localStorage.setItem("pc-theme",t);}catch(e){}}
-  var s=null;try{s=localStorage.getItem("pc-theme");}catch(e){}
-  if(s)setTheme(s);
+  var st=null;try{st=localStorage.getItem("pc-theme");}catch(e){}
+  if(st)setTheme(st);
   btn.addEventListener("click",function(){setTheme(document.body.getAttribute("data-theme")==="dark"?"light":"dark");});
 
   // toast + 复制
   var tt=document.getElementById("toast");
-  function toast(m){tt.textContent=m;tt.classList.add("show");setTimeout(function(){tt.classList.remove("show");},2000);}
+  function toast(m){tt.textContent=m;tt.classList.add("show");setTimeout(function(){tt.classList.remove("show");},2200);}
   function copyText(){
     var L=[];
     L.push("Paper卡片 · "+(D.date||"")+" · "+((D.counts&&D.counts.total)||0)+" 篇");
-    L.push("");
     all.forEach(function(p,i){
+      L.push("");
       L.push("▍"+(i+1)+". "+(p.titleZh||p.title));
-      if(p.hook)L.push("✦ "+p.hook);
-      L.push(p.summary);
+      if(p.hook)L.push("「"+p.hook+"」");
+      L.push("【导读】"+p.summary);
       (p.cards||[]).forEach(function(c){L.push(c.emoji+" "+c.title+"："+c.body);});
       L.push("原文："+p.paperUrl);
-      L.push("");
     });
     return L.join("\n");
   }
   document.getElementById("copyBtn").addEventListener("click",function(){
     var txt=copyText();
-    function ok(){toast("✓ 已复制，去公众号/笔记 App 粘贴");}
+    function ok(){toast("✓ 已复制全部文案");}
     if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,function(){fb(txt,ok);});}
     else fb(txt,ok);
   });
@@ -218,9 +339,11 @@
     document.body.appendChild(ta);ta.select();try{document.execCommand("copy");ok();}catch(e){toast("复制失败，请手动复制");}
     document.body.removeChild(ta);}
 
+  document.getElementById("appMount").hidden = false;
   document.getElementById("colophon").innerHTML =
-    "Paper卡片 · "+esc(D.axes||"三维重建 × 世界模型")+" · 每天几张卡片读懂一篇论文<br>数据自动生成 · "+
+    "Paper卡片 · "+esc(D.axes||"三维重建 × 世界模型")+" · 每篇论文一组卡片 · 键盘 ←→ 或滑动翻页<br>"+
     ((D.counts&&D.counts.total)||0)+" 篇 · "+esc(D.date||"");
+  render();
 })();
 </script>
 </body>

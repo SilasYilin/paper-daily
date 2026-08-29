@@ -174,21 +174,23 @@ def normalize_score(raw: float, prof: dict) -> float:
 
 
 # ---------------------------------------------------------------- LLM 总结（可选）
-LLM_JSON_INSTRUCTION = """你是小红书风格的论文精读博主（参考「博士侃AI」「残月魔都」的讲法）。只输出一个 JSON 对象（不要 markdown 代码块、不要多余文字）：
+LLM_JSON_INSTRUCTION = """你是论文精读卡片作者。只输出一个 JSON 对象（不要 markdown 代码块、不要多余文字）：
 {
-  "title_zh": "中文标题（吸引人但准确，15~25字，像帖子标题）",
-  "summary": "3~5 句通俗导读：第一句场景化开场（这篇解决什么问题、为什么读者该关心），然后讲清方法核心思想，用比喻和外号讲人话，保留技术术语用反引号标注",
-  "hook": "一句话钩子：最抓眼球的点（如「老办法要802秒，它只要197秒」式的对比），不超过30字",
+  "title_zh": "中文标题（准确、有吸引力，15~25字）",
+  "summary": "通俗导读 3~4 句：第一句用生活化场景讲这篇解决什么问题（像跟同学聊天），其余讲核心思想，可用比喻；技术术语用反引号标注",
+  "hook": "一句话钩子：最抓眼球的点，不超过30字",
   "cards": [
-    {"emoji": "🧠", "title": "它聪明在哪", "body": "2~4 句：核心洞察/关键设计，模块可起外号+一句话解释"},
-    {"emoji": "🎬", "title": "怎么做到的", "body": "2~4 句：流程怎么走，输入输出是什么"},
-    {"emoji": "⚠️", "title": "也别神话它", "body": "1~3 句：诚实的局限/适用边界"}
+    {"emoji": "🎯", "title": "问题与背景", "body": "专业表述：研究问题、已有方法的两难、为什么难（3~5 句，学术语气）"},
+    {"emoji": "⚙️", "title": "方法设计", "body": "专业表述：核心方法与关键模块拆解，模块名用反引号（4~6 句）"},
+    {"emoji": "📊", "title": "实验结果", "body": "专业表述：数据集、指标、与 SOTA 对比（3~5 句；数字必须来自摘要，没有就写「详见原文」）"},
+    {"emoji": "⚠️", "title": "局限与展望", "body": "专业表述：作者承认的局限+你判断的边界（2~4 句）"}
   ],
   "category": "英文大写短标签，如 FEED-FORWARD 3D × 世界模型",
-  "influence": "一句话团队/机构影响力或热度（有 HF upvote 时写明）",
+  "influence": "一句话团队/机构影响力或热度",
+  "figure_note": "流程图解说：假设流程图展示了方法全景，用 2~3 句专业语气解释图里各模块如何衔接（供流程图卡片配文，若摘要无信息则写「以原文流程图为准」）",
   "fields": {"background":"","task":"","insight":"","pipeline":"","methods":"","experiment":"","limitation":""}
 }
-规则：cards 恰好 3 张；不要编造数字，摘要里的数字可以引用，没有的写「以原文为准」；fields 七键齐全（较专业表述，供深读）；summary 与 cards 面向通俗读者。"""
+规则：cards 恰好 4 张，顺序固定（问题背景/方法设计/实验结果/局限展望）；summary 是通俗体、cards 与 fields 是专业体，两种语气不要混；不编造数字，摘要里的数字才可引用；fields 七键齐全。"""
 
 
 def _load_agent_plan_cfg():
@@ -217,7 +219,7 @@ def _call_agent_plan(cfg, title, abstract):
     body = json.dumps({
         "model": cfg["model"],
         "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 4000,
+        "max_tokens": 9000,
     }).encode("utf-8")
     req = urllib.request.Request(
         cfg["base"].rstrip("/") + "/chat/completions", data=body,
@@ -228,7 +230,7 @@ def _call_agent_plan(cfg, title, abstract):
     content = (msg.get("content") or "").strip()
     if not content:  # 思考 token 耗尽导致空 content -> 重试一次
         body = json.dumps({"model": cfg["model"], "messages": [{"role": "user", "content": prompt}],
-                           "max_tokens": 8000}).encode("utf-8")
+                           "max_tokens": 14000}).encode("utf-8")
         req = urllib.request.Request(
             cfg["base"].rstrip("/") + "/chat/completions", data=body,
             headers={"Authorization": f"Bearer {cfg['key']}", "Content-Type": "application/json", **(cfg.get("headers") or {})})
@@ -247,8 +249,16 @@ def _parse_llm_json(text):
         return None
     raw = m.group(0)
     obj = robust_parse(raw)
-    if not isinstance(obj, dict) or not isinstance(obj.get("fields"), dict):
+    if not isinstance(obj, dict):
         return None
+    has_cards = isinstance(obj.get("cards"), list) and len(obj["cards"]) >= 3
+    has_fields = isinstance(obj.get("fields"), dict)
+    if not (has_cards or (has_fields and obj.get("summary"))):
+        return None
+    if not has_fields:
+        obj["fields"] = {}
+    if not has_cards and not obj.get("cards"):
+        obj["cards"] = []
     return obj
 
 
@@ -341,13 +351,16 @@ def fallback_summarize(entry: dict, category: str):
         "summary": (f"本文属 {category} 方向。任务概述：{task_en} "
                     f"方法与实验结论以原文为准（LLM 精读后自动补全中文导读）。"),
         "cards": [
-            {"emoji": "🧠", "title": "它聪明在哪",
-             "body": "核心洞察待 LLM 精读补全；以原文 Abstract/Method 为准。"},
-            {"emoji": "🎬", "title": "怎么做到的",
-             "body": "流程与输入输出待 LLM 精读补全；以原文 Method 为准。"},
-            {"emoji": "⚠️", "title": "也别神话它",
-             "body": "适用边界与局限以原文 Limitation/Discussion 为准。"},
+            {"emoji": "🎯", "title": "问题与背景",
+             "body": "研究问题与背景以原文 Abstract/Introduction 为准（LLM 精读后补全专业表述）。"},
+            {"emoji": "⚙️", "title": "方法设计",
+             "body": "方法与模块拆解以原文 Method 为准（待 LLM 精读补全）。"},
+            {"emoji": "📊", "title": "实验结果",
+             "body": "数据集、指标与 SOTA 对比详见原文 Experiments（数字以原文为准）。"},
+            {"emoji": "⚠️", "title": "局限与展望",
+             "body": "局限以原文 Limitation/Discussion 为准。"},
         ],
+        "figure_note": "以原文流程图为准。",
         "influence": "新论文：作者影响力标注待补充",
         "fields": {
             "background": f"arXiv 新_submission（{entry['published']}），主分类 {', '.join(entry['categories'][:3])}。",
@@ -370,6 +383,7 @@ def main():
     ap.add_argument("--window-days", type=int, default=120, help="时间窗：最近 N 天都算新论文")
     ap.add_argument("--sources-extra", action="store_true", default=True, help="拉取 HF 热度数据（hf-mirror）")
     ap.add_argument("--no-sources-extra", dest="sources_extra", action="store_false")
+    ap.add_argument("--no-figures", action="store_true", help="不抓流程图（默认抓）")
     ap.add_argument("--llm-top", type=int, default=12, help="送 LLM 总结的候选篇数")
     ap.add_argument("--profile", default=PROFILE_PATH)
     ap.add_argument("--dry-run", action="store_true", help="只产出 today.json，不调用 build_web_data、不覆盖 web/data.js")
@@ -514,11 +528,21 @@ def main():
         if e.get("_media_hits"):
             srcs = "、".join(sorted({("公众号" if h["source"] == "weixin" else "B站") for h in e["_media_hits"]}))
             influence = f"中文社区 {srcs} 热议 · " + influence
+        figure_note = (info.get("figure_note") or "以原文流程图为准。") if isinstance(info, dict) else "以原文流程图为准。"
+        figures = []
+        if not args.no_figures:
+            try:
+                from fetch_figures import fetch_figures as _ff
+                figures = _ff(e["arxiv_id"], top_k=1)
+            except Exception as fe:  # noqa: BLE001
+                print(f"    [fig] {e['arxiv_id']} 流程图抓取失败：{fe}", file=sys.stderr)
         papers.append({
             "title": e["title"],
             "title_zh": (info.get("title_zh") or "") if isinstance(info, dict) else "",
             "hook": (info.get("hook") or "") if isinstance(info, dict) else "",
             "cards": (info.get("cards") or []) if isinstance(info, dict) else [],
+            "figure_note": figure_note,
+            "figures": figures,
             "authors": authors_disp,
             "venue": venue,
             "summary": info["summary"],
@@ -526,8 +550,8 @@ def main():
             "score": e["_score"],
             "category": category,
             "influence": influence,
-            "figure_url": None,  # 红线 2：简洁无图
-            "figure_caption": "",
+            "figure_url": figures[0]["file"] if figures else None,
+            "figure_caption": figures[0]["caption"] if figures else "",
             "fields": {k: (info.get("fields", {}).get(k, "") or "") for k in
                        ("background", "task", "insight", "pipeline", "methods", "experiment", "limitation")},
             "_boosts": e["_boosts"],

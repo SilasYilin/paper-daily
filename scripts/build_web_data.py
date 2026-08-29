@@ -22,6 +22,8 @@ def normalize(p: dict) -> dict:
         "titleZh": p.get("title_zh", "") or "",
         "hook": p.get("hook", "") or "",
         "cards": p.get("cards", []) or [],
+        "figureNote": p.get("figure_note", "") or "",
+        "figures": p.get("figures", []) or [],
         "authors": p.get("authors", ""),
         "venue": p.get("venue", ""),
         "summary": summary,
