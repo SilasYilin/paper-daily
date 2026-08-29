@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --animate-fade-up: fade-up 0.35s ease;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+/* 亮 / 暗双主题令牌（跟随 <html data-theme>） */
+:root {
+  --pd-bg: #f7f7f5;
+  --pd-card: #ffffff;
+  --pd-ink: #1a1a1a;
+  --pd-ink2: #4a4a48;
+  --pd-muted: #9a9a96;
+  --pd-line: #e8e8e4;
+  --pd-accent: #c8402a;
+  --pd-soft: #faf6f3;
+  --pd-tagbg: #f2f1ee;
+}
+
+[data-theme="dark"] {
+  --pd-bg: #141412;
+  --pd-card: #1e1e1b;
+  --pd-ink: #ecebe6;
+  --pd-ink2: #b5b3ac;
+  --pd-muted: #6f6e69;
+  --pd-line: #2c2c28;
+  --pd-accent: #e8664f;
+  --pd-soft: #242220;
+  --pd-tagbg: #262622;
+}
+
+@theme inline {
+  --color-paper-50: var(--pd-bg);
+  --color-paper-card: var(--pd-card);
+  --color-paper-ink: var(--pd-ink);
+  --color-paper-ink2: var(--pd-ink2);
+  --color-paper-muted: var(--pd-muted);
+  --color-paper-line: var(--pd-line);
+  --color-paper-accent: var(--pd-accent);
+  --color-paper-soft: var(--pd-soft);
+  --color-paper-tagbg: var(--pd-tagbg);
+}
+
+/* 主卡片（.pd-card）与导读首字母下沉（.pd-intro）——仅两个组件级类，其余全走原子类 */
+.pd-card {
+  background: var(--pd-card);
+  border: 1px solid var(--pd-line);
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.03), 0 12px 40px rgb(0 0 0 / 0.05);
+  min-height: 540px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fade-up 0.35s ease;
+}
+
+.pd-intro::first-letter {
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--pd-accent);
+  float: left;
+  line-height: 1;
+  margin: 4px 8px 0 0;
+}
