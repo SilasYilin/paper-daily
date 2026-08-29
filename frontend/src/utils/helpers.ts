@@ -12,6 +12,10 @@ export function buildCopyText(d: DataBundle): string {
     L.push('');
     L.push(`▍${i + 1}. ${p.titleZh || p.title}`);
     if (p.hook) L.push(`「${p.hook}」`);
+    const sc = p.scores || {};
+    if (sc.innovation != null || sc.effectiveness != null) {
+      L.push(`评分：创新 ${sc.innovation ?? '–'}/10 · 效果 ${sc.effectiveness ?? '–'}/10`);
+    }
     L.push(`【导读】${p.summary || ''}`);
     (p.cards || []).forEach(c => L.push(`${c.emoji} ${c.title}：${c.body}`));
     L.push(`原文：${p.paperUrl || ''}`);

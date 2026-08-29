@@ -16,7 +16,7 @@ export function Selector({
         <button
           key={i}
           onClick={() => onPick(i)}
-          title={p.titleZh || p.title}
+          title={`${p.titleZh || p.title}${p.scores?.innovation != null ? `（创新 ${p.scores.innovation}/10 · 效果 ${p.scores.effectiveness ?? '–'}/10）` : ''}`}
           className={
             i === cur
               ? 'flex h-7.5 w-7.5 items-center justify-center rounded-lg border border-paper-ink bg-paper-ink text-[13px] font-bold text-paper-50 transition-all'

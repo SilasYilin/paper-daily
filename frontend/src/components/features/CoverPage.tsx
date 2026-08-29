@@ -1,5 +1,19 @@
 import type { Paper } from '../../types/data';
-import { Star, Users, MapPin } from 'lucide-react';
+import { Lightbulb, Gauge, Star, Users, MapPin } from 'lucide-react';
+
+/** 双维度评分徽章（0~10） */
+function ScoreBadge({ label, value, icon: Icon }: { label: string; value?: number | null; icon: typeof Lightbulb }) {
+  const v = typeof value === 'number' && value >= 0 && value <= 10 ? value : null;
+  return (
+    <span className="flex items-center gap-1.5 rounded-full bg-paper-soft px-3 py-1 text-xs font-bold"
+      title={v == null ? '评分待补' : `${label} ${v}/10`}>
+      <Icon className="size-3 text-paper-accent" />
+      {label}
+      <span className="text-paper-accent">{v == null ? '–' : v}</span>
+      <span className="text-paper-muted">/10</span>
+    </span>
+  );
+}
 
 export function CoverPage({ p }: { p: Paper }) {
   return (
@@ -19,8 +33,9 @@ export function CoverPage({ p }: { p: Paper }) {
           <Users className="size-3 shrink-0" />
           {p.authors || ''}
         </span>
-        <span className="rounded-full bg-paper-soft px-3 py-0.5 font-bold text-paper-accent">
-          匹配度 {p.score ?? ''}
+        <span className="flex flex-wrap items-center gap-2">
+          <ScoreBadge label="创新" value={p.scores?.innovation} icon={Lightbulb} />
+          <ScoreBadge label="效果" value={p.scores?.effectiveness} icon={Gauge} />
         </span>
       </div>
       {p.influence && (

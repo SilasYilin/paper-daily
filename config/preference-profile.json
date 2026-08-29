@@ -43,7 +43,19 @@
       "pi3",
       "dense matching",
       "implicit decoder",
-      "3d foundation model"
+      "3d foundation model",
+      "seva",
+      "vggt4d",
+      "sparse vggt",
+      "seg vggt",
+      "mvggt",
+      "vggt-long",
+      "pe3r",
+      "da3",
+      "vista4d",
+      "scanrefer",
+      "uniworld",
+      "pixworld"
     ],
     "World Model": [
       "world model",
@@ -57,7 +69,16 @@
       "embodied world",
       "latent action",
       "navigation simulation",
-      "world model benchmark"
+      "world model benchmark",
+      "worldscore",
+      "world-r1",
+      "infinidepth",
+      "lingbot-world",
+      "lyra",
+      "hy-world",
+      "wan2.1",
+      "video world",
+      "navigation simulation"
     ],
     "4D/Dynamic": [
       "4d reconstruction",
@@ -77,7 +98,12 @@
       "scene graph",
       "grounding",
       "vlm3",
-      "referring"
+      "referring",
+      "spatial mllm",
+      "spatial intelligence",
+      "3d+llm",
+      "spatial relationships",
+      "vision banana"
     ],
     "Perception/Seg": [
       "sam2",

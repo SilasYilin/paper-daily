@@ -36,6 +36,7 @@ export interface Paper {
   venue?: string;
   category?: string;
   score?: number | string;
+  scores?: { innovation?: number | null; effectiveness?: number | null; note?: string };
   paperUrl?: string;
 }
 

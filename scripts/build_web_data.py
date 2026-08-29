@@ -29,6 +29,7 @@ def normalize(p: dict) -> dict:
         "summary": summary,
         "paperUrl": p.get("paper_url", ""),
         "score": p.get("score", 0),
+        "scores": p.get("scores", {}) or {},
         "category": p.get("category", ""),
         "influence": p.get("influence", ""),
         "figure": {"url": fig, "caption": p.get("figure_caption", "")},

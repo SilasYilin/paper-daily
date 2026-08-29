@@ -186,11 +186,13 @@ LLM_JSON_INSTRUCTION = """你是论文精读卡片作者。只输出一个 JSON 
     {"emoji": "⚠️", "title": "局限与展望", "body": "专业表述：作者承认的局限+你判断的边界（2~4 句）"}
   ],
   "category": "英文大写短标签，如 FEED-FORWARD 3D × 世界模型",
+  "scores": {"innovation": 0, "effectiveness": 0},
   "influence": "一句话团队/机构影响力或热度",
   "figure_note": "流程图解说：假设流程图展示了方法全景，用 2~3 句专业语气解释图里各模块如何衔接（供流程图卡片配文，若摘要无信息则写「以原文流程图为准」）",
   "fields": {"background":"","task":"","insight":"","pipeline":"","methods":"","experiment":"","limitation":""}
 }
-规则：cards 恰好 4 张，顺序固定（问题背景/方法设计/实验结果/局限展望）；summary 是通俗体、cards 与 fields 是专业体，两种语气不要混；不编造数字，摘要里的数字才可引用；fields 七键齐全。"""
+规则：cards 恰好 4 张，顺序固定（问题背景/方法设计/实验结果/局限展望）；summary 是通俗体、cards 与 fields 是专业体，两种语气不要混；不编造数字，摘要里的数字才可引用；fields 七键齐全；
+scores 从两个角度打分（0~10 整数）：innovation=创新（问题定义/思想/框架的新颖度），effectiveness=效果（实验验证的强度与提升幅度）；仅依据摘要证据打分，宁可保守不虚高；两者独立，不要为平衡而拉齐。"""
 
 
 def _load_agent_plan_cfg():
@@ -361,6 +363,7 @@ def fallback_summarize(entry: dict, category: str):
              "body": "局限以原文 Limitation/Discussion 为准。"},
         ],
         "figure_note": "以原文流程图为准。",
+        "scores": {"innovation": None, "effectiveness": None, "note": "LLM 未运行，评分待补"},
         "influence": "新论文：作者影响力标注待补充",
         "fields": {
             "background": f"arXiv 新_submission（{entry['published']}），主分类 {', '.join(entry['categories'][:3])}。",
@@ -529,6 +532,21 @@ def main():
             srcs = "、".join(sorted({("公众号" if h["source"] == "weixin" else "B站") for h in e["_media_hits"]}))
             influence = f"中文社区 {srcs} 热议 · " + influence
         figure_note = (info.get("figure_note") or "以原文流程图为准。") if isinstance(info, dict) else "以原文流程图为准。"
+        # 双维度评分（0~10）：LLM 打分；无则按启发式保守估计并标注
+        sc = (info.get("scores") or {}) if isinstance(info, dict) else {}
+        def _clamp10(v):
+            try:
+                iv = int(round(float(v)))
+                return iv if 0 <= iv <= 10 else None
+            except (TypeError, ValueError):
+                return None
+        scores_obj = {"innovation": _clamp10(sc.get("innovation")), "effectiveness": _clamp10(sc.get("effectiveness"))}
+        if scores_obj["innovation"] is None or scores_obj["effectiveness"] is None:
+            # 具名元组无法导入，直接启发式：偏门排除过后命中偏好轴>=2 或有 HF/媒体热度的保守 7 分档
+            est = 7 if (len(e.get("_axes") or []) >= 2 or e.get("_hf_up") or e.get("_media_hits")) else 6
+            scores_obj = {"innovation": scores_obj["innovation"] if scores_obj["innovation"] is not None else est,
+                          "effectiveness": scores_obj["effectiveness"] if scores_obj["effectiveness"] is not None else est,
+                          "note": "启发式估计（LLM 未出分），仅供参考"}
         figures = []
         if not args.no_figures:
             try:
@@ -548,6 +566,7 @@ def main():
             "summary": info["summary"],
             "paper_url": f"https://arxiv.org/abs/{e['arxiv_id']}",
             "score": e["_score"],
+            "scores": scores_obj,
             "category": category,
             "influence": influence,
             "figure_url": figures[0]["file"] if figures else None,

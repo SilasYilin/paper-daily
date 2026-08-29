@@ -23,10 +23,12 @@ ROOT = os.path.dirname(BASE_DIR)
 DATA_DIR = os.path.join(ROOT, "data")
 ENV = dict(os.environ, OPENCLI_CDP_ENDPOINT="http://127.0.0.1:9222")
 
-# 查询词（按偏好方向）
+# 查询词（偏好方向 + 用户本地论文库检索词校准 2026-08-29；含点名公众号账号）
 QUERIES_WX = ["机器之心 三维重建", "量子位 世界模型", "世界模型", "3DGS 高斯泼溅", "前馈式三维重建",
-              "3D基础模型", "Glob3R", "VGGT", "新视学院 论文", "PaperWeekly"]
-QUERIES_BILI = ["世界模型 论文", "3D reconstruction 论文解读", "3DGS 新工作", "前馈 3D 重建"]
+              "3D基础模型", "Glob3R", "VGGT", "新视学院 论文", "PaperWeekly",
+              "我爱计算机视觉", "3D视觉工坊", "SAM3", "DINOv3", "世界模型 评测", "视觉语言模型 3D"]
+QUERIES_BILI = ["世界模型 论文", "3D reconstruction 论文解读", "3DGS 新工作", "前馈 3D 重建",
+                "VGGT 论文", "3D基础模型", "SAM3 解读", "深度估计 论文"]
 RECENT_DAYS = 120
 # arXiv ID 匹配（2608.19583 风格）
 ARXIV_RE = re.compile(r"\b(\d{4}\.\d{4,5})\b")
