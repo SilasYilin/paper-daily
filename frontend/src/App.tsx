@@ -29,6 +29,7 @@ export function App({ data }: { data: DataBundle }) {
   const [flatIdx, setFlatIdx] = useFlatPager(total);
 
   const meta = `${data.axes || '三维重建 × 世界模型'} · ${data.date || ''} · ${papers.length} 篇`;
+  const issue = data.issue || '';
 
   if (data.empty || papers.length === 0) {
     return (
@@ -61,7 +62,7 @@ export function App({ data }: { data: DataBundle }) {
 
   return (
     <div className="min-h-dvh bg-paper-50 font-sans">
-      <TopBar meta={meta} />
+      <TopBar meta={meta} issue={issue} />
 
       <Selector papers={papers} cur={paperIdx} onPick={i => setFlatIdx(offsets[i])} />
 
@@ -69,7 +70,7 @@ export function App({ data }: { data: DataBundle }) {
         <div key={flatIdx} className="pd-card">
           {page?.t === 'cover' && <CoverPage p={p} />}
           {page?.t === 'intro' && <IntroPage p={p} />}
-          {page?.t === 'card' && <ContentCardPage p={p} card={page.card} />}
+          {page?.t === 'card' && <ContentCardPage p={p} card={page.card} idx={cardIdx - 1} />}
           {page?.t === 'fig' && <FigurePage p={p} />}
           {page?.t === 'fields' && <FieldsPage p={p} />}
           {page?.t === 'end' && <EndPage p={p} onVote={onVote} />}
@@ -91,19 +92,19 @@ export function App({ data }: { data: DataBundle }) {
       <div className="fixed right-4 bottom-4 z-40 hidden sm:block">
         <button
           onClick={onCopy}
-          className="flex items-center gap-1.5 rounded-full bg-paper-ink px-4 py-2 text-xs font-semibold text-paper-50 shadow-lg transition-transform hover:scale-105"
+          className="flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full bg-paper-ink px-4 text-xs font-semibold text-paper-50 shadow-lg transition-colors duration-200 hover:bg-paper-accent"
         >
-          <Copy className="size-3.5" />
+          <Copy className="size-3.5" aria-hidden />
           复制文案
         </button>
       </div>
       <div className="fixed right-4 bottom-4 z-40 sm:hidden">
         <button
           onClick={onCopy}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-paper-ink text-paper-50 shadow-lg"
           aria-label="复制文案"
+          className="flex size-11 cursor-pointer items-center justify-center rounded-full bg-paper-ink text-paper-50 shadow-lg transition-colors duration-200 hover:bg-paper-accent"
         >
-          <Copy className="size-4.5" />
+          <Copy className="size-4.5" aria-hidden />
         </button>
       </div>
 

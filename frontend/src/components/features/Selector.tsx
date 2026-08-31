@@ -17,10 +17,13 @@ export function Selector({
           key={i}
           onClick={() => onPick(i)}
           title={`${p.titleZh || p.title}${p.scores?.innovation != null ? `（创新 ${p.scores.innovation}/10 · 效果 ${p.scores.effectiveness ?? '–'}/10）` : ''}`}
+          aria-label={`第 ${i + 1} 篇：${p.titleZh || p.title}`}
+          aria-current={i === cur}
           className={
-            i === cur
-              ? 'flex h-7.5 w-7.5 items-center justify-center rounded-lg border border-paper-ink bg-paper-ink text-[13px] font-bold text-paper-50 transition-all'
-              : 'flex h-7.5 w-7.5 items-center justify-center rounded-lg border border-paper-line bg-paper-card text-[13px] text-paper-ink2 transition-all hover:border-paper-accent'
+            (i === cur
+              ? 'border-paper-ink bg-paper-ink font-bold text-paper-50'
+              : 'border-paper-line bg-paper-card text-paper-ink2 hover:border-paper-accent') +
+            ' flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border text-[13px] transition-colors duration-200'
           }
         >
           {i + 1}

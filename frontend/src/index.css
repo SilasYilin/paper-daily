@@ -1,39 +1,44 @@
 @import "tailwindcss";
 
 @theme {
+  /* 展示字体：英文衬线 + 中文宋体（零网络依赖，系统栈） */
+  --font-display: Georgia, "Times New Roman", "Noto Serif SC", "Source Han Serif SC",
+    "Songti SC", SimSun, serif;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --animate-fade-up: fade-up 0.35s ease;
+  --animate-fade-up: fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 
   @keyframes fade-up {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: none; }
   }
 }
 
-/* 亮 / 暗双主题令牌（跟随 <html data-theme>） */
+/* 亮 / 暗双主题令牌（跟随 <html data-theme>）· 抹茶绿主题 */
 :root {
-  --pd-bg: #f7f7f5;
+  --pd-bg: #f6f7f3;      /* 和纸米白，带一丝绿调 */
   --pd-card: #ffffff;
-  --pd-ink: #1a1a1a;
-  --pd-ink2: #4a4a48;
-  --pd-muted: #9a9a96;
-  --pd-line: #e8e8e4;
-  --pd-accent: #c8402a;
-  --pd-soft: #faf6f3;
-  --pd-tagbg: #f2f1ee;
+  --pd-ink: #22271f;      /* 墨绿调墨色 */
+  --pd-ink2: #4a5242;
+  --pd-muted: #666f5f;    /* 4.5:1+ on #f6f7f3 */
+  --pd-line: #e4e7dc;
+  --pd-accent: #4e7048;   /* 深抹茶：文字/强调，对比 ~5.5:1 */
+  --pd-accent-mid: #7fa06f; /* 抹茶中调：表盘/装饰 */
+  --pd-soft: #eff3ea;    /* 抹茶奶盖 */
+  --pd-tagbg: #f0f2e9;
 }
 
 [data-theme="dark"] {
-  --pd-bg: #141412;
-  --pd-card: #1e1e1b;
-  --pd-ink: #ecebe6;
-  --pd-ink2: #b5b3ac;
-  --pd-muted: #6f6e69;
-  --pd-line: #2c2c28;
-  --pd-accent: #e8664f;
-  --pd-soft: #242220;
-  --pd-tagbg: #262622;
+  --pd-bg: #131511;
+  --pd-card: #1b1e19;
+  --pd-ink: #e9ece3;
+  --pd-ink2: #b3b9ab;
+  --pd-muted: #969c8d;
+  --pd-line: #292d25;
+  --pd-accent: #9dbe8e;   /* 亮抹茶，暗底高对比 */
+  --pd-accent-mid: #7fa06f;
+  --pd-soft: #232720;
+  --pd-tagbg: #252922;
 }
 
 @theme inline {
@@ -44,11 +49,12 @@
   --color-paper-muted: var(--pd-muted);
   --color-paper-line: var(--pd-line);
   --color-paper-accent: var(--pd-accent);
+  --color-paper-accent-mid: var(--pd-accent-mid);
   --color-paper-soft: var(--pd-soft);
   --color-paper-tagbg: var(--pd-tagbg);
 }
 
-/* 主卡片（.pd-card）与导读首字母下沉（.pd-intro）——仅两个组件级类，其余全走原子类 */
+/* 主卡片（.pd-card）与导读首字母下沉（.pd-intro）--仅两个组件级类，其余全走原子类 */
 .pd-card {
   background: var(--pd-card);
   border: 1px solid var(--pd-line);
@@ -58,14 +64,37 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: fade-up 0.35s ease;
+  animation: fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pd-intro::first-letter {
-  font-size: 34px;
-  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 700;
   color: var(--pd-accent);
   float: left;
   line-height: 1;
-  margin: 4px 8px 0 0;
+  margin: 5px 10px 0 0;
+}
+
+/* 无障碍：键盘焦点环 */
+:focus-visible {
+  outline: 2px solid var(--pd-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 尊重系统减弱动效 */
+@media (prefers-reduced-motion: reduce) {
+  .pd-card { animation: none; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* 期刊刊头竖排分隔 */
+.pd-vol {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
 }
