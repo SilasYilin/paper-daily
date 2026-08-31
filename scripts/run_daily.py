@@ -396,15 +396,47 @@ def main():
     prof = load_profile(args.profile)
     cats = [c.strip() for c in args.categories.split(",") if c.strip()]
 
-    # 1) 抓取（失败则保留上期产物并退出）
-    print(f"[1/5] 抓取 arXiv: cats={cats} limit={args.fetch_limit} window={args.window_days}d")
+    # 1) 抓取（v0.9 源优先级：HF daily papers 主源 -> arXiv 元数据补抓/兜底）
+    print(f"[1/5] 抓取：HF daily(7d) 主源 + arXiv(cats={cats}, limit={args.fetch_limit}) 补抓")
+    hf_main = {}
+    try:
+        import importlib
+        sh = importlib.import_module("sources_hf") if BASE_DIR in sys.path else None
+        if sh is None:
+            sys.path.insert(0, BASE_DIR)
+            import sources_hf as sh  # noqa
+        sh.main()
+        with open(os.path.join(DATA_DIR, "sources_hf.json"), encoding="utf-8") as f:
+            hf_main = json.load(f).get("hf_daily") or {}
+        print(f"    [HF主源] {len(hf_main)} 篇（含 githubRepo {sum(1 for v in hf_main.values() if v.get('githubRepo'))} 篇）")
+    except Exception as e:  # noqa: BLE001
+        print(f"    [HF主源] 拉取失败（{e}），退回 arXiv 主源")
     try:
         entries = fetch_arxiv(cats, args.fetch_limit)
     except RuntimeError as e:
-        print(f"[!] {e}")
-        print("[!] 按红线 5：保留上期 data/today.json 与 web/data.js 不覆盖，今日跳过。")
-        sys.exit(1)
-    print(f"    共 {len(entries)} 条")
+        entries = []
+        if not hf_main:
+            print(f"[!] arXiv 也失败：{e}")
+            print("[!] 按红线 5：保留上期 data/today.json 与 web/data.js 不覆盖，今日跳过。")
+            sys.exit(1)
+        print("    [arXiv] 失败，仅用 HF 主源候选")
+    hf_ids = set(hf_main)
+    merged = {e["arxiv_id"]: e for e in entries}
+    for aid, v in hf_main.items():
+        if aid not in merged:
+            merged[aid] = {
+                "arxiv_id": aid, "title": v.get("title") or "",
+                "abstract": "", "authors": "", "published": (v.get("publishedAt") or "")[:10],
+                "categories": [], "comment": "", "_from_hf": True, "_hf_up": v.get("upvotes", 0),
+                "_github": v.get("githubRepo") or "",
+            }
+        else:
+            merged[aid]["_from_hf"] = True
+            merged[aid]["_hf_up"] = max(merged[aid].get("_hf_up", 0), v.get("upvotes", 0))
+            if v.get("githubRepo"):
+                merged[aid]["_github"] = v["githubRepo"]
+    entries = list(merged.values())
+    print(f"    合并后共 {len(entries)} 条（HF {len(hf_ids)} + arXiv 独有 {len(entries) - len([e for e in entries if e.get('_from_hf')])}）")
 
     # 1b) 扩展源：HF daily papers 热度（upvote>=30 写入 influence；热度加成 +0.08）
     hf_hot, hf_all = {}, {}
@@ -483,7 +515,9 @@ def main():
             continue
         if low_hit and max((ax["weight"] for ax in prof["axes"] if ax["name"] in hit_axes), default=0) < 0.9:
             continue
-        hf_bonus = 0.08 if e["arxiv_id"] in hf_hot else 0.0
+        hf_bonus = 0.10 if e.get("_from_hf") else 0.0  # v0.9：入选 HF daily 本身是社区筛选信号
+        hf_bonus += min(0.10, (e.get("_hf_up", 0) or 0) / 300.0)  # upvote 热度：300 票封顶 +0.10
+        hf_bonus += 0.08 if e["arxiv_id"] in hf_hot else 0.0
         med_bonus, med_hits = media_signal(e)
         cands.append({**e, "_score": round(normalize_score(score, prof) + hf_bonus + med_bonus, 2), "_axes": hit_axes,
                       "_boosts": hit_boosts, "_hf_up": hf_hot.get(e["arxiv_id"], {}).get("upvotes", 0),
@@ -577,6 +611,21 @@ def main():
         })
     # 4) 取 top max 篇写 today.json（list 格式，契约第五节）
     chosen = papers[: args.max]
+    # v0.9：封面元数据补全（作者/高校/被引/star/GitHub）——只对最终精选的少量论文请求
+    try:
+        sys.path.insert(0, BASE_DIR)
+        import paper_meta
+        _repos = {e["arxiv_id"]: e.get("_github") or "" for e in cands[: args.llm_top] if e["arxiv_id"] in {p_["paper_url"].rsplit("/", 1)[-1] for p_ in chosen}}
+        paper_meta.enrich(chosen_mapped := [{"arxiv_id": p_["paper_url"].rsplit("/", 1)[-1], **p_} for p_ in chosen], _repos)
+        for src_, dst_ in zip(chosen_mapped, chosen):
+            for k in ("cited_by", "institutions", "github", "stars"):
+                if src_.get(k) is not None:
+                    dst_[k] = src_[k]
+            # 高校并入 authors 展示字段
+            if src_.get("institutions"):
+                dst_["authors"] = src_["authors"] + " · " + " / ".join(src_["institutions"])
+    except Exception as me:  # noqa: BLE001
+        print(f"    [meta] 元数据补全失败（不阻塞）：{me}", file=sys.stderr)
     for p in chosen:
         p.pop("_boosts", None)
     with open(TODAY_JSON, "w", encoding="utf-8") as f:

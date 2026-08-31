@@ -32,6 +32,10 @@ def normalize(p: dict) -> dict:
         "scores": p.get("scores", {}) or {},
         "category": p.get("category", ""),
         "influence": p.get("influence", ""),
+        "github": p.get("github", "") or "",
+        "stars": p.get("stars"),
+        "citedBy": p.get("cited_by"),
+        "institutions": p.get("institutions", []) or [],
         "figure": {"url": fig, "caption": p.get("figure_caption", "")},
         "fields": {k: (p.get("fields") or {}).get(k, "") for k in FIELDS},
     }

@@ -1,86 +1,50 @@
 {
- "fetched_at": "2026-08-29T15:47:20",
+ "fetched_at": "2026-08-31T14:19:18",
  "mentions": [
   {
-   "source": "bilibili",
-   "query": "世界模型 论文",
-   "title": "【2026论文黄金赛道】Transformer创新点枯竭？把MLP换成KAN，就是一篇新论文！",
-   "summary": "",
-   "time": "",
+   "source": "weixin",
+   "query": "量子位 世界模型",
+   "title": "21独家|AI人才失血之际,“世界模型大将”加盟理想,向詹锟汇报",
+   "summary": "世界模型已成为机器人行业炙手可热的技术路线.机器人行业已经... 据量子位发布的《2026上半年中国具身智能赛道投融资统计报告》...",
+   "time": "3天前",
    "arxiv_id": null,
-   "url": "https://www.bilibili.com/video/BV1778y6eEV8"
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSxIEy8wvowI99FDH6JEYvk_3ZpEpij0FVlqXa8Fplpd9gfUdV6cLpHj5jyMv4RQrT_8GAFqJH95A3JZVQOqxJivvwbWMcm4Z0p5R_OO6q4DQHbwjJ-IVSGZjoH_TDZQ1oGI-pk4VUz9U_to94yaBnKg2MZuoeAytsikfrIKITSaSsacixbVOZ1jeFeQ50912-2626-7RCx0ag4dtnk65261f_71bqkOtiw..&type=2&query=%E9%87%8F%E5%AD%90%E4%BD%8D%20%E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B&token=B9A55547AB5CDADFBABDE0EA1BACAEA2BB45856F6A951CEB"
   },
   {
-   "source": "bilibili",
-   "query": "3D reconstruction 论文解读",
-   "title": "ICLR&#x27;25杰出论文|Learning Dynamics of LLM Finetuning",
-   "summary": "",
-   "time": "",
+   "source": "weixin",
+   "query": "量子位 世界模型",
+   "title": "AI早报|8月18日:世界模型有声 机器人开卡丁车",
+   "summary": "量子位、Noiz AI、腾讯新闻 一句金句当世界模型开始有声音、机器人开始踩油门,AI 离＂真正待在物理世界里＂又近了一层——但热...",
+   "time": "2026-8-18",
    "arxiv_id": null,
-   "url": "https://www.bilibili.com/video/BV1wfRgY1Ecp"
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSxIEy8wvowI99FDH6JEYvk_3ZpEpij0FVlqXa8Fplpd99Dt7cI6x94ttzEQWk13psAgDeomQrg9GnapBYD8Dz47NwSddFBSyotMlxG3RMo2n_bRDTmMl5Mx2h9ykhOrMt1k-xr7LEga3GZrm9KXVyDl9OOo7KYSxS9tQRe87WCLDvwiRxZRm5FnFQ0eKOvnzl6kz3lgx1R4pO6jBoWfLsEt5LU3lqtPw9g..&type=2&query=%E9%87%8F%E5%AD%90%E4%BD%8D%20%E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B&token=B9A55547AB5CDADFBABDE0EA1BACAEA2BB45856F6A951CEB"
   },
   {
-   "source": "bilibili",
-   "query": "3D reconstruction 论文解读",
-   "title": "CVPR2023：不使用任何3D数据标签，零样本学习3D场景理解",
-   "summary": "",
-   "time": "",
+   "source": "weixin",
+   "query": "量子位 世界模型",
+   "title": "世界模型一口气输出小时级视频不跑偏,开源了",
+   "summary": "Alaya Lab 团队 投稿 量子位 | 公众号 QbitAI视频世界模型跑久了,往往面临三个问题:画面发灰发糊或者过曝过饱和、场景悄悄换了地...",
+   "time": "2026-8-17",
    "arxiv_id": null,
-   "url": "https://www.bilibili.com/video/BV1824y1t7n3"
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSxIEy8wvowI99FDH6JEYvk_3ZpEpij0FVlqXa8Fplpd9iTrKF-1kYQ7t2CYZn41MAZXQFT3BXfmGVWryYMjqlQRUh2vBFpquc1Sj2l2ha1ds02_1K9FSqKgmKIZ11lqsijFtjWJctykPsDeVe6Gvp66y6sA4L644597tqn3pMvpbLu7rRPitRq95IGFjPT32nnuS60_jk9DB-qoZHXvYATX2CsG6-xMgzQ..&type=2&query=%E9%87%8F%E5%AD%90%E4%BD%8D%20%E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B&token=B9A55547AB5CDADFBABDE0EA1BACAEA2BB45856F6A951CEB"
   },
   {
-   "source": "bilibili",
-   "query": "3D reconstruction 论文解读",
-   "title": "【论文一刻 】ICCV&#x27;23  从2D图像到3D空间：全新的特征拉升方法 - 3D Deformable Attention",
-   "summary": "",
-   "time": "",
+   "source": "weixin",
+   "query": "新视学院 3DGS",
+   "title": "Jonathan Li |华东师范大学空间人工智能学院 | LiDAR与三维点云智能/无人机和自动驾驶/GeoAI 方向 | 2027申博导师分析",
+   "summary": "学院依托地理信息科学教育部重点实验室、自然资源部超大城市自... 它比较适合作为:3DGS + GeoAI + Digital Twin方向申请人的第一...",
+   "time": "2026-8-26",
    "arxiv_id": null,
-   "url": "https://www.bilibili.com/video/BV1Pw411k7gH"
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSxIEy8wvowI9k_uAf4wtGtX3ZpEpij0FVlqXa8Fplpd9hzMN17zDDct9lsP3qJPqlF-vOoGY5kiOOolbg1XzOvjegwFwkQoPzwcDw-30zQEP6T65ud6WKg4oCFdmHya_NfN07mRKIptM6N8GPUbX4JIwFEeouryOJfxNFLX4QVbL7dY-K1n0vO0TVBNY69imDTDCmk7abkjlx9MWROCwdvzvzHZXxeLdyg..&type=2&query=%E6%96%B0%E8%A7%86%E5%AD%A6%E9%99%A2%203DGS&token=B9A6509CAB5CDADFBABDE0EA1BACAEA2BB45856F6A951D14"
   },
   {
-   "source": "bilibili",
-   "query": "VGGT 论文",
-   "title": "CVPR&#x27;25 最佳论文一作亲解 | VGGT：纯前馈Transformer架构，快速3D重建新范式！",
-   "summary": "",
-   "time": "",
+   "source": "weixin",
+   "query": "新视学院 3DGS",
+   "title": "【ChinaSI2026】专题论坛:空间智能 for X",
+   "summary": "东南大学自动化学院副院长、首席教授(二级教授),博士生导师... 设计 monoVLN,结合 3DGS 重建、特征补全与主动感知,打通单...",
+   "time": "2026-8-18",
    "arxiv_id": null,
-   "url": "https://www.bilibili.com/video/BV1UyunzLE4J"
-  },
-  {
-   "source": "bilibili",
-   "query": "VGGT 论文",
-   "title": "CVPR2025最佳论文！3D重建新起点VGGT",
-   "summary": "",
-   "time": "",
-   "arxiv_id": null,
-   "url": "https://www.bilibili.com/video/BV11FM9zhE4q"
-  },
-  {
-   "source": "bilibili",
-   "query": "VGGT 论文",
-   "title": "【CAM2025】即插即用|VGGT：颠覆传统！秒级重建三维场景，VGGT即插即用，性能炸裂！",
-   "summary": "",
-   "time": "",
-   "arxiv_id": null,
-   "url": "https://www.bilibili.com/video/BV14xH8zYELQ"
-  },
-  {
-   "source": "bilibili",
-   "query": "VGGT 论文",
-   "title": "CVPR 2025 最佳论文！VGGT开创高效3D视觉新范式！",
-   "summary": "",
-   "time": "",
-   "arxiv_id": null,
-   "url": "https://www.bilibili.com/video/BV1qKNbzzEMZ"
-  },
-  {
-   "source": "bilibili",
-   "query": "SAM3 解读",
-   "title": "【2026最强SAM模型】分割一切！Segment Anything Model 最全解读！一口气带你学透SAM1-SAM3模型，最全解读！附完整数据集！",
-   "summary": "",
-   "time": "",
-   "arxiv_id": null,
-   "url": "https://www.bilibili.com/video/BV1Px9aBPEft"
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSxIEy8wvowI9k_uAf4wtGtX3ZpEpij0FVlqXa8Fplpd9jCaJTu_uMj-mJ3JCEkSXu6JxM_dx0PDDa3Zg3XOhX-g-Gl3_8P-pQHGabbp2jS5HuQD2HkmsQk8RZ-7BdqEhAuOee6hXbSSvETZ-_FnLx7lv0avq0BheXNyI822kEf5rhVjRu3CSdWnaP-zU3ySIw3qIWB5cjnhMfhdtrMFTzhbS-e4Yz84xMA..&type=2&query=%E6%96%B0%E8%A7%86%E5%AD%A6%E9%99%A2%203DGS&token=B9A6509CAB5CDADFBABDE0EA1BACAEA2BB45856F6A951D14"
   }
  ]
 }

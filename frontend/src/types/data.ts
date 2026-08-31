@@ -32,6 +32,10 @@ export interface Paper {
   figure?: string | null;
   fields?: Fields;
   influence?: string;
+  github?: string;
+  stars?: number | null;
+  citedBy?: number | null;
+  institutions?: string[];
   authors?: string;
   venue?: string;
   category?: string;

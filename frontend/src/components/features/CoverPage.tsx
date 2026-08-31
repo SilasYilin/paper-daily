@@ -1,5 +1,5 @@
 import type { Paper } from '../../types/data';
-import { Lightbulb, Gauge, Star, Users } from 'lucide-react';
+import { Lightbulb, Gauge, Star, Users, CodeXml, BookOpen, Building2 } from 'lucide-react';
 
 /** 双维度评分环（0~10，半环形仪表盘样式） */
 function ScoreDial({ label, value, icon: Icon }: { label: string; value?: number | null; icon: typeof Lightbulb }) {
@@ -61,19 +61,50 @@ export function CoverPage({ p }: { p: Paper }) {
         </div>
       </div>
 
-      {/* 评分区：双表盘 */}
-      <div className="mx-6 flex items-center justify-end gap-8 border-t border-dashed border-paper-line pb-5 pt-5 sm:mx-10">
-        <ScoreDial label="创新" value={p.scores?.innovation} icon={Lightbulb} />
-        <ScoreDial label="效果" value={p.scores?.effectiveness} icon={Gauge} />
+      {/* 评分区：双表盘 + 证据徽章（被引/star/GitHub） */}
+      <div className="mx-6 flex items-center justify-between gap-6 border-t border-dashed border-paper-line pb-5 pt-5 sm:mx-10">
+        <div className="flex flex-col gap-2">
+          <a
+            href={p.github || 'https://github.com/search?q=' + encodeURIComponent(p.title || '')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex min-h-11 cursor-pointer items-center gap-1.5 self-start rounded-lg border border-paper-line bg-paper-soft px-3 text-xs font-semibold text-paper-ink transition-colors duration-200 hover:border-paper-accent hover:text-paper-accent"
+          >
+            <CodeXml className="size-3.5" aria-hidden />
+            {p.github ? 'GitHub' : '搜代码'}
+            {typeof p.stars === 'number' && (
+              <span className="ml-1 flex items-center gap-0.5 text-paper-accent">
+                <Star className="size-3 fill-current" aria-hidden />
+                {p.stars >= 1000 ? `${(p.stars / 1000).toFixed(1)}k` : p.stars}
+              </span>
+            )}
+          </a>
+          {typeof p.citedBy === 'number' && (
+            <span className="flex items-center gap-1 text-[11px] text-paper-muted">
+              <BookOpen className="size-3" aria-hidden />
+              被引 {p.citedBy}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-8">
+          <ScoreDial label="创新" value={p.scores?.innovation} icon={Lightbulb} />
+          <ScoreDial label="效果" value={p.scores?.effectiveness} icon={Gauge} />
+        </div>
       </div>
 
-      {/* 页脚：作者 + 影响力 */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-paper-line px-6 py-4 text-xs text-paper-muted sm:px-10">
-        <span className="flex min-w-0 items-center gap-1.5">
-          <Users className="size-3 shrink-0" aria-hidden />
+      {/* 页脚：作者 + 高校 */}
+      <div className="flex flex-wrap items-start justify-between gap-3 border-t border-paper-line px-6 py-4 text-xs text-paper-muted sm:px-10">
+        <span className="flex min-w-0 items-start gap-1.5">
+          <Users className="mt-0.5 size-3 shrink-0" aria-hidden />
           <span className="truncate">{p.authors || ''}</span>
         </span>
       </div>
+      {p.institutions && p.institutions.length > 0 && (
+        <div className="flex items-start gap-1.5 px-6 pb-5 text-xs leading-relaxed text-paper-muted sm:px-10">
+          <Building2 className="mt-0.5 size-3 shrink-0 text-paper-accent" aria-hidden />
+          <span>{p.institutions.join(' · ')}</span>
+        </div>
+      )}
       {(p.influence || p.venue) && (
         <div className="space-y-1.5 px-6 pb-5 text-xs leading-relaxed text-paper-muted sm:px-10">
           {p.influence && (
