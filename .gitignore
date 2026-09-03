@@ -3,3 +3,7 @@ scripts/output/
 __pycache__/
 *.pyc
 .env
+node_modules/
+frontend/dist/
+frontend/figs
+*.log

@@ -16,6 +16,9 @@ import re
 import sys
 import urllib.request
 
+# 直连 opener（绕过可能失效的本地 http_proxy 环境变量）
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(BASE_DIR)
 DATA_DIR = os.path.join(ROOT, "data")
@@ -26,7 +29,7 @@ HF_DAYS = 7  # 最近 7 天（每天 50 篇，去重约 300 条，社区每日�
 
 def http_json(url, timeout=30):
     req = urllib.request.Request(url, headers={"User-Agent": "paper-daily/0.9"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    with _OPENER.open(req, timeout=timeout) as r:
         return json.loads(r.read().decode("utf-8"))
 
 

@@ -1,0 +1,9 @@
+{
+  "name": "paper-daily-wechat-search",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sogou weixin article search (bundled from wechat-article-search skill)",
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  }
+}

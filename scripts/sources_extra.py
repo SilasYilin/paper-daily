@@ -37,9 +37,12 @@ EXCLUDE_KEYWORDS = [
 ]
 
 
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+
 def http_json(url, timeout=30):
     req = urllib.request.Request(url, headers={"User-Agent": "paper-daily/0.4"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    with _OPENER.open(req, timeout=timeout) as r:
         return json.loads(r.read().decode("utf-8"))
 
 

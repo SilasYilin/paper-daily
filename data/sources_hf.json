@@ -1,369 +1,355 @@
 {
  "hf_daily": {
-  "2608.28460": {
-   "arxiv_id": "2608.28460",
-   "title": "LayerRecall: A State-Conditioned Memory Router for Long-Horizon Consistency in Video Generation",
-   "upvotes": 6,
-   "githubRepo": "https://github.com/Yixuan-Ding-ZJU/LayerRecall",
-   "publishedAt": "2026-08-28T00:00:00.000Z"
-  },
-  "2608.27370": {
-   "arxiv_id": "2608.27370",
-   "title": "Puro-2B: Poor Lab's Qwen2-1.5B Trained on RTX 5090 within $5090",
-   "upvotes": 4,
-   "githubRepo": "https://github.com/thu-pacman/Puro-Megatron",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.25417": {
-   "arxiv_id": "2608.25417",
-   "title": "Paint What You See: Benchmarking Dexterous Visual Tool Use in Multimodal Agents",
-   "upvotes": 3,
-   "githubRepo": "https://github.com/OOOHS/EASEL",
-   "publishedAt": "2026-08-26T00:00:00.000Z"
-  },
-  "2608.24804": {
-   "arxiv_id": "2608.24804",
-   "title": "StarHarness: Evolving Harnesses with Stratified Search for Enterprise Environments",
-   "upvotes": 2,
-   "githubRepo": "",
-   "publishedAt": "2026-08-25T00:00:00.000Z"
-  },
-  "2608.26582": {
-   "arxiv_id": "2608.26582",
-   "title": "J-Zero: Unified Challenger--Solver--Judge Co-Evolution from Zero Data",
-   "upvotes": 23,
-   "githubRepo": "https://github.com/GyoukChu/J-Zero",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.27529": {
-   "arxiv_id": "2608.27529",
-   "title": "Revisiting Local Context for Long-Horizon Streaming 3D Reconstruction",
-   "upvotes": 16,
-   "githubRepo": "https://github.com/amap-cvlab/ABot-Recon",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.24777": {
-   "arxiv_id": "2608.24777",
-   "title": "StepGuard: Learning Step-Level Guardrails with Scalable Supervision and Safety-Utility Balancing",
-   "upvotes": 13,
-   "githubRepo": "https://github.com/zheng977/StepGuard",
-   "publishedAt": "2026-08-25T00:00:00.000Z"
-  },
-  "2608.27906": {
-   "arxiv_id": "2608.27906",
-   "title": "Rubric-to-Code Credit Assignment for Reinforcement Learning",
-   "upvotes": 3,
-   "githubRepo": "",
-   "publishedAt": "2026-08-28T00:00:00.000Z"
-  },
-  "2608.28549": {
-   "arxiv_id": "2608.28549",
-   "title": "Video Generative Models as Geometry Learner",
-   "upvotes": 4,
-   "githubRepo": "",
-   "publishedAt": "2026-08-28T00:00:00.000Z"
-  },
-  "2608.25697": {
-   "arxiv_id": "2608.25697",
-   "title": "LMSM: LLM Security Framework Inspired by Linux Security Modules",
-   "upvotes": 3,
-   "githubRepo": "https://github.com/xiuyuz/LMSM",
-   "publishedAt": "2026-08-26T00:00:00.000Z"
-  },
-  "2608.20965": {
-   "arxiv_id": "2608.20965",
-   "title": "Training, learning and inference: unified dynamics of neural systems",
-   "upvotes": 2,
-   "githubRepo": "https://github.com/wind342/gfg-training-learning-inference-experiments",
-   "publishedAt": "2026-08-21T00:00:00.000Z"
-  },
-  "2608.27550": {
-   "arxiv_id": "2608.27550",
-   "title": "Beyond Data Scaling: Representation-Centric Continued Pre-training for Vision-Language-Action Models",
-   "upvotes": 21,
-   "githubRepo": "https://github.com/starVLA/VLAct",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.24115": {
-   "arxiv_id": "2608.24115",
-   "title": "PonderPounce: A Pretrained MLLM as an Episode Context Engine for Robot Control",
-   "upvotes": 10,
-   "githubRepo": "https://github.com/worv-ai/PonderPounce",
-   "publishedAt": "2026-08-25T00:00:00.000Z"
-  },
-  "2608.27549": {
-   "arxiv_id": "2608.27549",
-   "title": "Code as Worlds: Agentic Discovery of Executable World Representations for Physical Reasoning",
-   "upvotes": 24,
-   "githubRepo": "https://github.com/mirros-lab/code-as-world",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.28478": {
-   "arxiv_id": "2608.28478",
-   "title": "Blind Men and the Elephant: Probing the Epistemic Myopia of LLMs under Long-Tail Divergent Knowledge",
-   "upvotes": 11,
-   "githubRepo": "https://github.com/Tencent/ElephantBench",
-   "publishedAt": "2026-08-28T00:00:00.000Z"
-  },
-  "2608.28476": {
-   "arxiv_id": "2608.28476",
-   "title": "ContextPilot: Teaching Agents for Proactive Context Management via Fine-grained RL",
-   "upvotes": 16,
-   "githubRepo": "https://github.com/Tencent/ContextPilot",
-   "publishedAt": "2026-08-28T00:00:00.000Z"
-  },
-  "2608.23943": {
-   "arxiv_id": "2608.23943",
-   "title": "Luce: Relightable Gaussians for 3D Asset Generation",
-   "upvotes": 12,
-   "githubRepo": "",
-   "publishedAt": "2026-08-25T00:00:00.000Z"
-  },
-  "2608.27455": {
-   "arxiv_id": "2608.27455",
-   "title": "CritICL: Inference-Time Weak-to-Strong Generalization from Small Language Model Failure Modes",
-   "upvotes": 9,
-   "githubRepo": "",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.25798": {
-   "arxiv_id": "2608.25798",
-   "title": "TacForcing: Streaming Action Generation with Execution-Time Tactile Feedback",
-   "upvotes": 5,
-   "githubRepo": "",
-   "publishedAt": "2026-08-26T00:00:00.000Z"
-  },
-  "2608.19269": {
-   "arxiv_id": "2608.19269",
-   "title": "What Does an Evaluation License? A Commit-Bound Census of Claim-Relative Inference in Inspect Evals",
-   "upvotes": 3,
-   "githubRepo": "",
-   "publishedAt": "2026-08-25T00:00:00.000Z"
-  },
-  "2608.27123": {
-   "arxiv_id": "2608.27123",
-   "title": "EditaLive! Unified Character Video Editing for Live Streaming",
-   "upvotes": 3,
-   "githubRepo": "https://github.com/GVCLab/EditaLive",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.26530": {
-   "arxiv_id": "2608.26530",
-   "title": "PILOT in the Loop: Live Self-Improvement for Long-Horizon Agents",
-   "upvotes": 30,
-   "githubRepo": "",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.25518": {
-   "arxiv_id": "2608.25518",
-   "title": "Agentic Game Development as a Verifiable Trajectory Data Engine for Scaling World Models",
-   "upvotes": 182,
-   "githubRepo": "",
-   "publishedAt": "2026-08-26T00:00:00.000Z"
-  },
-  "2608.26238": {
-   "arxiv_id": "2608.26238",
-   "title": "Procedura: Agentic 3D Modeling with Procedural Control",
-   "upvotes": 12,
-   "githubRepo": "https://github.com/SpatiaOS/Procedura",
-   "publishedAt": "2026-08-26T00:00:00.000Z"
-  },
-  "2608.26809": {
-   "arxiv_id": "2608.26809",
-   "title": "Thinking on Shots: Consistent Multi-Shot Video Editing with Agentic Reasoning",
-   "upvotes": 4,
-   "githubRepo": "https://github.com/Wucy0519/MMLVE",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.26200": {
-   "arxiv_id": "2608.26200",
-   "title": "GameWAM: A World Action Model for Video Games",
-   "upvotes": 44,
-   "githubRepo": "https://github.com/yunncheng/GameWAM",
-   "publishedAt": "2026-08-25T00:00:00.000Z"
-  },
-  "2608.27448": {
-   "arxiv_id": "2608.27448",
-   "title": "TTPO: Test-Time Policy Optimization",
-   "upvotes": 73,
-   "githubRepo": "https://github.com/ZJU-REAL/TTPO",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.26993": {
-   "arxiv_id": "2608.26993",
-   "title": "Aphanta: Diagnosing Task-Aligned Image-Edited Intermediates for Multimodal Reasoning",
-   "upvotes": 3,
-   "githubRepo": "",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.25500": {
-   "arxiv_id": "2608.25500",
-   "title": "CaSKG: Counterfactual-Causal Skill Graphs for Scalable Agent Skill Retrieval",
-   "upvotes": 5,
-   "githubRepo": "https://github.com/ZhiyuanLi218/Caskg",
-   "publishedAt": "2026-08-26T00:00:00.000Z"
-  },
-  "2608.15763": {
-   "arxiv_id": "2608.15763",
-   "title": "Training Agents to Evolve with Their Harness: TaoLive Digital Avatar Agent Technical Report",
-   "upvotes": 47,
-   "githubRepo": "",
-   "publishedAt": "2026-08-22T00:00:00.000Z"
-  },
-  "2608.23172": {
-   "arxiv_id": "2608.23172",
-   "title": "CaRGo-T: Causal Reasoning Graph-of-Thought improves Multimodal Humor Comprehension",
-   "upvotes": 7,
-   "githubRepo": "https://github.com/abhi1nandy2/CaRGo-T",
-   "publishedAt": "2026-08-24T00:00:00.000Z"
-  },
-  "2608.27345": {
-   "arxiv_id": "2608.27345",
-   "title": "PAWBench: How Far Are We from Probabilistically Aligned World Modeling?",
-   "upvotes": 137,
-   "githubRepo": "https://github.com/Andrew0613/PAWBench",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.27456": {
-   "arxiv_id": "2608.27456",
-   "title": "UrbanGround: From Local Perception to Spatial Agency in a Real-Scale City",
-   "upvotes": 105,
-   "githubRepo": "https://github.com/UrbanGround/UrbanGround",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.26103": {
-   "arxiv_id": "2608.26103",
-   "title": "Zero-WAM: In-Context World-Action Modeling from Human Videos for Open-Ended Task Generalization",
-   "upvotes": 19,
-   "githubRepo": "https://github.com/robbyant-research/Zero-WAM",
-   "publishedAt": "2026-08-26T00:00:00.000Z"
-  },
-  "2608.27454": {
-   "arxiv_id": "2608.27454",
-   "title": "WikiSkill: Compiling Agent Experience into Persistent Knowledge for Skill Evolution",
-   "upvotes": 21,
-   "githubRepo": "",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.26872": {
-   "arxiv_id": "2608.26872",
-   "title": "Self-OPD: On-Policy Distillation for Flow Matching Models without Teacher",
-   "upvotes": 73,
-   "githubRepo": "",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.27351": {
-   "arxiv_id": "2608.27351",
-   "title": "Understanding Evolution Strategies for LLM Reasoning: Broader Reasoning Coverage than GRPO",
-   "upvotes": 16,
-   "githubRepo": "",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.27168": {
-   "arxiv_id": "2608.27168",
-   "title": "Magpie: Real-Time World Renderer for Interactive Games",
-   "upvotes": 8,
-   "githubRepo": "",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.27260": {
-   "arxiv_id": "2608.27260",
-   "title": "What Makes Good Agentic Data? An ACE Lens on Data Generation for LLM Agents",
-   "upvotes": 63,
-   "githubRepo": "",
-   "publishedAt": "2026-08-27T00:00:00.000Z"
-  },
-  "2608.21832": {
-   "arxiv_id": "2608.21832",
-   "title": "GUI-Primitives: Diagnosing Spatial Reasoning Failures in Vision-Language GUI Grounding",
-   "upvotes": 9,
-   "githubRepo": "https://github.com/Abrar2652/gui-primitives",
-   "publishedAt": "2026-08-22T00:00:00.000Z"
-  },
-  "2608.25832": {
-   "arxiv_id": "2608.25832",
-   "title": "Skill Issue: Are Skills Language-Invariant in LLMs?",
-   "upvotes": 4,
-   "githubRepo": "https://github.com/TextArena/TextArena",
-   "publishedAt": "2026-08-26T00:00:00.000Z"
-  },
-  "2608.26070": {
-   "arxiv_id": "2608.26070",
-   "title": "Prefix Sliding for efficient test-time scaling",
-   "upvotes": 4,
-   "githubRepo": "https://github.com/Muennighoff/prefix-sliding",
-   "publishedAt": "2026-08-26T00:00:00.000Z"
-  },
-  "2608.14652": {
-   "arxiv_id": "2608.14652",
-   "title": "Pushing the Limits of High-Resolution Weather Forecasting through Data Scaling",
-   "upvotes": 4,
-   "githubRepo": "",
-   "publishedAt": "2026-07-31T00:00:00.000Z"
-  },
-  "2608.25204": {
-   "arxiv_id": "2608.25204",
-   "title": "LibriBrain100: One Hundred Hours of Broad and Deep MEG Data for Neural Speech Decoding at Scale",
-   "upvotes": 3,
-   "githubRepo": "https://github.com/neural-processing-lab/pnpl",
-   "publishedAt": "2026-08-25T00:00:00.000Z"
-  },
-  "2608.23564": {
-   "arxiv_id": "2608.23564",
-   "title": "SWE Refactor Bench: Can Coding Agents Complete a Long-Horizon, Whole-Repository Stack Migration?",
-   "upvotes": 14,
-   "githubRepo": "https://github.com/Einsia/SWE-Refactor-Bench",
-   "publishedAt": "2026-08-24T00:00:00.000Z"
-  },
-  "2608.21140": {
-   "arxiv_id": "2608.21140",
-   "title": "A Modular Agent for Reliable and Auditable Spatial Relation Verification in CT Scans",
-   "upvotes": 2,
-   "githubRepo": "https://github.com/DeveloperNomis/MICCAI-Medical-Agent",
-   "publishedAt": "2026-08-21T00:00:00.000Z"
-  },
-  "2608.25625": {
-   "arxiv_id": "2608.25625",
-   "title": "RetrievalRouter: Joint Modality and Architecture Selection for Document Retrieval",
-   "upvotes": 3,
-   "githubRepo": "https://github.com/emrekuruu/retrieval-router",
-   "publishedAt": "2026-08-26T00:00:00.000Z"
-  },
-  "2608.22071": {
-   "arxiv_id": "2608.22071",
-   "title": "Real-TurnTurk: A Multimodal Turkish Corpus for Turn-Taking Prediction",
+  "2609.01657": {
+   "arxiv_id": "2609.01657",
+   "title": "NeoMME: A Single-Tower Multimodal-Native Multilingual Foundation Encoder for Efficient Fine-Tuning and Inference",
    "upvotes": 0,
    "githubRepo": "",
-   "publishedAt": "2026-08-22T00:00:00.000Z"
+   "publishedAt": "2026-08-31T00:00:00.000Z"
   },
-  "2608.23256": {
-   "arxiv_id": "2608.23256",
-   "title": "Is Next-Chunk Reasoning RL Really Better than SFT? Revisiting Training Strategies under no-CoT Data",
-   "upvotes": 21,
+  "2609.00377": {
+   "arxiv_id": "2609.00377",
+   "title": "FoldingAgent: Inferring Parametric Origami Procedures from Demonstration Videos",
+   "upvotes": 2,
    "githubRepo": "",
-   "publishedAt": "2026-08-24T00:00:00.000Z"
+   "publishedAt": "2026-08-31T00:00:00.000Z"
   },
-  "2608.24358": {
-   "arxiv_id": "2608.24358",
-   "title": "The Handoff Tax: Continuing Non-Native Trajectories in LLM Agents",
+  "2608.30322": {
+   "arxiv_id": "2608.30322",
+   "title": "Ignorance or Incompetence? Constructing Knowledge-Gated, Verifiable Tasks for LLM Agents",
+   "upvotes": 1,
+   "githubRepo": "",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2609.00474": {
+   "arxiv_id": "2609.00474",
+   "title": "Exploring Collaboration between a language and a non-language agent",
+   "upvotes": 2,
+   "githubRepo": "",
+   "publishedAt": "2026-09-02T00:00:00.000Z"
+  },
+  "2608.21450": {
+   "arxiv_id": "2608.21450",
+   "title": "Beyond Visual Similarity: Entity-Aligned Retrieval for Knowledge-Based Visual Question Answering",
+   "upvotes": 25,
+   "githubRepo": "",
+   "publishedAt": "2026-08-19T00:00:00.000Z"
+  },
+  "2608.30751": {
+   "arxiv_id": "2608.30751",
+   "title": "Autoregressive Mosaics: Probing 2D Spatial Reasoning in Text-Only Language Models",
+   "upvotes": 0,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2609.01740": {
+   "arxiv_id": "2609.01740",
+   "title": "ZipTok3D: High-Fidelity 3D Tokenization with Compact Token Prefixes",
+   "upvotes": 16,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2608.29607": {
+   "arxiv_id": "2608.29607",
+   "title": "SnapBench: Benchmarking Snap-and-Ask Multimodal Retrieval for Mobile Interactions",
+   "upvotes": 4,
+   "githubRepo": "",
+   "publishedAt": "2026-08-30T00:00:00.000Z"
+  },
+  "2609.02812": {
+   "arxiv_id": "2609.02812",
+   "title": "VibeVoice-ASR-Streaming Technical Report",
+   "upvotes": 8,
+   "githubRepo": "",
+   "publishedAt": "2026-09-02T00:00:00.000Z"
+  },
+  "2609.00591": {
+   "arxiv_id": "2609.00591",
+   "title": "A Glance Is All You Need: Single-Pass Fine-Grained Image Captioning with SimLoss",
+   "upvotes": 9,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2609.01925": {
+   "arxiv_id": "2609.01925",
+   "title": "CRISP: Cliff-awaRe Input-adaptive Sparse Prefilling with Structural-Mass-Motivated Routing",
+   "upvotes": 5,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2608.18972": {
+   "arxiv_id": "2608.18972",
+   "title": "Institutional Newspapers Pipeline: Deriving billions of high quality tokens from historical newspapers",
+   "upvotes": 7,
+   "githubRepo": "",
+   "publishedAt": "2026-08-19T00:00:00.000Z"
+  },
+  "2609.01437": {
+   "arxiv_id": "2609.01437",
+   "title": "HarnessDev: Can LLMs Create and Evolve Their Own Agent Harness?",
+   "upvotes": 20,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2608.31111": {
+   "arxiv_id": "2608.31111",
+   "title": "Aspire: Can Models Self-Evolve from Vague Goals?",
    "upvotes": 13,
    "githubRepo": "",
-   "publishedAt": "2026-08-25T00:00:00.000Z"
+   "publishedAt": "2026-08-31T00:00:00.000Z"
   },
-  "2608.23383": {
-   "arxiv_id": "2608.23383",
-   "title": "Long-Horizon Audio-Visual Generation for Persistent Stories and Interactive Worlds",
+  "2608.31100": {
+   "arxiv_id": "2608.31100",
+   "title": "S3Gym: Can LLMs Turn Self-Testing and Self-Judging into Self-Improvement?",
+   "upvotes": 12,
+   "githubRepo": "",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2609.02749": {
+   "arxiv_id": "2609.02749",
+   "title": "Repo-To-Skill: Distilling GitHub Repositories Into AI4AI Skills",
+   "upvotes": 339,
+   "githubRepo": "https://github.com/VectorSpaceLab/AREX-Skill",
+   "publishedAt": "2026-09-02T00:00:00.000Z"
+  },
+  "2609.02783": {
+   "arxiv_id": "2609.02783",
+   "title": "EarlyEval: Cheaper Agent Evaluation via Early Outcome Prediction",
+   "upvotes": 87,
+   "githubRepo": "https://github.com/inphotoo/earlyeval",
+   "publishedAt": "2026-09-02T00:00:00.000Z"
+  },
+  "2609.02737": {
+   "arxiv_id": "2609.02737",
+   "title": "Language Models Can Control Their Own Attention",
+   "upvotes": 40,
+   "githubRepo": "",
+   "publishedAt": "2026-09-02T00:00:00.000Z"
+  },
+  "2609.01147": {
+   "arxiv_id": "2609.01147",
+   "title": "On the Design Fundamentals of Pixel Text Representation Learning",
+   "upvotes": 25,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2609.02849": {
+   "arxiv_id": "2609.02849",
+   "title": "Post-Training Language Models for Gold-Medal Performance in Coding Competitions",
+   "upvotes": 6,
+   "githubRepo": "",
+   "publishedAt": "2026-09-02T00:00:00.000Z"
+  },
+  "2609.01823": {
+   "arxiv_id": "2609.01823",
+   "title": "Kirin: Animal Motion Generation from In-the-Wild Video",
+   "upvotes": 2,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2609.02817": {
+   "arxiv_id": "2609.02817",
+   "title": "Cliff: Learning Process Rewards from the First Mistake",
+   "upvotes": 15,
+   "githubRepo": "",
+   "publishedAt": "2026-09-02T00:00:00.000Z"
+  },
+  "2609.02272": {
+   "arxiv_id": "2609.02272",
+   "title": "PaperCompiler: Faithful Paper-to-Code Generation via Repository-Level Specification Compilation",
+   "upvotes": 5,
+   "githubRepo": "https://github.com/Daethalous/PaperCompiler",
+   "publishedAt": "2026-09-02T00:00:00.000Z"
+  },
+  "2609.01865": {
+   "arxiv_id": "2609.01865",
+   "title": "ExecRetrieval: Measuring the Functional-Correctness Gap in Code-Embedding Retrieval",
+   "upvotes": 5,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2608.30949": {
+   "arxiv_id": "2608.30949",
+   "title": "MULTI3IR: A Benchmark for Multi-perspective Multi-domain Multi-modal Information Retrieval",
+   "upvotes": 7,
+   "githubRepo": "",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2609.02886": {
+   "arxiv_id": "2609.02886",
+   "title": "SolarWM: Open Data and Scalable Training for Long-Horizon Video World Models",
+   "upvotes": 108,
+   "githubRepo": "https://github.com/Junchao-cs/SolarWM",
+   "publishedAt": "2026-09-02T00:00:00.000Z"
+  },
+  "2608.29846": {
+   "arxiv_id": "2608.29846",
+   "title": "Influence-Directed Distillation: Solving the Diversity Bottleneck in Sampled-Token On-Policy Distillation",
+   "upvotes": 14,
+   "githubRepo": "",
+   "publishedAt": "2026-08-30T00:00:00.000Z"
+  },
+  "2609.00638": {
+   "arxiv_id": "2609.00638",
+   "title": "It Takes Two to Match: Co-Evolving Generative Retriever with Reinforcement Learning",
+   "upvotes": 61,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2608.27831": {
+   "arxiv_id": "2608.27831",
+   "title": "RealSWE: A Compositional Evaluation of Coding Agents under Realistic User Requests",
+   "upvotes": 4,
+   "githubRepo": "https://github.com/gyuhyeong-x/RealSWE",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2609.01836": {
+   "arxiv_id": "2609.01836",
+   "title": "Agent Memory Is a Surface for Endogenous Authorization Laundering",
+   "upvotes": 6,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2609.01453": {
+   "arxiv_id": "2609.01453",
+   "title": "Does Imitation Learning Preserve Temporal Robustness in Dexterous Manipulation? An Expert-Learner Comparison Across Task Execution Speeds",
+   "upvotes": 2,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2609.01532": {
+   "arxiv_id": "2609.01532",
+   "title": "Knowledge Distillation During Mid-Training Favors Reasoning over Factual Recall",
+   "upvotes": 4,
+   "githubRepo": "https://github.com/facebookresearch/midtraining-distillation",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2608.26623": {
+   "arxiv_id": "2608.26623",
+   "title": "AgentJudgeBench: A Multi-Difficulty Benchmark for Evaluating LLM Judges on Agentic Tool-Calling",
    "upvotes": 19,
-   "githubRepo": "https://github.com/jd-opensource/JoyAI-Echo",
-   "publishedAt": "2026-08-24T00:00:00.000Z"
+   "githubRepo": "",
+   "publishedAt": "2026-08-27T00:00:00.000Z"
   },
-  "2608.25529": {
-   "arxiv_id": "2608.25529",
-   "title": "Video-IFBench: Evaluating Instruction Following of Multimodal LLMs in Video Understanding Scenarios",
-   "upvotes": 16,
-   "githubRepo": "https://github.com/Alexios-hub/Video-IFBench",
-   "publishedAt": "2026-08-26T00:00:00.000Z"
+  "2608.31082": {
+   "arxiv_id": "2608.31082",
+   "title": "Token-Efficient Data Reasoning Agents via Adaptive Structuring of Unstructured Data",
+   "upvotes": 4,
+   "githubRepo": "",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2609.00374": {
+   "arxiv_id": "2609.00374",
+   "title": "Adapting Without Gradients: Affine Statistics Transport and What Its Certificate Can Tell You",
+   "upvotes": 6,
+   "githubRepo": "",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2609.00646": {
+   "arxiv_id": "2609.00646",
+   "title": "DramaChain Bench: An End-to-End Benchmark for Short-Drama Generation",
+   "upvotes": 5,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2608.30457": {
+   "arxiv_id": "2608.30457",
+   "title": "Learning Where Outcomes Change:Credit-Addressable Reasoning for Multimodal Geometry",
+   "upvotes": 7,
+   "githubRepo": "",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2609.01572": {
+   "arxiv_id": "2609.01572",
+   "title": "From Production Traffic to Post-Training: Building a Self-Hosted LLM That Covers the Corporate Request Mix",
+   "upvotes": 32,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2609.00137": {
+   "arxiv_id": "2609.00137",
+   "title": "Recursive Criticality of AI Self-Improvement",
+   "upvotes": 5,
+   "githubRepo": "https://github.com/burtsev/recursive-criticality-ai",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2608.30478": {
+   "arxiv_id": "2608.30478",
+   "title": "Agents in the Large: Perception-Centered Architecture for Persistent Agents",
+   "upvotes": 9,
+   "githubRepo": "",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2609.00768": {
+   "arxiv_id": "2609.00768",
+   "title": "DiagEvo: Diagnosis-Guided Self-Evolution via Hierarchical Error Memory",
+   "upvotes": 17,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2609.00092": {
+   "arxiv_id": "2609.00092",
+   "title": "Safin-1: Safety from Within through Memory-Native State Evolution",
+   "upvotes": 20,
+   "githubRepo": "https://github.com/AI45Lab/Safin-1",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2609.01343": {
+   "arxiv_id": "2609.01343",
+   "title": "SMELT: Scaling Laws for Compute-Matched MoE Looped Transformers",
+   "upvotes": 84,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2609.01481": {
+   "arxiv_id": "2609.01481",
+   "title": "Harness-of-Harness: Multi-Day Autonomous Software Development with Continual Improvement",
+   "upvotes": 12,
+   "githubRepo": "",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2609.00028": {
+   "arxiv_id": "2609.00028",
+   "title": "UI-Venus-2 Technical Report",
+   "upvotes": 56,
+   "githubRepo": "",
+   "publishedAt": "2026-08-27T00:00:00.000Z"
+  },
+  "2609.00111": {
+   "arxiv_id": "2609.00111",
+   "title": "Qwen-Drive-1.0: An Initial Step towards a Vision-Language Foundation Model for Autonomous Driving",
+   "upvotes": 357,
+   "githubRepo": "",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2609.00188": {
+   "arxiv_id": "2609.00188",
+   "title": "ZimaBlue: Evolving Generalizable World Action Models through Scalable Video Pre-training",
+   "upvotes": 42,
+   "githubRepo": "https://github.com/ZimaBlue-WAM/ZimaBlue",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2608.30730": {
+   "arxiv_id": "2608.30730",
+   "title": "E-Commerce Bench: Evaluating LLM Agents on Long-Horizon Autonomous Business Operation",
+   "upvotes": 10,
+   "githubRepo": "https://github.com/QwenLM/E-CommerceBench",
+   "publishedAt": "2026-08-31T00:00:00.000Z"
+  },
+  "2609.01560": {
+   "arxiv_id": "2609.01560",
+   "title": "H3-World: Turning Language Understanding into World Control",
+   "upvotes": 46,
+   "githubRepo": "https://github.com/Danzer1xxxxChan/H3-World",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
+  },
+  "2609.01591": {
+   "arxiv_id": "2609.01591",
+   "title": "StudentSim: Training LLM-based Student Simulators",
+   "upvotes": 478,
+   "githubRepo": "https://github.com/microsoft/StudentSim",
+   "publishedAt": "2026-09-01T00:00:00.000Z"
   }
  },
- "fetched_at": "2026-08-31T14:19:09"
+ "fetched_at": "2026-09-03T18:50:05"
 }

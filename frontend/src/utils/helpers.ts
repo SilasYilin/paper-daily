@@ -52,3 +52,20 @@ export function saveFeedback(title: string, v: 1 | -1) {
     localStorage.setItem('pd-feedback', JSON.stringify(fb));
   } catch { /* ignore */ }
 }
+
+/** 是否支持 Web Share API（移动端原生分享面板） */
+export function canShare(): boolean {
+  return typeof navigator !== 'undefined' && typeof navigator.share === 'function';
+}
+
+/** 分享当前论文（原生分享面板；取消/失败返回 false） */
+export async function sharePaper(p: Paper): Promise<boolean> {
+  const title = p.titleZh || p.title;
+  const text = p.hook ? `${title} ——「${p.hook}」` : title;
+  try {
+    await navigator.share({ title, text, url: p.paperUrl || window.location.href });
+    return true;
+  } catch {
+    return false;
+  }
+}

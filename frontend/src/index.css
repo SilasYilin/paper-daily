@@ -98,3 +98,62 @@
   writing-mode: vertical-rl;
   text-orientation: mixed;
 }
+
+/* ---- 交互与视觉细节（v1.0 增补）---- */
+html { scroll-behavior: smooth; }
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 抹茶绿选区高亮 */
+::selection {
+  background: color-mix(in srgb, var(--pd-accent) 28%, transparent);
+}
+
+/* 细滚动条（跟随主题色） */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--pd-accent-mid) 45%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--pd-accent-mid) 70%, transparent);
+  background-clip: content-box;
+}
+
+/* 顶部阅读进度条 */
+.pd-progress-track {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  height: 3px;
+  z-index: 60;
+  pointer-events: none;
+}
+.pd-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pd-accent-mid), var(--pd-accent));
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 快捷键帮助浮层的键帽 */
+.pd-kbd {
+  display: inline-flex;
+  min-width: 22px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--pd-line);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: var(--pd-soft);
+  padding: 1px 6px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--pd-ink);
+}

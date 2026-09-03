@@ -19,6 +19,9 @@ import sys
 import time
 import urllib.request
 
+# 直连 opener（绕过可能失效的本地 http_proxy 环境变量）
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(BASE_DIR)
 DATA_DIR = os.path.join(ROOT, "data")
@@ -28,13 +31,13 @@ CACHE_TTL_DAYS = 3  # star/被引缓存 3 天
 
 def http_json(url, timeout=25, headers=None):
     req = urllib.request.Request(url, headers=headers or {"User-Agent": "paper-daily/0.9"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    with _OPENER.open(req, timeout=timeout) as r:
         return json.loads(r.read().decode("utf-8"))
 
 
 def _http_get(url, timeout=25):
     req = urllib.request.Request(url, headers={"User-Agent": "paper-daily/0.9"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    with _OPENER.open(req, timeout=timeout) as r:
         return r.read().decode("utf-8", errors="ignore")
 
 
@@ -121,7 +124,7 @@ def fetch_s2_citations(arxiv_id, tries=2):
     for i in range(tries):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "paper-daily/0.9"})
-            with urllib.request.urlopen(req, timeout=20) as r:
+            with _OPENER.open(req, timeout=20) as r:
                 d = json.loads(r.read().decode("utf-8"))
                 return d.get("citationCount")
         except urllib.error.HTTPError as e:

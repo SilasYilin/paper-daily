@@ -15,6 +15,9 @@ import re
 import sys
 import urllib.request
 
+# 直连 opener（绕过可能失效的本地 http_proxy 环境变量）
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
 BASE = os.path.dirname(os.path.abspath(__file__))
 WEB = os.path.join(os.path.dirname(BASE), "web", "figs")
 PIPELINE_WORDS = ["pipeline", "overview", "framework", "method", "architecture", "approach", "model overview"]
@@ -24,7 +27,7 @@ def fetch_figures(arxiv_id, top_k=1):
     os.makedirs(WEB, exist_ok=True)
     url = f"https://arxiv.org/html/{arxiv_id}"
     req = urllib.request.Request(url, headers={"User-Agent": "paper-daily/0.5"})
-    with urllib.request.urlopen(req, timeout=30) as r:
+    with _OPENER.open(req, timeout=30) as r:
         html = r.read().decode("utf-8", errors="ignore")
 
     out = []
@@ -66,7 +69,7 @@ def fetch_figures(arxiv_id, top_k=1):
         path = os.path.join(WEB, fname)
         try:
             req = urllib.request.Request(f["src"], headers={"User-Agent": "paper-daily/0.5"})
-            with urllib.request.urlopen(req, timeout=30) as r:
+            with _OPENER.open(req, timeout=30) as r:
                 raw = r.read()
             # 尺寸控制：>1.2MB 或宽>2000 用 Pillow 压到 JPEG/缩放
             if ext in (".png", ".jpg", ".jpeg") and len(raw) > 300_000:

@@ -1,228 +1,105 @@
 window.PAPER_DAILY_DATA = {
-  "issue": "No.243",
-  "date": "2026-08-31",
+  "issue": "No.246",
+  "date": "2026-09-03",
   "axes": "三维重建 × 世界模型",
-  "edNote": "本期精选基于偏好画像筛选与排序。",
+  "edNote": "本期精选基于偏好画像筛选与排序；检索源：HF Daily 主源 + AI HOT 中文策展池 + 公众号定向 + arXiv 兜底。",
   "hero": {
-    "title": "Locate Anything in Videos: Rethinking Efficient Generative Spatio-Temporal Video Grounding",
-    "titleZh": "视频定位告别逐帧生成：并行管状解码提速79倍",
-    "hook": "解码深度固定1+1轮：延迟降79倍、吞吐升92倍还更准",
+    "title": "SolarWM: Open Data and Scalable Training for Long-Horizon Video World Models",
+    "titleZh": "SolarWM：全开源的长时程交互视频世界模型训练基座",
+    "hook": "143万段视频、10个数据集，炼一个能玩几小时的世界模型",
     "cards": [
       {
         "emoji": "🎯",
         "title": "问题与背景",
-        "body": "时空视频定位（`STVG`）要求模型同时预测指代事件的时间区间，并在该区间内逐帧回归目标实体的空间位置。现有 `MLLM` 通常将密集定位轨迹自回归地序列化生成，导致解码延迟随 tube 长度增长。更深层瓶颈在于序列依赖使误差沿时间维度传播：早期预测偏差会污染后续帧的定位。如何在不牺牲生成式建模灵活性的前提下，消除 token 级与轨迹级的串行依赖，是该任务亟待解决的核心矛盾。"
+        "body": "长时程交互视频世界模型的训练被三重耦合卡住。数据层面，异构数据集在时间尺度、相机几何、画质与字幕风格上互不兼容，朴素混合会产生不一致的监督信号；模型层面，各视频生成器使用不同的表示与架构，实现彼此割裂，结果难以复现与对比；交互层面，仅在 5 秒片段上训练的模型通常无法支撑分钟乃至小时级的持续推演。领域缺少一个从数据准备贯通到长时程推理、且完全开放可复现的基座。"
       },
       {
         "emoji": "⚙️",
         "title": "方法设计",
-        "body": "`Parallel Tube Decoding (PTD)` 将 grounding 分解为『一个时间块 + 若干时间条件化空间块』：时间块先预测事件边界，各空间块以时间为条件同时解码，使序列解码深度固定为 1+1 轮、与 tube 长度无关。`Decoupled Block Attention` 在消除跨框依赖的同时，保留各空间块对共享视频-查询上下文的访问，保障并行生成的一致性。`localization-aware policy optimization` 分别针对时间边界与空间几何设计奖励，强化定位质量。整体以紧凑的 4B 骨干网络承载，兼顾效率、精度与泛化。"
+        "body": "SolarWM 由两大件构成。`可重构多源数据引擎`把 10 个数据集的 143 万段规范剪辑统一为帧对齐契约——涵盖视觉观测、度量相机几何、字幕、质量元数据、选取决策与来源追溯——并把「源处理」与「混合构造」解耦，使配方可在同一底座上重配。`骨干原生适配框架`在共享相机条件化、训练与推理接口下，基于 `Wan2.2`、`LTX-2.5`、`MiniMax-H3` 的原生表示与目标实例化 5B–33B 四个模型。训练采用统一三段式配方：双向适配、教师强制自回归初始化、分布匹配蒸馏。"
       },
       {
         "emoji": "📊",
         "title": "实验结果",
-        "body": "在 VidSTG 上，PTD 相对标准自回归解码将 Tube Completion Latency 降低 79 倍、空间解码吞吐提升 92 倍，同时提升定位精度。以 4B 规模骨干，模型在 VidSTG 与 HC-STVG 两个基准上取得有竞争力的表现。此外还零样本泛化到时序定位、`grounded VideoQA` 与指代视频目标跟踪三项任务。各基准具体精度数值详见原文。"
+        "body": "得到的因果模型仅在 5 秒序列上训练，即可在数分钟到数小时的 rollout 上保持实时交互。作者同步发布数据、流水线、训练配方与全部权重，构成可复现、可扩展的交互世界模型研究基座。各基准上的具体量化数字以原文为准。"
       },
       {
         "emoji": "⚠️",
         "title": "局限与展望",
-        "body": "摘要未明确承认局限，主验证集中于 VidSTG 与 HC-STVG，更长视频、严重遮挡及多实例场景下的鲁棒性有待检验。并行空间生成虽消除跨框依赖，但若时间块预测出错，可能级联影响全部条件化空间块。策略优化中时间边界与空间几何奖励之间的权衡，也值得更系统的消融分析。"
+        "body": "摘要未明确承认局限。三段式配方在更多骨干上的普适性、跨数据集混合比例的敏感性、以及「实时交互」对推理侧算力的实际要求，均有待原文实验与社区复现检验；33B 档模型的开放复现门槛也值得关注。"
       }
     ],
-    "figureNote": "假设流程图展示方法全景：视频与查询特征先进入时间块预测事件起止边界；随后各时间条件化空间块经 `Decoupled Block Attention` 并行访问共享视频-查询上下文，同时生成各帧包围框；训练端由定位感知策略优化对时间边界与空间几何施加奖励。整体呈『先定时、后并行定空』的两阶段结构，解码深度固定为 1+1 轮。",
+    "figureNote": "假设流程图自左向右展示：10 个异构数据集先经多源数据引擎统一为帧对齐契约（观测／相机几何／字幕／质量／来源），解耦地构造数据混合；下游骨干原生适配层把三族视频骨干接入共享接口，经三阶段配方（双向适配→教师强制自回归初始化→分布匹配蒸馏）产出可实时长时程交互的因果世界模型。具体结构以原文流程图为准。",
     "figures": [],
-    "authors": "Hanoona Rasheed et al. · Mohamed bin Zayed University of Artificial Intelligence / University of California, Merced · Mohamed bin Zayed University of Artificial Intelligence / University of California, Merced",
-    "venue": "arXiv 2026.08",
-    "summary": "想象你在长视频里跟 AI 说『把跳起来接飞盘的人框出来，从起跳到落地』——它得听懂时间段，还得每帧都框得准。以前的多模态大模型像写作文一样一个框接一个框地生成，视频越长越慢，而且错一个框后面可能跟着错。这篇论文提出 `Parallel Tube Decoding (PTD)`，把定位改成『先定时间段，再同时生成所有帧的框』，像把流水线改成并行作业，解码轮数固定为 1+1、跟轨迹长度无关。再配上 `Decoupled Block Attention` 和定位感知的策略优化，在 VidSTG 上延迟降 79 倍、吞吐升 92 倍，精度还不降反升。",
-    "paperUrl": "https://arxiv.org/abs/2608.28192",
-    "score": 0.59,
+    "authors": "Junchao Huang et al.",
+    "venue": "arXiv 2026.09 · https://junchao-cs.github.io/SolarWM-Web/",
+    "summary": "想象一个能让你像玩游戏一样持续「走进去」的 AI 视频世界——训练这种世界模型的痛点在于：各家数据格式不统一、模型结构各异，拼在一起就是一锅乱炖，结果还难以复现。SolarWM 把来自 10 个数据集的 143 万段视频统一成一套帧对齐「契约」（画面、度量相机几何、字幕、质量元数据、来源追溯全对齐），并让 `Wan2.2`、`LTX-2.5`、`MiniMax-H3` 三族视频骨干在同一接口下训练。仅用 5 秒短视频训练出的因果模型，就能在数分钟到数小时的连续推演中保持实时交互——数据、配方、权重全部开源。",
+    "paperUrl": "https://arxiv.org/abs/2609.02886",
+    "score": 0.86,
     "scores": {
       "innovation": 8,
-      "effectiveness": 7
+      "effectiveness": 8
     },
-    "category": "SPATIO-TEMPORAL VIDEO GROUNDING × PARALLEL DECODING",
-    "influence": "摘要未披露团队信息；以『并行化替代自回归』重构生成式视频定位的效率范式，对实时视频理解与交互系统具有直接的工程借鉴价值。",
-    "github": "",
-    "stars": null,
+    "category": "VIDEO WORLD MODEL × OPEN SCALABLE TRAINING",
+    "influence": "18 人团队（Mike Zheng Shou 组参与），发布 5B–33B 全套权重与数据引擎，为交互世界模型研究提供可复现公共基座。",
+    "github": "https://github.com/Junchao-cs/SolarWM",
+    "stars": 206,
     "citedBy": null,
-    "institutions": [
-      "Mohamed bin Zayed University of Artificial Intelligence",
-      "University of California, Merced"
-    ],
+    "institutions": [],
     "figure": {
       "url": null,
       "caption": ""
     },
     "fields": {
-      "background": "多模态大语言模型将时空视频定位轨迹自回归序列化，解码延迟随 tube 长度增长，且定位误差沿时间维度传播。",
-      "task": "时空视频定位（STVG）：识别指代事件的时间区间并逐帧定位目标实体；同时考察零样本时序定位、grounded VideoQA、指代视频目标跟踪。",
-      "insight": "将 grounding 解耦为『时间块 + 时间条件化空间块』，移除 token 级与轨迹级串行依赖，使解码深度固定为 1+1 轮、与 tube 长度无关。",
-      "pipeline": "时间块预测事件边界 → 各空间块以时间为条件并行解码（Decoupled Block Attention 保共享上下文、去跨框依赖）→ 定位感知策略优化分别作用于时间边界与空间几何。",
-      "methods": "Parallel Tube Decoding (PTD)；Decoupled Block Attention；localization-aware policy optimization；4B 紧凑骨干网络。",
-      "experiment": "VidSTG：Tube Completion Latency 降低 79×、空间解码吞吐提升 92×，同时提升定位精度；以 4B 骨干在 VidSTG 与 HC-STVG 上表现有竞争力，并零样本泛化到三个相关任务。",
-      "limitation": "摘要未明确承认局限；长视频/遮挡/多实例下的鲁棒性、时间块错误对并行空间块的级联影响、以及策略优化奖励设计在时序与几何间的权衡，均需进一步验证。"
+      "background": "长时程交互视频世界模型训练面临数据异构（时间尺度/相机几何/画质/字幕风格不一）、模型实现割裂（表示与架构各异、难复现对比）、短片段训练无法支撑长时程推演三重耦合，缺少开放的全链路基座。",
+      "task": "构建从数据准备到长时程推理完全开放的交互视频世界模型基座：统一多源数据、在多族视频骨干上可复现地训练，并以 5 秒序列训练出分钟到小时级实时交互的因果模型。",
+      "insight": "把「源处理」与「混合构造」解耦、把「骨干原生表示」与「共享训练接口」解耦，用统一契约与统一配方替代朴素数据混合与模型专属实现，即可同时获得可复现性与长时程交互能力。",
+      "pipeline": "多源数据引擎（143 万段剪辑→帧对齐契约：观测/度量相机几何/字幕/质量元数据/选取决策/来源）→ 解耦的混合构造 → 骨干原生适配（Wan2.2 / LTX-2.5 / MiniMax-H3，5B–33B 四实例）→ 三段式训练（双向适配→教师强制自回归初始化→分布匹配蒸馏）→ 实时长时程交互推理。",
+      "methods": "可重构多源数据引擎；骨干原生适配框架；共享相机条件化/训练/推理接口；双向适配 + 教师强制自回归初始化 + 分布匹配蒸馏的三段式配方。",
+      "experiment": "仅在 5 秒序列上训练的因果模型，在数分钟至数小时的 rollout 上保持实时交互；数据、流水线、配方与权重全部开源发布；具体基准数字以原文为准。",
+      "limitation": "摘要未明确承认局限；三段式配方的骨干普适性、数据混合比例敏感性、实时交互的推理算力要求，以及大模型的复现门槛，均待原文实验与社区验证。"
     }
   },
   "papers": [
     {
-      "title": "Lossy Event Compression: From Event Stream Distortion to Task Performance",
-      "titleZh": "有损事件压缩：从流失真到任务性能的桥梁",
-      "hook": "失真指标竟能预测任务掉分，事件压缩调参告别昂贵重跑",
+      "title": "RoGe: Novel View Synthesis via End-to-End Implicit Reconstruction and Generation",
+      "titleZh": "RoGe：重建与生成端到端合一的稀疏视角漫游合成",
+      "hook": "拆掉中间桥梁：几何特征经光线查询直通视频扩散",
       "cards": [
         {
           "emoji": "🎯",
           "title": "问题与背景",
-          "body": "事件相机以微秒级时间分辨率输出异步、稀疏的事件流，但在中高速运动场景下事件率可达每秒数亿量级，给带宽与存储带来严峻挑战。有损压缩因此成为实际部署的必要环节，然而现有事件流失真度量无法可靠预测压缩引入的退化在任务层面的表现。这迫使编解码器的优化只能依赖代价高昂的任务专属评测，且结论难以跨任务、跨编码框架复用。如何在统一评测框架下建立事件流失真与下游任务性能之间的可靠映射，是本文的核心研究问题。"
+          "body": "稀疏输入的新视角合成需要两种互补能力：观测视角提供几何接地，未见区域依赖生成先验，由此催生了重建+生成的混合方法。但现有工作用渲染图像或点图、3D 高斯等显式表示做桥——生成侧的条件本就是一个有损且有缺陷的场景投影，误差被直接继承；重建侧则得不到来自生成的任何纠错信号。这座「桥」本身成了精度瓶颈，也阻断了端到端优化。"
         },
         {
           "emoji": "⚙️",
           "title": "方法设计",
-          "body": "本文提出两条本质不同的有损压缩管线：`聚合式管线`将事件流按极性累积为直方图帧，并复用传统图像编码器 `JPEG 2000` 进行压缩。`无帧点云管线`则不依赖帧表示，将事件原生地编码为三维点，采用基于八叉树的点云编码器 `G-PCC`。两条管线的输出统一送入`任务驱动评测框架`，将事件流失真与四类代表性下游任务的性能相关联：视频重建、目标检测、光流估计，以及在参考相对协议下时延敏感的异步特征跟踪。在此基础上，作者首次将五种基于分类的失真度量应用于事件压缩，并与现有事件流失真度量在同一基准下系统对标。整体设计使得失真度量能够在不同编码框架与任务之间提供一致的任务退化预测能力。"
+          "body": "RoGe 是端到端统一的重建-生成框架，面向稀疏视角锚定的场景内漫游：给定少量带位姿图像与相机轨迹，合成沿轨迹的时序连贯视频。`前馈重建模型`从稀疏输入构建隐式场景表示；目标相机`光线`直接查询该表示，得到逐视角几何特征——全程无任何 3D 中间量——注入`视频扩散模型`作为条件。两模块联合训练，使生成目标直接塑造自身的几何条件，形成闭环互促。"
         },
         {
           "emoji": "📊",
           "title": "实验结果",
-          "body": "实验在统一框架下覆盖视频重建、目标检测、光流估计与异步特征跟踪四类任务，横跨 `JPEG 2000` 聚合式与 `G-PCC` 点云式两条编码路线。结果表明，所引入的五种分类失真度量能够可靠预测不同编码框架中压缩所致的任务性能退化，相对现有事件流度量具有更稳定的预测表现。这验证了以失真评估替代反复任务专属评测的可行性，可为事件数据编码方案的开发与优化提供直接指导。摘要未给出具体数据集与量化数字，详细对比结果详见原文。"
+          "body": "在 `DL3DV` 上，RoGe 在图像级指标与视频级时序一致性上均超过重建式、生成式与混合式基线。消融实验证实：光线查询的隐式特征优于原始重建 token 与渲染 RGB 两种条件形式；联合训练相对分离训练带来进一步增益。"
         },
         {
           "emoji": "⚠️",
           "title": "局限与展望",
-          "body": "摘要未披露具体数据集与量化提升幅度，所提度量的预测可靠性在更广任务域与极端码率区间的外推性需以原文实验核实。`聚合式管线`的直方图帧表示可能损失时间维度信息，其对时延敏感任务的适配性值得进一步检验。作者展望该框架可指导未来事件数据编码方案的开发与优化；失真—任务映射在超高事件率场景下的稳定性仍是开放问题。"
+          "body": "摘要未明确承认局限。隐式表示在大场景、长轨迹下的可扩展性，对输入位姿质量与视角覆盖的敏感性，以及扩散模型推理延迟对「漫游」实时性的制约，是落地关键变量，需原文实验与后续工作验证。"
         }
       ],
-      "figureNote": "假设流程图先分出两条编码支线：事件流或经`直方图帧聚合`进入 `JPEG 2000`，或以原生三维点形式进入 `G-PCC` 八叉树编码。两条支线的重建事件流随后汇入统一的`任务驱动评测框架`，与四个下游任务的性能曲线并列对比，用以检验五种`分类失真指标`对任务退化的预测能力。具体结构以原文流程图为准。",
+      "figureNote": "假设流程图分两路汇合：上方稀疏视角经前馈重建模型得到隐式场景表示；下方目标相机轨迹的光线直接查询该表示，输出逐视角几何特征注入视频扩散模型；两路联合训练、生成损失回传更新几何条件，最终合成沿轨迹的连贯视频。具体结构以原文流程图为准。",
       "figures": [],
-      "authors": "Zahra Rezaee et al. · Instituto Superior Técnico, University of Lisbon, Instituto de Telecomunicações, Lisbon, Portugal · Instituto Superior Técnico, University of Lisbon, Instituto de Telecomunicações, Lisbon, Portugal",
-      "venue": "arXiv 2026.08",
-      "summary": "想象一台『像素级变化雷达』：画面哪里有动静，它就往哪里每秒狂吐上亿个小信号——这就是事件相机，存储和传输根本扛不住，必须做有损压缩。这篇论文的核心一问是：压缩把数据压『糊』了，能不能不跑任务就知道下游效果掉了多少？作者搭了两条压缩路线——把事件攒成`直方图帧`用`JPEG 2000`压，或直接当作三维点用`G-PCC`压——并在四个任务上统一测量『失真』和『掉分』之间的关系。他们首次引入五种`分类失真指标`，发现这些指标能可靠预测压缩对任务的伤害，以后调编码器参数就不用每次都烧钱跑一遍任务评测了。",
-      "paperUrl": "https://arxiv.org/abs/2608.28429",
-      "score": 0.5,
+      "authors": "Xiaolei Lang et al.",
+      "venue": "arXiv 2026.09",
+      "summary": "拿几张照片还原整个场景、还要沿任意镜头轨迹拍成丝滑视频——以前的做法是先重建出显式 3D 表示，再把这个「投影」喂给生成模型，投影里的误差会原样传染给生成结果，重建侧也得不到生成的纠错信号。RoGe 把这座桥整个拆掉：前馈重建网络先从稀疏视角建立隐式场景表示，目标相机光线直接查询它得到逐视角几何特征，注入视频扩散模型做条件，两个模块联合训练，生成损失反过来塑造自己的几何条件。在 `DL3DV` 上，图像质量与视频时序一致性同时超过重建派、生成派与混合派基线。",
+      "paperUrl": "https://arxiv.org/abs/2609.02847",
+      "score": 0.64,
       "scores": {
-        "innovation": 7,
-        "effectiveness": 6
-      },
-      "category": "EVENT CAMERA × 有损压缩评测",
-      "influence": "摘要未披露作者与机构；选题直面事件相机实用化的带宽痛点，属事件视觉编码与失真度量交叉方向的前沿基准工作。",
-      "github": "",
-      "stars": null,
-      "citedBy": null,
-      "institutions": [
-        "Instituto Superior Técnico, University of Lisbon, Instituto de Telecomunicações, Lisbon, Portugal"
-      ],
-      "figure": {
-        "url": null,
-        "caption": ""
-      },
-      "fields": {
-        "background": "事件相机输出微秒级异步稀疏事件流，中高速运动下每秒可产生数亿事件，带宽与存储压力使有损压缩成为实际部署刚需；但现有事件流失真度量无法可靠预测压缩引起的任务级退化，编码器优化被迫依赖昂贵的任务专属评测。",
-        "task": "构建统一的事件压缩评测框架：设计两条有损压缩管线，建立事件流失真与四类下游任务（视频重建、目标检测、光流估计、参考相对协议下的异步特征跟踪）性能之间的映射，并首次引入五种基于分类的失真度量以预测压缩所致任务退化。",
-        "insight": "若失真度量能可靠预测任务性能退化，则可作为反复任务评测的高效替代，为事件编码器的开发与参数优化提供直接、可复用的客观指导。",
-        "pipeline": "双管线并行：`聚合式管线`（事件流→按极性累积直方图帧→`JPEG 2000` 图像编码）与`无帧点云管线`（事件原生表示为三维点→`G-PCC` 八叉树编码）；输出统一送入跨四任务的`任务驱动评测框架`，并与五种`分类失真指标`对标分析。",
-        "methods": "基于极性直方图的帧聚合；`JPEG 2000` 图像编码；事件三维点云化与 `G-PCC` 八叉树编码；参考相对协议的异步特征跟踪评测；五种基于分类的失真度量首次应用于事件压缩并系统基准测试。",
-        "experiment": "在视频重建、目标检测、光流估计与异步特征跟踪四类任务上评估两条压缩管线；将所引入的五种分类失真度量与现有事件流度量对标，验证其对压缩所致任务退化的预测可靠性；具体数据集与量化数字详见原文。",
-        "limitation": "摘要未提供具体数据集与量化提升数字，结论外推性有待原文核实；直方图帧聚合可能损失时间信息，对时延敏感任务的适配性存疑；失真—任务映射在极端码率与更广任务域上的稳定性仍为开放问题。"
-      }
-    },
-    {
-      "title": "STEGNav: Spatio-Temporal Event Graph Reasoning for Multimodal Lifelong Object Navigation",
-      "titleZh": "时空事件图推理：免训练的多模态终身导航框架",
-      "hook": "场景图只记「看到什么」，事件图还记住「做过什么」",
-      "cards": [
-        {
-          "emoji": "🎯",
-          "title": "问题与背景",
-          "body": "多模态终身导航要求智能体在未知环境中自主探索，并依次完成由物体类别、语言描述或参考图像指定的导航任务。现有方法多构建以状态为中心的`语义场景图`，将其作为语义观测的持久存储库。此类表示存在三重局限：难以区分相似实例、无法联合表示语义目标与探索前沿，以及难以有效利用导航记忆与轨迹经验。其根源在于场景图偏重观测状态建模，缺乏对事件与决策过程的显式表示，制约了长时序任务中的经验复用。"
-        },
-        {
-          "emoji": "⚙️",
-          "title": "方法设计",
-          "body": "STEGNav 是一个免训练框架，将传统场景图沿互补的空间轴与时间轴扩展为`时空事件图`。空间轴执行`查询条件化实例接地`，统一表示语义目标与占据感知的探索前沿，并以可达性、路径代价与探索效用刻画前沿节点。时间轴引入`轨迹感知双窗口记忆`，分别保留最近的决策—轨迹事件与经检验的跨子任务导航结果。在此基础上，基于`视觉语言模型（VLM）`的导航智能体对时空事件图进行推理，选择目标实例或探索前沿作为下一导航目标。两条轴协同作用，使目标选择与主动探索在统一图结构上完成。"
-        },
-        {
-          "emoji": "📊",
-          "title": "实验结果",
-          "body": "在 GOAT-Bench 上，STEGNav 取得 66.3% 的 SR 与 39.7% 的 SPL；在 HM3Dv1 与 HM3Dv2 上分别取得 64.0% 与 69.4% 的 SR。消融实验验证了空间轴与时间轴的互补效应，误差分析进一步表明事件驱动的时空表示提升了导航可靠性。相对 SOTA 的具体提升幅度详见原文。"
-        },
-        {
-          "emoji": "⚠️",
-          "title": "局限与展望",
-          "body": "作者通过误差分析承认框架仍存在失败案例，但相似实例混淆的最终解决程度有待原文量化。免训练设计依赖 VLM 的推理质量，可能受限于推理延迟与长时记忆容量。摘要未涉及动态环境或物体变动场景，双窗口记忆在任务语义差异较大时的跨任务经验重用稳健性仍需检验。"
-        }
-      ],
-      "figureNote": "假设流程图展示方法全景：多模态查询与环境感知输入首先进入空间轴模块，经查询条件化实例接地生成包含语义目标与占据感知前沿的事件节点。随后时间轴的双窗口记忆将近期决策—轨迹事件与经检验的跨子任务结果写入同一图结构。最终 VLM 智能体在完整时空事件图上推理，输出目标实例或探索前沿作为下一导航目标，形成免训练的闭环。",
-      "figures": [],
-      "authors": "Yang Chen et al. · State Key Laboratory of Novel Software Technology, Nanjing University / School of Intelligence Science and Technology, Nanjing University · State Key Laboratory of Novel Software Technology, Nanjing University / School of Intelligence Science and Technology, Nanjing University",
-      "venue": "arXiv 2026.08",
-      "summary": "想象你搬进一栋新房子，要陆续找到「冰箱」「带蓝色靠垫的沙发」和「照片里那个台灯」，机器人也要干这活，还得越找越熟练。以往方法把环境画成一张静态的`语义场景图`，像个只记「哪里有什么」的账本，分不清两把长得像的椅子，也记不住走过的弯路。这篇论文把场景图升级成`时空事件图`：空间轴负责按查询定位实例、把没探索的边界一起画进图里，时间轴用`双窗口记忆`记住最近的决策轨迹和验证过的跨任务经验。整个框架免训练，靠`VLM`在图上推理做决策，在 GOAT-Bench 上拿到 66.3% 的成功率。",
-      "paperUrl": "https://arxiv.org/abs/2608.28279",
-      "score": 0.45,
-      "scores": {
-        "innovation": 7,
+        "innovation": 8,
         "effectiveness": 7
       },
-      "category": "EMBODIED AI × LIFELONG NAVIGATION",
-      "influence": "摘要未披露作者与机构信息；所评测的 GOAT-Bench 与 HM3D 均为具身导航社区主流基准，免训练 VLM 导航是当前热点方向，预计关注度高。",
-      "github": "",
-      "stars": null,
-      "citedBy": null,
-      "institutions": [
-        "State Key Laboratory of Novel Software Technology, Nanjing University",
-        "School of Intelligence Science and Technology, Nanjing University"
-      ],
-      "figure": {
-        "url": null,
-        "caption": ""
-      },
-      "fields": {
-        "background": "多模态终身导航中，现有方法以状态中心的语义场景图作为持久语义观测库，难以区分相似实例、无法联合表示语义目标与探索前沿，且难以利用导航记忆与轨迹经验。",
-        "task": "多模态终身物体导航：智能体在未知环境中自主探索，依次完成由物体类别、语言描述或参考图像指定的导航任务。",
-        "insight": "将状态式场景图升级为事件驱动的时空事件图：空间轴统一表示语义目标与探索前沿，时间轴以双窗口记忆沉淀轨迹经验与跨子任务结果，显式建模过程而非仅建模状态。",
-        "pipeline": "多模态查询与感知输入 → 空间轴查询条件化实例接地与前沿建模 → 时间轴双窗口记忆写入事件 → VLM 在时空事件图上推理 → 选择目标实例或探索前沿作为下一导航目标，构成免训练闭环。",
-        "methods": "查询条件化实例接地、占据感知探索前沿（可达性/路径代价/探索效用）、轨迹感知双窗口记忆、基于 VLM 的图推理决策。",
-        "experiment": "GOAT-Bench：SR 66.3%、SPL 39.7%；HM3Dv1：SR 64.0%；HM3Dv2：SR 69.4%；消融与误差分析验证空间轴与时间轴的互补效应及跨子任务经验复用价值。",
-        "limitation": "摘要未报告相对 SOTA 的提升幅度与失败模式细节；免训练框架依赖 VLM 推理质量，双窗口记忆的容量上限与动态环境适应性有待检验。"
-      }
-    },
-    {
-      "title": "WALDO: One-Shot Exemplar-Conditioned Object Detection in Cluttered Scenes",
-      "titleZh": "WALDO: One-Shot Exemplar-Conditioned Object Detection in Clu（直译待润色）",
-      "hook": "新鲜出炉：详情以原文为准",
-      "cards": [
-        {
-          "emoji": "🎯",
-          "title": "问题与背景",
-          "body": "研究问题与背景以原文 Abstract/Introduction 为准（LLM 精读后补全专业表述）。"
-        },
-        {
-          "emoji": "⚙️",
-          "title": "方法设计",
-          "body": "方法与模块拆解以原文 Method 为准（待 LLM 精读补全）。"
-        },
-        {
-          "emoji": "📊",
-          "title": "实验结果",
-          "body": "数据集、指标与 SOTA 对比详见原文 Experiments（数字以原文为准）。"
-        },
-        {
-          "emoji": "⚠️",
-          "title": "局限与展望",
-          "body": "局限以原文 Limitation/Discussion 为准。"
-        }
-      ],
-      "figureNote": "以原文流程图为准。",
-      "figures": [],
-      "authors": "Kishor Datta Gupta et al.",
-      "venue": "arXiv 2026.08",
-      "summary": "本文属 Spatial LLM/VLM × Perception/Seg 方向。任务概述：Locating a specific object instance in a cluttered scene using a single reference image and a short description, and reporting when that instance is absent, large vision-language models usually address this task. We ask whether the same capability is available far more cheaply, from representations  方法与实验结论以原文为准（LLM 精读后自动补全中文导读）。",
-      "paperUrl": "https://arxiv.org/abs/2608.28216",
-      "score": 0.42,
-      "scores": {
-        "innovation": 7,
-        "effectiveness": 7,
-        "note": "启发式估计（LLM 未出分），仅供参考"
-      },
-      "category": "Spatial LLM/VLM × Perception/Seg",
-      "influence": "新论文：作者影响力标注待补充",
+      "category": "NOVEL VIEW SYNTHESIS × RECON-GEN UNIFIED",
+      "influence": "摘要未披露团队信息；「光线查询隐式特征 + 联合训练」为重建-生成混合范式提供了去桥梁化的新参照。",
       "github": "",
       "stars": null,
       "citedBy": null,
@@ -232,18 +109,189 @@ window.PAPER_DAILY_DATA = {
         "caption": ""
       },
       "fields": {
-        "background": "arXiv 新_submission（2026-08-28），主分类 cs.CV。",
-        "task": "Locating a specific object instance in a cluttered scene using a single reference image and a short description, and reporting when that instance is absent, large vision-language models usually address this task. We ask whether the same capability is available far more cheaply, from representations ",
-        "insight": "核心洞察以原文 Abstract/Method 为准（待 LLM 精读补全）。",
-        "pipeline": "I/O 与模块拆解待 LLM 精读填充；以原文 Method 部分与流程图为准。",
-        "methods": "方法细节以原文为准。",
-        "experiment": "实验数据集与消融详见原文 Experiments（数字以原文为准）。",
-        "limitation": "局限以原文 Limitation/Discussion 为准。"
+        "background": "稀疏输入新视角合成依赖「重建接地 + 生成先验」，但现有混合方法以渲染图像或点图/3D 高斯等显式表示为桥：生成条件继承了有损投影的误差，重建也收不到生成的纠错信号。",
+        "task": "场景内漫游：给定少量带位姿图像与任意相机轨迹，端到端地合成沿轨迹时序连贯的视频。",
+        "insight": "显式桥梁是精度瓶颈——用「光线查询隐式场景表示」替代 3D 中间量，让生成目标在联合训练中直接塑造自己的几何条件。",
+        "pipeline": "稀疏视角 → 前馈重建模型 → 隐式场景表示 → 目标相机光线查询 → 逐视角几何特征 → 视频扩散模型（条件注入）→ 沿轨迹连贯视频；重建与生成联合训练。",
+        "methods": "前馈隐式重建；光线查询式条件化（ray-queried implicit features）；视频扩散条件注入；联合端到端训练。",
+        "experiment": "DL3DV 上图像级指标与视频级时序一致性均超重建式/生成式/混合式基线；消融显示光线查询隐式特征 > 原始重建 token / 渲染 RGB 条件，联合训练带来额外增益。",
+        "limitation": "摘要未明确承认局限；大场景长轨迹的可扩展性、位姿质量与视角覆盖敏感性、扩散推理实时性均待验证。"
+      }
+    },
+    {
+      "title": "Query Rewriting for Complex Object Segmentation in 4D Gaussian Representations",
+      "titleZh": "查询重写：让4D高斯分割听懂「啰嗦的提问」",
+      "hook": "免训练改写提问，时间定位准确率60.9%→92.2%",
+      "cards": [
+        {
+          "emoji": "🎯",
+          "title": "问题与背景",
+          "body": "4D 高斯表示框架在语言引导的动态场景理解中表现出色，但对含大量上下文噪声的叙事型长查询高度敏感。用户的真实提问往往冗长啰嗦，与训练时偏简洁的查询分布错位，导致时间定位与空间分割性能骤降。如何弥合「人说的话」与「模型听得懂的查询」之间的鸿沟，是此类系统走向部署的实际瓶颈。"
+        },
+        {
+          "emoji": "⚙️",
+          "title": "方法设计",
+          "body": "受检索增强语言模型与关键词引导查询重构的启发，提出免训练的`重解释策略`：将长描述性查询渐进式改写为关键词接地的简洁形式，在每一步剥离语言噪声的同时，保留与物体中心高斯表示相关的语义锚点。整个流程不触碰任何模型权重，对已有 4D 分割框架即插即用。"
+        },
+        {
+          "emoji": "📊",
+          "title": "实验结果",
+          "body": "在 `HyperNeRF` 与 `Neu3D` 上，简洁化改写显著提升时间定位与空间分割：平均时间准确率 60.92%→92.21%，平均 vIoU 20.08%→76.94%，全程零微调。消融研究进一步显示：更短、更聚焦关键词的查询带来更稳定的视频特征相似度分布，与物体中心高斯表示对齐更好。"
+        },
+        {
+          "emoji": "⚠️",
+          "title": "局限与展望",
+          "body": "摘要未明确承认局限。改写质量对性能上限的影响、关键词化在需要细粒度属性区分的查询（如同色多物体）上的潜在信息损失、以及改写环节引入的额外延迟，值得在更广泛的基准上系统检验。"
+        }
+      ],
+      "figureNote": "假设流程图：左侧输入冗长叙事型查询，经查询重写模块渐进式去噪、锚定关键词，输出简洁关键词式查询；右侧 4D 高斯场景表示接收改写后查询，完成时间定位与空间分割；并排展示改写前后的性能差异。具体结构以原文流程图为准。",
+      "figures": [],
+      "authors": "Thanh-Khoi Nguyen et al.",
+      "venue": "arXiv 2026.09",
+      "summary": "你跟 AI 说「帮我找那个刚才从左边柜子旁边慢慢飘过去的红色气球」——一句话里全是噪声，4D 高斯场景理解模型经常被这种「叙事型长提问」绕晕。这篇论文发现：把冗长的描述性提问改写成干净的关键词式提问，模型表现大幅提升。改写策略免训练、即插即用，逐步剥离语言噪声、保留与物体中心表示相关的语义锚点。在 `HyperNeRF` 与 `Neu3D` 上，时间定位准确率从 60.92% 提到 92.21%，vIoU 从 20.08% 提到 76.94%——一行模型权重都不用改。",
+      "paperUrl": "https://arxiv.org/abs/2609.02664",
+      "score": 0.63,
+      "scores": {
+        "innovation": 7,
+        "effectiveness": 8
+      },
+      "category": "4D GAUSSIAN × QUERY REWRITING",
+      "influence": "摘要未披露团队信息（越南胡志明市方向工作）；「免训练提示工程 × 4D 表示」的结论对部署侧有直接工程价值。",
+      "github": "",
+      "stars": null,
+      "citedBy": null,
+      "institutions": [],
+      "figure": {
+        "url": null,
+        "caption": ""
+      },
+      "fields": {
+        "background": "4D 高斯表示的语言引导动态场景理解对叙事型长查询高度敏感：真实用户提问冗长含噪，与训练时简洁查询分布错位，时间定位与空间分割性能骤降。",
+        "task": "复杂物体分割：在不重训模型的前提下，把冗长描述性查询变换为 4D 高斯表示更能消化的形式，提升时间定位与空间分割。",
+        "insight": "语言噪声才是主要瓶颈——免训练地把长查询渐进改写为关键词接地形式、保留语义锚点，即可释放既有模型的真实能力。",
+        "pipeline": "叙事型长查询 → 渐进式查询重写（剥噪 + 语义锚点保留）→ 关键词式简洁查询 → 4D 高斯表示 → 时间定位 + 空间分割。",
+        "methods": "训练无关的重解释策略；关键词接地的查询重构；受 RAG 查询改写启发的渐进去噪。",
+        "experiment": "HyperNeRF 与 Neu3D：时间准确率 60.92%→92.21%，vIoU 20.08%→76.94%，零微调；消融显示短关键词查询带来更稳定的视频特征相似度分布。",
+        "limitation": "摘要未明确承认局限；改写质量上限、细粒度属性区分场景的信息损失、改写延迟等需更广基准检验。"
+      }
+    },
+    {
+      "title": "AGI Maze Prediction Datasets: A Compact Benchmark for Learning World Dynamics with Transformers",
+      "titleZh": "AGI迷宫基准：检验Transformer的世界动力学记忆",
+      "hook": "结构化工作记忆，胜过单纯堆latent容量",
+      "cards": [
+        {
+          "emoji": "🎯",
+          "title": "问题与背景",
+          "body": "世界建模要求预测模型维护并更新一个足以推理动作后果的内部状态。但现有评测中，「学到可迁移的动作条件动力学」与「背下熟悉布局的转移」常常混为一谈：模型在训练迷宫上满分，未必代表掌握了动力学本身。领域需要一个受控、紧凑的测试床，把结构化记忆、latent 容量与泛化能力三个变量干净地拆开对照。"
+        },
+        {
+          "emoji": "⚙️",
+          "title": "方法设计",
+          "body": "基准基于程序化生成的有状态网格世界，含三类任务：逐步转移预测、固定时域状态预测、序列文本观测预测。`源迷宫不相交`的训练/验证切分配合贪婪精确匹配评测，严格区分泛化与记忆。基线含从零训练的字节级 Transformer 与两种工作记忆增强架构：通用辅助 latent 记忆，以及`伪视频空间记忆`——从输入地图初始化二维潜在工作区，仅凭动作历史更新，不接收中间地图、位置或状态标签。"
+        },
+        {
+          "emoji": "📊",
+          "title": "实验结果",
+          "body": "通用 latent 记忆 Transformer 可完美拟合部分训练集，但验证集未一致提升；`伪视频空间记忆` Transformer 在选定的固定时域任务上取得完美验证精度（字节级与非结构化记忆基线均未达到），并大幅改进序列文本轨迹预测。同一数据、目标与协议下：结构化、任务对齐的工作记忆优于单纯增加 latent 容量。"
+        },
+        {
+          "emoji": "⚠️",
+          "title": "局限与展望",
+          "body": "摘要未明确承认局限。程序化迷宫与真实世界复杂性尚有距离，结论向真实感知-行动域的外推需谨慎；「语言接地由持久数据结构介导」的论断也待更广任务族验证。"
+        }
+      ],
+      "figureNote": "假设流程图：程序化生成的状态网格世界输出三类预测任务；模型侧并列三条支线——字节级 Transformer、通用 latent 记忆、伪视频空间记忆（地图初始化二维工作区 + 动作历史驱动更新）；评测层以源迷宫不相交切分做贪婪精确匹配，对比三条支线的验证泛化。具体结构以原文流程图为准。",
+      "figures": [],
+      "authors": "Alexey Potapov",
+      "venue": "arXiv 2026.09",
+      "summary": "世界模型的看家本领是「心里推演」：走一步、想一步，脑子里得维护一张会跟着动作更新的地图。这篇工作造了一个轻量可控的迷宫测试场，把问题拆得很干净：同样的数据与评测协议下，字节级 Transformer 能把训练集背得滚瓜烂熟，验证集却不动；通用 latent 记忆增强也没好多少。而一个`伪视频空间记忆`模型——先从输入地图初始化二维潜在工作区，之后仅凭动作历史更新它——在选定的固定时域任务上拿到满分验证精度。结论：与任务对齐的结构化记忆，比单纯加 latent 容量更有用。",
+      "paperUrl": "https://arxiv.org/abs/2609.02339",
+      "score": 0.56,
+      "scores": {
+        "innovation": 7,
+        "effectiveness": 6
+      },
+      "category": "WORLD DYNAMICS × STRUCTURED WORKING MEMORY",
+      "influence": "单作者基准型工作；为「结构化状态 vs 记忆容量」之争提供紧凑可复现的对照实验场。",
+      "github": "",
+      "stars": null,
+      "citedBy": null,
+      "institutions": [],
+      "figure": {
+        "url": null,
+        "caption": ""
+      },
+      "fields": {
+        "background": "世界建模需要预测模型维护并更新推理动作后果所需的内部状态；现有评测难以区分「学到可迁移动力学」与「记忆熟悉布局」，结构化记忆与 latent 容量的作用纠缠不清。",
+        "task": "构建轻量受控的世界动力学基准：程序化有状态网格世界上的逐步转移预测、固定时域状态预测与序列文本观测预测，并以源迷宫不相交切分严格评测泛化。",
+        "insight": "与任务对齐的结构化工作记忆（二维潜在空间工作区）比单纯增加 latent 容量更能带来跨布局泛化。",
+        "pipeline": "程序化网格世界 → 三类预测任务 → 三支线模型（字节级 Transformer / 通用 latent 记忆 / 伪视频空间记忆：地图初始化工作区 + 动作历史更新）→ 源迷宫不相交的精确匹配评测。",
+        "methods": "程序化有状态网格世界生成；源迷宫不相交切分；贪婪精确匹配评测；字节级从零训练基线；latent 记忆增强；伪视频空间记忆架构。",
+        "experiment": "伪视频空间记忆 Transformer 在选定固定时域任务上取得完美验证精度（其余基线未达），并大幅改进序列文本轨迹预测；通用 latent 记忆可拟合训练集但验证不提升。",
+        "limitation": "摘要未明确承认局限；程序化迷宫与真实域的差距、结论外推的边界、以及论断在更广任务族上的成立性待验证。"
+      }
+    },
+    {
+      "title": "Adapting a Foundation Model for Lunar Surface Height Estimation",
+      "titleZh": "把Depth Anything V2微调成月面高程估计器",
+      "hook": "零样本深度大模型搬家月球：微调后性能大幅提升",
+      "cards": [
+        {
+          "emoji": "🎯",
+          "title": "问题与背景",
+          "body": "数字高程模型（DEM）对月面分析与着陆安全至关重要：ESA 未来登月任务需要精确的高度估计来规避危险地形。传统 `shape from shading` 与 `stereophotogrammetry` 虽已证明价值但流程繁重；深度学习兴起后焦点转向单目深度估计。然而月面被岩石与陨石坑覆盖，经典障碍检测仅依赖 2D 图像，缺少高度维度。"
+        },
+        {
+          "emoji": "⚙️",
+          "title": "方法设计",
+          "body": "以零样本相对深度模型 `Depth Anything V2 (DAV2)` 为基础提出领域适配微调策略：用公开的 SPG 派生月面 DEM 数据作为监督，把通用深度先验迁移到月面域，输出月面相对高度图。此前的同类工作只把零样本 DAV2 当作 SOTA 对照而不做目标域适配，导致其潜力被低估——本文证明适配本身就有可观收益。"
+        },
+        {
+          "emoji": "📊",
+          "title": "实验结果",
+          "body": "与零样本 DAV2 相比，微调后的模型性能显著提升，成为可靠的月面相对深度估计器，可为障碍定位提供额外的高程信息。具体量化指标以原文为准。"
+        },
+        {
+          "emoji": "⚠️",
+          "title": "局限与展望",
+          "body": "摘要未明确承认局限。SPG 派生 DEM 的噪声上界、极区低光照与长阴影对单目线索的破坏、以及从相对高度到绝对高程的标定链路，都是登月任务实际使用前必须补齐的验证环节。"
+        }
+      ],
+      "figureNote": "假设流程图：月面影像输入微调后的 Depth Anything V2，输出相对高度图；训练侧由 SPG 派生 DEM 提供监督完成领域适配；推理结果作为 2D 障碍检测的高程补充维度。具体结构以原文流程图为准。",
+      "figures": [],
+      "authors": "Patrick Bauer et al.",
+      "venue": "arXiv 2026.09",
+      "summary": "ESA 筹备登月，落月点要避开乱石与陨石坑，靠单张影像估高度成了刚需。通用深度大模型 `Depth Anything V2` 零样本直接用在月面上会掉链子——毕竟它的训练集里没有月球。这篇工作用公开的立体摄影测量（SPG）月面 DEM 数据对 DAV2 做领域微调，把它改造成可靠的月面相对高度估计器，为传统纯 2D 的障碍检测补上第三维信息。",
+      "paperUrl": "https://arxiv.org/abs/2609.02448",
+      "score": 0.46,
+      "scores": {
+        "innovation": 6,
+        "effectiveness": 6
+      },
+      "category": "MONOCULAR DEPTH × LUNAR DOMAIN ADAPTATION",
+      "influence": "摘要未披露团队信息（德国达姆施塔特方向工作）；「基础模型领域微调」范式在行星科学落地的直接样本。",
+      "github": "",
+      "stars": null,
+      "citedBy": null,
+      "institutions": [],
+      "figure": {
+        "url": null,
+        "caption": ""
+      },
+      "fields": {
+        "background": "ESA 登月任务需要精确高度估计规避危险地形；传统 SfS/SPG 流程繁重，深度学习焦点转向单目深度，但月面岩石陨石坑地形与通用深度模型训练分布差异大。",
+        "task": "构建月面相对高度估计器：在 Depth Anything V2 基础上做目标域微调，为经典 2D 障碍检测补充高程维度。",
+        "insight": "零样本基础模型在域外（月面）直接使用会低估其潜力——用 SPG 派生 DEM 做轻量领域微调即可显著提升。",
+        "pipeline": "公开 SPG 派生月面 DEM（监督）→ 微调 Depth Anything V2 → 月面相对高度图 → 与 2D 障碍检测融合。",
+        "methods": "Depth Anything V2 零样本基础模型；SPG 派生 DEM 监督微调；领域适配策略。",
+        "experiment": "微调后相对零样本 DAV2 性能显著提升，成为可靠的月面相对深度估计器；具体量化指标以原文为准。",
+        "limitation": "摘要未明确承认局限；SPG DEM 噪声上界、极区光照与长阴影、相对高度到绝对高程的标定链路均待验证。"
       }
     }
   ],
   "counts": {
-    "total": 4,
-    "new": 3
+    "total": 5,
+    "new": 4
   }
 };

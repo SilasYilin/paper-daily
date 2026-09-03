@@ -43,9 +43,13 @@ ATOM_NS = {"a": "http://www.w3.org/2005/Atom", "ar": "http://arxiv.org/schemas/a
 
 
 # ---------------------------------------------------------------- arXiv 抓取
+# 直连 opener（环境 http_proxy 若指向不存在的本地代理，urlopen 会连接被拒）
+_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+
 def http_get(url: str, timeout: int = 30) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": "paper-daily/0.2 (research digest; contact: none)"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    with _OPENER.open(req, timeout=timeout) as r:
         return r.read().decode("utf-8", errors="replace")
 
 
@@ -70,6 +74,18 @@ def fetch_arxiv(categories, max_results: int = 150, retries: int = 1):
                 import time
                 time.sleep(5)
     raise RuntimeError(f"arXiv 抓取失败（已重试 {retries} 次）: {last_err}")
+
+
+def fetch_arxiv_by_ids(ids):
+    """按 arXiv ID 批量补抓元数据（AI HOT 池内独有论文用）。"""
+    params = urllib.parse.urlencode({"id_list": ",".join(ids), "max_results": str(len(ids))})
+    xml_text = http_get(f"{ARXIV_API}?{params}")
+    return parse_atom(xml_text)
+
+
+def _norm_title(s: str) -> str:
+    """标题归一化（小写、去非字母数字），用于跨源标题模糊对齐。"""
+    return re.sub(r"[^a-z0-9]", "", (s or "").lower())
 
 
 def _clean(text: str) -> str:
@@ -421,6 +437,29 @@ def main():
             sys.exit(1)
         print("    [arXiv] 失败，仅用 HF 主源候选")
     hf_ids = set(hf_main)
+    # 1a-2) AI HOT 中文策展池（aihot skill 通道）：热度信号 + 池内独有论文补抓元数据
+    aihot_signals, aihot_title_map = {}, {}
+    try:
+        subprocess.run([sys.executable, os.path.join(BASE_DIR, "sources_aihot.py")],
+                       capture_output=True, timeout=300)
+        with open(os.path.join(DATA_DIR, "sources_aihot.json"), encoding="utf-8") as f:
+            ah = json.load(f)
+        aihot_signals = ah.get("signals") or {}
+        for c in ah.get("curated") or []:
+            for t in (c.get("originalTitle"), c.get("title")):
+                nt = _norm_title(t or "")
+                if len(nt) >= 12:
+                    aihot_title_map[nt] = max(aihot_title_map.get(nt, 0), 0.08)
+        for kwh in ah.get("kw_hits") or []:
+            w = 0.06 if kwh.get("mode") == "selected" else 0.02
+            for c in kwh.get("items") or []:
+                for t in (c.get("originalTitle"), c.get("title")):
+                    nt = _norm_title(t or "")
+                    if len(nt) >= 12:
+                        aihot_title_map[nt] = max(aihot_title_map.get(nt, 0), w)
+        print(f"    [AIHOT] 精选池 {len(ah.get('curated') or [])} 条，信号覆盖 {len(aihot_signals)} 个 arXiv ID")
+    except Exception as e:  # noqa: BLE001
+        print(f"    [AIHOT] 拉取失败（{e}），跳过", file=sys.stderr)
     merged = {e["arxiv_id"]: e for e in entries}
     for aid, v in hf_main.items():
         if aid not in merged:
@@ -436,6 +475,17 @@ def main():
             if v.get("githubRepo"):
                 merged[aid]["_github"] = v["githubRepo"]
     entries = list(merged.values())
+    # AI HOT 池内独有论文：批量补抓 arXiv 元数据后并入候选
+    missing_ai = [a for a in aihot_signals if a not in merged]
+    if missing_ai:
+        try:
+            got = fetch_arxiv_by_ids(missing_ai[:25])
+            for e2 in got:
+                merged[e2["arxiv_id"]] = {**e2, "_from_aihot": True}
+            entries = list(merged.values())
+            print(f"    [AIHOT] 池内独有 {len(missing_ai)} 篇，补抓到 arXiv 元数据 {len(got)} 篇")
+        except Exception as ex:  # noqa: BLE001
+            print(f"    [AIHOT] arXiv 元数据补抓失败（{ex}）", file=sys.stderr)
     print(f"    合并后共 {len(entries)} 条（HF {len(hf_ids)} + arXiv 独有 {len(entries) - len([e for e in entries if e.get('_from_hf')])}）")
 
     # 1b) 扩展源：HF daily papers 热度（upvote>=30 写入 influence；热度加成 +0.08）
@@ -452,20 +502,32 @@ def main():
         except Exception as e:  # noqa: BLE001
             print(f"    [HF] 扩展源失败（{e}），继续仅用 arXiv", file=sys.stderr)
 
-    # 1c) 中文媒体源（公众号/B站）：热度信号 + 论文关联
+    # 1c) 中文媒体源（公众号）：wechat-article-search skill 通道优先，失败回退 opencli media_monitor
     media_hot = {}   # arxiv_id -> [ {source,title,url} ]
     media_kw_hot = []  # 标题关键词命中列表（英文论文名出现在中文标题里）
     try:
         mm_path = os.path.join(DATA_DIR, "media_mentions.json")
-        subprocess.run([sys.executable, os.path.join(BASE_DIR, "media_monitor.py")], capture_output=True, timeout=500)
-        with open(mm_path, encoding="utf-8") as f:
-            mm = json.load(f)
-        for mention in mm.get("mentions") or []:
-            aid = mention.get("arxiv_id")
-            if aid:
-                media_hot.setdefault(aid, []).append(mention)
-            media_kw_hot.append(mention)
-        print(f"    [媒体] 公众号/B站提及 {len(mm.get('mentions') or [])} 条（含 arXiv ID {len(media_hot)} 条）")
+        ok_mm = False
+        for mm_script in ("sources_wechat.py", "media_monitor.py"):
+            try:
+                r_mm = subprocess.run([sys.executable, os.path.join(BASE_DIR, mm_script)],
+                                      capture_output=True, timeout=500)
+                if r_mm.returncode == 0:
+                    ok_mm = True
+                    break
+            except Exception:  # noqa: BLE001
+                continue
+        if ok_mm:
+            with open(mm_path, encoding="utf-8") as f:
+                mm = json.load(f)
+            for mention in mm.get("mentions") or []:
+                aid = mention.get("arxiv_id")
+                if aid:
+                    media_hot.setdefault(aid, []).append(mention)
+                media_kw_hot.append(mention)
+            print(f"    [媒体] 公众号提及 {len(mm.get('mentions') or [])} 条（含 arXiv ID {len(media_hot)} 条）")
+        else:
+            print("    [媒体] 两个通道都失败，今日无媒体信号", file=sys.stderr)
     except Exception as e:  # noqa: BLE001
         print(f"    [媒体] 扩展源失败（{e}），继续", file=sys.stderr)
 
@@ -563,8 +625,11 @@ def main():
         if e.get("_hf_up"):
             influence = f"HF upvote {e['_hf_up']} · " + influence
         if e.get("_media_hits"):
-            srcs = "、".join(sorted({("公众号" if h["source"] == "weixin" else "B站") for h in e["_media_hits"]}))
+            srcs = "、".join(sorted({(h.get("account") or ("公众号" if h.get("source") == "weixin" else "B站"))
+                                     for h in e["_media_hits"]}))
             influence = f"中文社区 {srcs} 热议 · " + influence
+        if e.get("_aihot_w"):
+            influence = "AI HOT 中文社区收录 · " + influence
         figure_note = (info.get("figure_note") or "以原文流程图为准。") if isinstance(info, dict) else "以原文流程图为准。"
         # 双维度评分（0~10）：LLM 打分；无则按启发式保守估计并标注
         sc = (info.get("scores") or {}) if isinstance(info, dict) else {}
