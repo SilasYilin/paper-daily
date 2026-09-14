@@ -15,9 +15,9 @@ import os
 import re
 import sys
 import urllib.request
+import net  # noqa: E402  自适应网络层
 
-# 直连 opener（绕过可能失效的本地 http_proxy 环境变量）
-_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+_OPENER = net  # 自适应代理/直连（net.py）
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(BASE_DIR)

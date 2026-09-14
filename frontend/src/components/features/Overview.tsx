@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { ArrowRight, ExternalLink, Code, Star, Quote, Building2 } from 'lucide-react';
 import type { DataBundle, Paper } from '../../types/data';
-import { groupPapers, humanDate, TIERS, type Group } from '../../utils/groups';
+import { groupPapers, humanDate, type Group } from '../../utils/groups';
 import { allPapers } from '../../utils/helpers';
 
 const SUMMARY_MAX = 60;
@@ -29,13 +29,6 @@ function MetaRow({ p }: { p: Paper }) {
   if (p.citedBy != null) {
     bits.push({ icon: <Quote className="size-3" aria-hidden />, text: `被引 ${p.citedBy}` });
   }
-  const sc = p.scores || {};
-  if (sc.innovation != null || sc.effectiveness != null) {
-    bits.push({
-      icon: <span className="text-[10px] font-bold">评</span>,
-      text: `创新 ${sc.innovation ?? '–'} · 效果 ${sc.effectiveness ?? '–'}`,
-    });
-  }
   if (!bits.length) return null;
   return (
     <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-paper-muted">
@@ -60,6 +53,10 @@ function PaperCard({
   color: string;
   onRead: () => void;
 }) {
+  // 来源声望优先：会议 + 荣誉（如「CVPR · Oral」）比方向分类更值得占这一格
+  const grade = [p.venueLabel, p.awardLabel].filter(Boolean).join(' · ');
+  const chip = grade || p.category || '';
+
   return (
     <article
       className="pd-oc"
@@ -67,9 +64,9 @@ function PaperCard({
     >
       <div className="mb-2.5 flex items-center gap-2">
         <span className="pd-oc-no">{n}</span>
-        {p.category && (
-          <span className="pd-oc-chip" title={p.category}>
-            {p.category}
+        {chip && (
+          <span className={'pd-oc-chip' + (grade ? ' is-grade' : '')} title={grade || p.category}>
+            {chip}
           </span>
         )}
       </div>
@@ -153,32 +150,27 @@ export function Overview({
     <>
       {/* ---------- Hero ---------- */}
       <header className="pd-hero">
-        <div className="mx-auto max-w-[1180px] px-5 pt-10 pb-7 sm:pt-12">
-          <div className="pd-kicker">
-            PAPER DAILY · 每日论文精选
-          </div>
-
+        <div className="mx-auto max-w-[1180px] px-5 pt-9 pb-6 sm:pt-11">
           <h1 className="font-display text-[clamp(26px,4.4vw,40px)] leading-[1.18] font-bold tracking-[-0.02em] text-paper-ink">
             本期精选，{total} 篇值得看
           </h1>
 
-          <p className="mt-2.5 mb-5 text-[15px] text-paper-ink2">
+          <p className="mt-2 mb-5 text-[15px] text-paper-ink2">
             {data.issue && (
               <>
                 <b className="font-semibold text-paper-ink">{data.issue}</b>
                 {'　·　'}
               </>
             )}
-            报道日 <b className="font-semibold text-paper-ink">{heroDate || data.date}</b>
-            {data.axes && <>　·　<b className="font-semibold text-paper-ink">{data.axes}</b></>}
-            <span className="ml-2 text-[12px] text-paper-muted">（北京时间）</span>
+            <b className="font-semibold text-paper-ink">{heroDate || data.date}</b>
+            {data.axes && <>　·　{data.axes}</>}
           </p>
 
           {/* 统计胶囊：总数 + 三档分布 */}
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2.5">
             <div className="pd-stat">
               <div className="pd-stat-num !text-paper-accent">{total}</div>
-              <div className="pd-stat-lbl">Total</div>
+              <div className="pd-stat-lbl">总数</div>
             </div>
             {groups.map(g => (
               <div key={g.def.key} className="pd-stat">
@@ -189,10 +181,6 @@ export function Overview({
               </div>
             ))}
           </div>
-
-          {data.edNote && (
-            <div className="pd-lead mt-4">{data.edNote}</div>
-          )}
         </div>
       </header>
 
@@ -227,8 +215,6 @@ export function Overview({
               <h2 className="font-display text-[19px] font-bold tracking-[-0.01em] text-paper-ink">
                 {g.def.label}
               </h2>
-              <span className="pd-blk-en">{g.def.en}</span>
-              <span className="pd-blk-desc">{g.def.desc}</span>
               <span className="pd-blk-n">{g.items.length} 篇</span>
             </div>
 
@@ -261,9 +247,6 @@ export function Overview({
             <a href="https://aihot.virxact.com" target="_blank" rel="noopener noreferrer">AI HOT</a>
             {' · '}
             <a href="https://arxiv.org" target="_blank" rel="noopener noreferrer">arXiv</a>
-          </div>
-          <div className="mt-1.5">
-            分层依据：{TIERS.map(t => t.label).join(' / ')}（按你的偏好画像自动判定）　·　摘要为自动归纳，引用请以原文为准。
           </div>
         </div>
       </footer>

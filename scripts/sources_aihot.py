@@ -26,6 +26,7 @@ import re
 import time
 import urllib.parse
 import urllib.request
+import net  # noqa: E402  自适应网络层
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(BASE_DIR)
@@ -51,7 +52,7 @@ W_CAP = 0.10       # 单篇叠加封顶
 
 
 # 强制直连（沙箱/本机的 http_proxy 指向不存在的本地代理时，urllib 会连接被拒）
-_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+_OPENER = net  # 自适应代理/直连（net.py）
 
 
 def http_json(url: str, timeout: int = 30) -> dict:

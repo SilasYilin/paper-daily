@@ -38,6 +38,12 @@ export interface Paper {
   institutions?: string[];
   authors?: string;
   venue?: string;
+  /** 来源声望标签：CCF-A/顶会名（如 CVPR、ICCV） */
+  venueLabel?: string;
+  /** 荣誉标签：Oral / Highlight / Best Paper */
+  awardLabel?: string;
+  /** 知名机构标签（顶级高校或企业研究院） */
+  instLabel?: string;
   category?: string;
   score?: number | string;
   scores?: { innovation?: number | null; effectiveness?: number | null; note?: string };

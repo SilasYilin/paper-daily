@@ -26,6 +26,10 @@ def normalize(p: dict) -> dict:
         "figures": p.get("figures", []) or [],
         "authors": p.get("authors", ""),
         "venue": p.get("venue", ""),
+        # 来源声望（v1.3）：顶会 / Oral·Highlight 等荣誉 / 知名机构，卡片上以 chip 展示
+        "venueLabel": p.get("venue_label", "") or "",
+        "awardLabel": p.get("award_label", "") or "",
+        "instLabel": p.get("inst_label", "") or "",
         "summary": summary,
         "paperUrl": p.get("paper_url", ""),
         "score": p.get("score", 0),

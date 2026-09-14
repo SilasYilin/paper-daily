@@ -14,13 +14,49 @@ import os
 import re
 import sys
 import urllib.request
+import net  # noqa: E402  自适应网络层
 
-# 直连 opener（绕过可能失效的本地 http_proxy 环境变量）
-_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+_OPENER = net  # 自适应代理/直连（net.py）
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 WEB = os.path.join(os.path.dirname(BASE), "web", "figs")
 PIPELINE_WORDS = ["pipeline", "overview", "framework", "method", "architecture", "approach", "model overview"]
+
+
+MAX_W = 1600          # 输出最大宽度
+QUALITY = 80          # JPEG 质量
+COMPRESS_MIN = 150_000  # 超过此体积才压缩（小图保持原样，避免无谓重编码）
+
+
+def _compress(raw: bytes, fname: str, arxiv_id: str, idx: int):
+    """把位图压成受控体积的 JPEG。Pillow 不可用时打印告警并返回原图，不再静默吞异常。"""
+    if len(raw) <= COMPRESS_MIN:
+        return raw, fname, os.path.join(WEB, fname)
+    try:
+        from PIL import Image
+        import io
+        im = Image.open(io.BytesIO(raw))
+        if im.mode not in ("RGB", "L"):
+            im = im.convert("RGB")
+        elif im.mode == "L":
+            im = im.convert("RGB")
+        if im.width > MAX_W:
+            im = im.resize((MAX_W, max(1, int(im.height * MAX_W / im.width))), Image.LANCZOS)
+        buf = io.BytesIO()
+        im.save(buf, format="JPEG", quality=QUALITY, optimize=True, progressive=True)
+        out = buf.getvalue()
+        # 压完反而更大（极少数已高度优化的图）就保留原图
+        if len(out) >= len(raw):
+            return raw, fname, os.path.join(WEB, fname)
+        new_fname = f"{arxiv_id.replace('.', '_')}-fig{idx}.jpg"
+        print(f"    [fig] 压缩 {len(raw)//1024}KB → {len(out)//1024}KB ({im.width}px)")
+        return out, new_fname, os.path.join(WEB, new_fname)
+    except ImportError:
+        print("    [fig] 警告：未安装 Pillow，图片未压缩（pip install Pillow）", file=sys.stderr)
+        return raw, fname, os.path.join(WEB, fname)
+    except Exception as e:  # noqa: BLE001
+        print(f"    [fig] 压缩失败，保留原图：{type(e).__name__} {e}", file=sys.stderr)
+        return raw, fname, os.path.join(WEB, fname)
 
 
 def fetch_figures(arxiv_id, top_k=1):
@@ -71,21 +107,10 @@ def fetch_figures(arxiv_id, top_k=1):
             req = urllib.request.Request(f["src"], headers={"User-Agent": "paper-daily/0.5"})
             with _OPENER.open(req, timeout=30) as r:
                 raw = r.read()
-            # 尺寸控制：>1.2MB 或宽>2000 用 Pillow 压到 JPEG/缩放
-            if ext in (".png", ".jpg", ".jpeg") and len(raw) > 300_000:
-                try:
-                    from PIL import Image
-                    import io
-                    im = Image.open(io.BytesIO(raw)).convert("RGB")
-                    if im.width > 2000:
-                        im = im.resize((2000, int(im.height * 2000 / im.width)), Image.LANCZOS)
-                    buf = io.BytesIO()
-                    im.save(buf, format="JPEG", quality=82)
-                    raw = buf.getvalue()
-                    fname = fname.rsplit(".", 1)[0] + ".jpg"
-                    path = os.path.join(WEB, fname)
-                except Exception:  # noqa: BLE001
-                    pass
+            # 尺寸控制：位图统一压到 JPEG（宽 ≤1600，quality 80）。
+            # 阈值 150KB —— 论文原图常达 3MB+，不压会把仓库撑爆（2026-09-14 实测）。
+            if ext in (".png", ".jpg", ".jpeg", ".webp"):
+                raw, fname, path = _compress(raw, fname, arxiv_id, len(chosen) + 1)
             with open(path, "wb") as w:
                 w.write(raw)
             chosen.append({"file": fname, "caption": f["caption"], "kind": f["kind"]})

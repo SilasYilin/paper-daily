@@ -9,3 +9,14 @@ frontend/figs
 *.log
 # 工作区私有数据：内部记忆与自动化元数据，不得进公开仓库
 .workbuddy/
+
+# 运行期缓存（每日管道自动生成，无需入库；仅保留 today.json 与 llm_summaries.json）
+data/sources_*.json
+data/media_mentions.json
+data/meta_cache.json
+data/arxivweb_cache.json
+data/abstracts_today.json
+
+# 配图回收目录（scripts/clean_figs.py 生成，本机回滚用，不入库）
+web/figs_trash/
+data/_*.json

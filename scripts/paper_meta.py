@@ -18,9 +18,9 @@ import subprocess
 import sys
 import time
 import urllib.request
+import net  # noqa: E402  自适应网络层
 
-# 直连 opener（绕过可能失效的本地 http_proxy 环境变量）
-_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+_OPENER = net  # 自适应代理/直连（net.py）
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(BASE_DIR)
@@ -220,8 +220,17 @@ def enrich(papers, github_repos=None):
         rec = {"_ts": datetime.datetime.now().isoformat(timespec="seconds")}
         oa = fetch_openalex(aid)
         rec.update(oa)
-        # 高校：OpenAlex 对 arXiv 预印本常无 raw_affiliation，优先 arXiv HTML 脚注
-        insts = fetch_arxiv_affiliations(aid)
+        # 高校：优先复用 arxiv_web 的缓存（其提取规则覆盖 arXiv 新模板），
+        # 未命中时才回退到本模块的老式脚注解析（OpenAlex 对预印本常无 raw_affiliation）
+        insts: list[str] = []
+        try:
+            sys.path.insert(0, BASE_DIR)
+            import arxiv_web  # noqa: WPS433
+            insts = (arxiv_web.load_cache().get(aid) or {}).get("institutions") or []
+        except Exception:  # noqa: BLE001
+            insts = []
+        if not insts:
+            insts = fetch_arxiv_affiliations(aid)
         if insts:
             rec["institutions"] = insts
         repo = github_repos.get(aid) or p.get("github") or ""

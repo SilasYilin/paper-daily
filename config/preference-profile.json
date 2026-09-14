@@ -106,9 +106,6 @@
       "canonical space",
       "deformation field",
       "motion trajectory",
-      "space-time",
-      "spatiotemporal",
-      "temporal consistency",
       "monocular dynamic",
       "shape of motion",
       "vista4d",
@@ -238,7 +235,10 @@
       "optical flow",
       "multimodal perception",
       "generalizable representation",
-      "unsupervised 3d"
+      "unsupervised 3d",
+      "space-time",
+      "spatiotemporal",
+      "temporal consistency"
     ]
   },
   "feedback_log": []

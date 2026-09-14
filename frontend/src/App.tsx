@@ -3,7 +3,6 @@ import { Copy, Share2, Keyboard, ArrowLeft } from 'lucide-react';
 import type { DataBundle } from './types/data';
 import { allPapers, buildCopyText, copyToClipboard, saveFeedback, sharePaper, canShare } from './utils/helpers';
 import { pagesOf } from './utils/pages';
-import { humanDate } from './utils/groups';
 import { TopBar, type ViewMode } from './components/layout/TopBar';
 import { Colophon } from './components/layout/Colophon';
 import { Selector } from './components/features/Selector';
@@ -42,7 +41,8 @@ export function App({ data }: { data: DataBundle }) {
     return offsets[i] ?? 0;
   });
 
-  const meta = `${data.axes || '三维重建 × 世界模型'} · ${humanDate(data.date) || data.date || ''} · ${papers.length} 篇`;
+  // 顶栏只留方向名（期号/日期已在 Hero 展示，避免小字重复）
+  const meta = data.axes || '稀疏视角 4DGS · 新视角合成';
   const issue = data.issue || '';
 
   if (data.empty || papers.length === 0) {
@@ -207,9 +207,6 @@ export function App({ data }: { data: DataBundle }) {
           onNext={() => setFlatIdx(Math.min(total - 1, flatIdx + 1))}
           onDot={i => setFlatIdx(offsets[paperIdx] + i)}
         />
-        <p className="mt-3 hidden text-center text-[11px] text-paper-muted sm:block">
-          ←/→ 翻卡（触屏可滑动） · <span className="pd-kbd">G</span> 回概览 · <span className="pd-kbd">T</span> 切主题 · <span className="pd-kbd">C</span> 复制文案 · <span className="pd-kbd">?</span> 全部快捷键
-        </p>
       </div>
 
       {/* 复制 / 分享：桌面胶囊组 / 移动圆钮组 */}

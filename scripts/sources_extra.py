@@ -16,6 +16,7 @@ import os
 import re
 import sys
 import urllib.request
+import net  # noqa: E402  自适应网络层
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(BASE_DIR)
@@ -35,7 +36,7 @@ EXCLUDE_KEYWORDS = [
 ]
 
 
-_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+_OPENER = net  # 自适应代理/直连（net.py）
 
 
 def http_json(url, timeout=30):

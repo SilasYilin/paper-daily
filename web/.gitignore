@@ -1,1 +1,3 @@
-figs
+# 论文流程图需随站点一同发布（GitHub Pages 不做服务端裁剪），故不忽略 figs/。
+# 体积控制由 scripts/fetch_figures.py 负责：单图 >300KB 会压成 JPEG（宽 ≤2000，quality 82）。
+# 历史期次的旧图需手动清理（保留当前 data.js 中仍被引用的）。

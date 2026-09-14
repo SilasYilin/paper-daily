@@ -27,6 +27,7 @@ import subprocess
 import sys
 import urllib.parse
 import urllib.request
+import net  # noqa: E402  自适应网络层
 import xml.etree.ElementTree as ET
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,14 +38,14 @@ TODAY_JSON = os.path.join(DATA_DIR, "today.json")
 BUILD_SCRIPT = os.path.join(BASE_DIR, "build_web_data.py")
 
 ARXIV_API = "https://export.arxiv.org/api/query"  # HTTP 会 301 到 HTTPS，直接走 HTTPS
-AXES_TITLE = "三维重建 × 世界模型"
+AXES_TITLE = "稀疏视角 4DGS · 新视角合成"
 
 ATOM_NS = {"a": "http://www.w3.org/2005/Atom", "ar": "http://arxiv.org/schemas/atom"}
 
 
 # ---------------------------------------------------------------- arXiv 抓取
 # 直连 opener（环境 http_proxy 若指向不存在的本地代理，urlopen 会连接被拒）
-_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+_OPENER = net  # 自适应代理/直连（net.py）
 
 
 def http_get(url: str, timeout: int = 30) -> str:
@@ -405,6 +406,8 @@ def main():
     ap.add_argument("--no-sources-extra", dest="sources_extra", action="store_false")
     ap.add_argument("--no-figures", action="store_true", help="不抓流程图（默认抓）")
     ap.add_argument("--llm-top", type=int, default=12, help="送 LLM 总结的候选篇数")
+    ap.add_argument("--prestige-top", type=int, default=60,
+                    help="对基础分前 N 篇补全 arXiv 网页元数据（会议 Oral/Highlight + 知名机构），默认 40")
     ap.add_argument("--profile", default=PROFILE_PATH)
     ap.add_argument("--dry-run", action="store_true", help="只产出 today.json，不调用 build_web_data、不覆盖 web/data.js")
     args = ap.parse_args()
@@ -477,6 +480,29 @@ def main():
             merged[aid]["_hf_up"] = max(merged[aid].get("_hf_up", 0), v.get("upvotes", 0))
             if v.get("githubRepo"):
                 merged[aid]["_github"] = v["githubRepo"]
+    # 1a-3) arXiv RSS 通道（v1.3）：API 被出口 IP 限流时的主候选来源。
+    #       实测 cs.CV 单日 140+ 篇、全分类去重 600+ 篇，远大于旧路径的几十篇。
+    rss_items = {}
+    try:
+        subprocess.run([sys.executable, os.path.join(BASE_DIR, "sources_arxiv_rss.py")],
+                       capture_output=True, timeout=420)
+        with open(os.path.join(DATA_DIR, "sources_arxiv_rss.json"), encoding="utf-8") as f:
+            rss_items = (json.load(f).get("items") or {})
+        print(f"    [arXiv-RSS] {len(rss_items)} 篇候选纳入池")
+    except Exception as e:  # noqa: BLE001
+        print(f"    [arXiv-RSS] 拉取失败（{e}），跳过", file=sys.stderr)
+    for aid, v in rss_items.items():
+        if aid not in merged:
+            merged[aid] = {
+                "arxiv_id": aid,
+                "title": v.get("title") or "",
+                "abstract": v.get("abstract") or "",
+                "authors": v.get("authors") or [],
+                "published": v.get("published") or "",
+                "categories": v.get("categories") or [],
+                "comment": "",
+                "_from_rss": True,
+            }
     entries = list(merged.values())
     # AI HOT 池内独有论文：批量补抓 arXiv 元数据后并入候选
     missing_ai = [a for a in aihot_signals if a not in merged]
@@ -584,11 +610,51 @@ def main():
         hf_bonus += min(0.10, (e.get("_hf_up", 0) or 0) / 300.0)  # upvote 热度：300 票封顶 +0.10
         hf_bonus += 0.08 if e["arxiv_id"] in hf_hot else 0.0
         med_bonus, med_hits = media_signal(e)
-        cands.append({**e, "_score": round(normalize_score(score, prof) + hf_bonus + med_bonus, 2), "_axes": hit_axes,
+        # 主线契合度（v1.3）：用户主攻「稀疏视角 4DGS 新视角合成」，
+        # 命中主核轴给予额外权重，避免被世界模型/视频生成这类高热邻接方向挤下去。
+        core_hits = sum(1 for a in hit_axes if a in ("Sparse-view NVS", "4DGS / Dynamic GS"))
+        core_bonus = {2: 0.15, 1: 0.07}.get(core_hits, 0.0)
+        if core_hits and "Feed-forward 3D Geometry" in hit_axes:
+            core_bonus += 0.03
+        cands.append({**e, "_score": round(normalize_score(score, prof) + hf_bonus + med_bonus + core_bonus, 2),
+                      "_core": core_hits, "_axes": hit_axes,
                       "_boosts": hit_boosts, "_hf_up": hf_hot.get(e["arxiv_id"], {}).get("upvotes", 0),
                       "_media_hits": med_hits[:3]})
     cands.sort(key=lambda x: (x["_score"], x["_hf_up"]), reverse=True)
     print(f"[2/5] 粗筛：窗口外剔除 {skipped_window}，偏门排除 {skipped_excl}，命中偏好轴候选 {len(cands)} 篇")
+
+    # 2c) 来源声望（v1.3）——用户 2026-09-14 指令：
+    #     优先「知名大学/企业发表的论文」与「CCF-A 类会议 Oral/Highlight 等优秀论文」。
+    #     对基础分靠前的候选补全 arXiv 网页元数据（Comments 字段 + 作者机构脚注），
+    #     命中则加权并重排。声望满分（0.42）高于任何单一偏好轴，确保"优先"真正生效。
+    try:
+        sys.path.insert(0, BASE_DIR)
+        import arxiv_web
+        import prestige
+        _pres = prestige.default()
+        _pool = cands[: args.prestige_top]
+        _meta = arxiv_web.enrich_meta([e["arxiv_id"] for e in _pool],
+                                      want_affiliations=True, workers=6)
+        n_venue = n_award = n_inst = 0
+        for e in _pool:
+            m = _meta.get(e["arxiv_id"]) or {}
+            comment = (m.get("comment") or "").strip() or (e.get("comment") or "")
+            insts = m.get("institutions") or []
+            r = _pres.evaluate(comment=comment, journal_ref=m.get("journal_ref") or "",
+                               affiliations=insts, title=e["title"])
+            e["_prestige"] = r["bonus"]
+            e["_venue"], e["_award"] = r["venue"], r["award"]
+            e["_inst_label"], e["_insts"] = r["institution"], insts
+            e["_comment"] = comment[:200]
+            if r["bonus"]:
+                e["_score"] = round(e["_score"] + r["bonus"], 3)
+            n_venue += 1 if r["venue"] else 0
+            n_award += 1 if r["award"] else 0
+            n_inst += 1 if r["institution"] else 0
+        cands.sort(key=lambda x: (x["_score"], x["_hf_up"]), reverse=True)
+        print(f"[2c/5] 来源声望：补全 {len(_pool)} 篇｜顶会命中 {n_venue}｜Oral/Highlight 等 {n_award}｜知名机构 {n_inst}")
+    except Exception as pe:  # noqa: BLE001
+        print(f"    [prestige] 声望评分失败（不阻塞，按原分排序）：{pe}", file=sys.stderr)
 
     if not cands:
         print("[!] 今日窗口内无合适论文 -> 写入「今日无精选」而非退出。")
@@ -621,10 +687,15 @@ def main():
             category = llm.get("category") or category
         first_author = (e["authors"] or ["佚名"])[0]
         authors_disp = first_author + (" et al." if len(e["authors"]) > 1 else "")
+        comment_txt = e.get("_comment") or e.get("comment") or ""
         venue = f"arXiv {e['published'][:7].replace('-', '.')}"
-        if e["comment"]:
-            venue += f" · {e['comment'][:60]}"
+        if comment_txt:
+            venue += f" · {comment_txt[:60]}"
         influence = info.get("influence", "") or ""
+        # 来源声望标签（顶会 / Oral·Highlight / 知名机构）置于影响力行首，卡片上一眼可见
+        _plabels = [x for x in (e.get("_venue"), e.get("_award"), e.get("_inst_label")) if x]
+        if _plabels:
+            influence = " · ".join(_plabels) + ((" · " + influence) if influence else "")
         if e.get("_hf_up"):
             influence = f"HF upvote {e['_hf_up']} · " + influence
         if e.get("_media_hits"):
@@ -675,6 +746,10 @@ def main():
             "figure_caption": figures[0]["caption"] if figures else "",
             "fields": {k: (info.get("fields", {}).get(k, "") or "") for k in
                        ("background", "task", "insight", "pipeline", "methods", "experiment", "limitation")},
+            "venue_label": e.get("_venue") or "",
+            "award_label": e.get("_award") or "",
+            "inst_label": e.get("_inst_label") or "",
+            "_insts": e.get("_insts") or [],
             "_boosts": e["_boosts"],
         })
     # 4) 取 top max 篇写 today.json（list 格式，契约第五节）
@@ -686,16 +761,28 @@ def main():
         _repos = {e["arxiv_id"]: e.get("_github") or "" for e in cands[: args.llm_top] if e["arxiv_id"] in {p_["paper_url"].rsplit("/", 1)[-1] for p_ in chosen}}
         paper_meta.enrich(chosen_mapped := [{"arxiv_id": p_["paper_url"].rsplit("/", 1)[-1], **p_} for p_ in chosen], _repos)
         for src_, dst_ in zip(chosen_mapped, chosen):
-            for k in ("cited_by", "institutions", "github", "stars"):
+            for k in ("cited_by", "github", "stars"):
                 if src_.get(k) is not None:
                     dst_[k] = src_[k]
-            # 高校并入 authors 展示字段
-            if src_.get("institutions"):
-                dst_["authors"] = src_["authors"] + " · " + " / ".join(src_["institutions"])
+            # 机构：优先用 arXiv 网页脚注（arxiv_web 抓取更全），退回 paper_meta
+            insts = dst_.get("_insts") or src_.get("institutions") or []
+            if insts:
+                dst_["institutions"] = insts
+                base = dst_.get("authors") if isinstance(dst_.get("authors"), str) else ""
+                oa_authors = src_.get("authors")
+                # OpenAlex 返回的是 [{name, institutions}]，需要转成展示串
+                if isinstance(oa_authors, list) and oa_authors:
+                    names = [a.get("name") if isinstance(a, dict) else str(a) for a in oa_authors]
+                    names = [n for n in names if n]
+                    if names:
+                        base = names[0] + (" et al." if len(names) > 1 else "")
+                if base:
+                    dst_["authors"] = f"{base} · " + " / ".join(insts[:2])
     except Exception as me:  # noqa: BLE001
         print(f"    [meta] 元数据补全失败（不阻塞）：{me}", file=sys.stderr)
     for p in chosen:
         p.pop("_boosts", None)
+        p.pop("_insts", None)
     with open(TODAY_JSON, "w", encoding="utf-8") as f:
         json.dump(chosen, f, ensure_ascii=False, indent=2)
     print(f"[4/5] 写出 {TODAY_JSON}（{len(chosen)} 篇，score 最高: {chosen[0]['title'][:48]}… -> hero）")

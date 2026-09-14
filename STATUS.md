@@ -4,11 +4,11 @@
 
 | 项 | 状态 |
 |---|---|
-| 每日更新 | ⏸️ 定时任务存在但为 PAUSED（每日 08:00 北京时间；说「恢复更新」即可激活） |
+| 每日更新 | ✅ 已激活（每日 08:00 北京时间，WorkBuddy 定时任务 `644ae714`） |
 | 研究方向 | **稀疏视角下的 4DGS 新视角合成**（2026-09-14 按论文库重校准） |
-| 检索源 | 不设限制、只做审核打分：HF Daily + AI HOT 中文策展池 + 公众号（宽检索）+ arXiv 兜底 |
+| 检索口径 | **v2**：来源不设限，**优先知名高校/企业 + CCF-A 类会议 Oral·Highlight·Best Paper**，再按方向画像排序 |
+| 候选来源 | HF Daily 主源 + **arXiv RSS**（cs.CV/GR/AI/LG/RO，约 600 篇/日）+ AI HOT 中文策展池 + 公众号宽检索 |
 | 自定义域名 | yilinsforest.me（DNS：dns27/dns28.hichina.com，GitHub Pages 托管）✅ 已生效 |
-| 当前期号 | No.253（2026-09-10） |
 | 网页视图 | 双视图：**概览（仪表盘）** + 精读（翻卡），默认进概览 |
 
 ## 研究方向画像（v1，2026-09-14）
@@ -27,61 +27,73 @@
 | Point Cloud Backbones | 0.55 | PointNet++、Point Transformer V3 |
 | 3D Vision Adjacent | 0.45 | 邻接领域（保召回，排序自然靠后） |
 
-## 检索口径变更（v1）
+## 检索口径（v2，2026-09-14 用户指令）
 
-- **解除来源限制**：不再限定公众号与定向组合词，改为按方向宽检索；硬排除仅保留医学/临床等完全无关领域（原 robot / lidar / 自动驾驶 / 遥感 / 硬件等已全部放行）。
-- **只做审核**：靠偏好画像打分排序决定去留，而非入池前拦截。
-- arXiv 分类新增 `cs.GR`（图形学，渲染 / 新视角合成相关）。
-- 关键词清理：移除 `nvs` / `dit` / `seg` / `dino` / `clip` / `generalizable` 等易误命中的短泛词；
-  裸词 `world model` 只保留在低权邻接轴，避免智能体 / RL 世界模型抢占主线。
+**优先级 = 来源声望 + 方向匹配**，权重配置在 `config/source-prestige.json`，
+评分与匹配逻辑在 `scripts/prestige.py`。
 
-## 网页视图（v1.2，2026-09-14）
+| 信号 | 加分 | 识别方式 |
+|---|---|---|
+| CCF-A / 公认顶会（CVPR、ICCV、NeurIPS、ICML、ICLR、AAAI、SIGGRAPH、TPAMI…） | +0.20 | arXiv Comments 字段 |
+| Oral / Highlight / Spotlight / Best Paper 等荣誉 | +0.14 ~ +0.22 | 同上 |
+| 顶级高校或企业研究院（含 Google DeepMind、Meta、NVIDIA、清华、MIT… 约 160 条） | +0.16 | arXiv 全文首页作者脚注 |
+| 其他正规高校 / 研究机构 | +0.04 | 同上（标签取原文片段） |
+| **合计封顶** | **0.42** | 高于任何单一方向轴，确保「优先」真正生效 |
 
-移植「AI 晨报仪表盘」的信息架构，保留原有抹茶绿杂志感配色。默认进入**概览视图**：
+- **Workshop ≠ 正会**：Comments 含 `workshop` 时标注为「XX Workshop」并整体降半，避免误导。
+- 单位获取优先走 arXiv 摘要页脚注；无 HTML 版时退 OpenAlex / Semantic Scholar。
+- 其余：解除来源限制（仅保留医学/临床硬排除）；关键词已清理 `nvs`/`dit`/`generalizable` 等易误命中短泛词；
+  裸词 `world model` 只留在低权邻接轴。
 
-- **Hero**：kicker + 期号 + 人话日期（`2026年9月10日 星期四`）+ 四枚统计胶囊（总数 + 三档分布）+ 导语条
-- **锚点导航**：三档分层，吸顶、滚动高亮（IntersectionObserver），带计数与色点
-- **卡片网格**：`auto-fill minmax(320px, 1fr)`；卡片含序号徽标、分类 chip、中文标题、≤60 字摘要、
-  元信息行（高校 / star / 被引 / 评分，为空则整行省略）、「精读」+「原文」+「代码」操作
+## 网页视图（v1.3，2026-09-14 精简）
+
+保留「晨报仪表盘」信息架构与抹茶绿配色，按用户反馈**删去非关键小字与小模块**：
+
+- 已删：Hero kicker 小字、导语条（edNote 框）、「（北京时间）」、分组英文名与描述小字、
+  卡片「创新 x · 效果 y」评分行、页脚第二行说明、精读页快捷键提示行、顶栏重复元信息。
+- **Hero**：期号 + 人话日期 + 统计胶囊（总数 / 核心 / 相关 / 邻近，标签已中文化）
+- **锚点导航**：三档分层，吸顶 + 滚动高亮，带计数与色点
+- **卡片网格** `auto-fill minmax(320px, 1fr)`：序号徽标、**来源声望 chip**（如「CVPR · Oral」，无则回退方向分类）、
+  中文标题、≤60 字摘要、元信息行（机构 / star / 被引）、「精读」+「原文」+「代码」
 - **文末**：总篇数 + 数据源署名
 
-**三档分层**（`frontend/src/utils/groups.ts`，按关键词判定，非人工标注）：
-
-| 层次 | 判据 | 色 |
-|---|---|---|
-| 核心方向 CORE | 稀疏视角 NVS / 4DGS / 高斯泼溅 / 前馈几何（VGGT·DUSt3R）/ NeRF | 深抹茶 |
-| 相关方向 RELATED | 世界模型 / 视频扩散 / 单目几何 / 点云 / 3D 感知 | 中抹茶 |
-| 邻近领域 NEARBY | 其余可借鉴领域 | 灰绿 |
-
-编号**全局连续**（跨档累加不重置），与晨报口径一致。
-
 其他交互：`G` 切视图、`Esc` 从精读返回概览、`T` 主题、`C` 复制、`?` 帮助；
-深链 `#read/<n>` 直达第 n 篇精读、`?theme=dark|light` 指定主题（均可分享）。
+深链 `#read/<n>` 直达第 n 篇精读、`?theme=dark|light` 指定主题。
+
+## 每日管道
+
+1. `scripts/run_daily.py --dry-run --no-figures --llm-top 8 --max 8`
+   （HF + arXiv RSS + AIHOT + 公众号 → 方向打分 → **前 60 篇补全会议/机构并加权** → 写入 `data/today.json`）
+2. 智能体精读：写入 `data/llm_summaries.json` → `scripts/merge_llm.py` 合并（零 API 成本）
+3. `scripts/build_web_data.py` 生成 `web/data.js`
+4. `cd frontend && npm run build` → 拷贝 `frontend/dist/*` 到 `web/`
+5. `git add -A && git commit && git push origin main`（推送前先 unset 代理变量）
+
+## 脚本清单（v1.3 新增）
+
+| 脚本 | 作用 |
+|---|---|
+| `scripts/net.py` | 统一网络层：自动探测本机代理（7890 等），失败回退直连，带重试 |
+| `scripts/arxiv_web.py` | 解析 arXiv 摘要页（Comments → 会议/荣誉）与全文页（作者脚注 → 机构），带 14 天缓存 |
+| `scripts/prestige.py` | 来源声望评分：顶会 / 荣誉 / 知名机构 → 加权与标签 |
+| `scripts/sources_arxiv_rss.py` | arXiv RSS 通道，绕开 API 的 IP 限流，单日约 600 篇候选 |
+| `config/source-prestige.json` | 会议名单、荣誉词表、约 160 条顶级高校/企业名单 |
 
 ## 恢复/暂停更新
 
 - 暂停：WorkBuddy 对话中说「暂停 paper-daily 更新」，并把定时任务置 PAUSED
 - 恢复：说「恢复更新」，把定时任务置 ACTIVE
 
-## 每日管道
-
-1. `scripts/run_daily.py --dry-run --no-figures`（HF / AIHOT / 公众号 / arXiv → 打分筛选 → 写入 `data/today.json`）
-2. 智能体精读：写入 `data/llm_summaries.json` → `scripts/merge_llm.py` 合并
-3. `scripts/build_web_data.py` 生成 `web/data.js`（axes 用「稀疏视角 4DGS · 新视角合成」）
-4. `cd frontend && npm run build` → 拷贝 `frontend/dist/*` 到 `web/`
-5. `git add -A && git commit && git push origin main`（推送前先 unset 代理变量）
-
 ## 已知问题与注意
 
-- **arXiv 接口在 2026-09-14 本机不可达**（SSL UNEXPECTED_EOF，重试 3 次均失败）。
-  已修复连带问题：HF 载荷自带 title/summary，现已持久化为候选兜底，arXiv 不可达时仍能打分（此前会 0 命中）。
-  arXiv 恢复前候选池仅 HF 约 50 篇，精选质量受限。
+- **arXiv API（`/api/query`）对本机出口 IP 长期 429 限流**；摘要页与 RSS 不受影响，故候选主通道走 RSS。
+  即使未开梯子，管道也能靠 HF Daily 出刊。
 - `web/CNAME` = yilinsforest.me，勿删。
-- 本机 `http_proxy` 常指向失效端口，脚本已内置直连 opener；git 推送前需 `unset http_proxy https_proxy`，
-  并加 `-c http.proxy= -c https.proxy=`，否则推送会静默失败。
+- 本机 `http_proxy` 指向 127.0.0.1:7890（梯子未开时失效）；`net.py` 已自适应处理，
+  但 **git 推送仍须** `unset http_proxy https_proxy` 并加 `-c http.proxy= -c https.proxy=`，否则静默失败。
 - 公众号源依赖 `scripts/wechat_search/`（node + cheerio，仓库内自包含）。
 - **受管 Node 版本会升级**（`22.22.2-2` → `22.22.2-3` 已发生），硬编码路径会让公众号源静默失败。
-  `sources_wechat.py` 的 `_find_node()` 已改为自动扫描受管目录取最新版本；新增脚本请沿用同样做法。
-- 前端产物 `web/assets/` 的文件名带内容哈希，部署时须**先删旧目录再复制**，避免残留旧 bundle。
-- 本地快速验证网页：`chrome --headless=new --screenshot=<绝对路径> "file:///.../web/index.html?theme=dark#read/2"`
-  （截图输出路径必须写绝对路径，相对路径会被拒绝访问）。
+  `sources_wechat.py` 的 `_find_node()` 已改为自动扫描取最新版本；新增脚本请沿用。
+- 前端产物 `web/assets/` 文件名带内容哈希，部署时须**先删旧目录再复制**。
+- 本地快速验证：`chrome --headless=new --screenshot=<绝对路径> "file:///.../web/index.html?theme=dark#read/2"`
+  （截图路径必须写绝对路径）。
