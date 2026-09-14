@@ -36,11 +36,12 @@ UA = "paper-daily/1.0 (+https://github.com/SilasYilin/paper-daily; aihot-skill c
 ARXIV_URL_RE = re.compile(r"arxiv\.org/(?:abs|pdf)/(\d{4}\.\d{4,5})", re.I)
 ARXIV_TEXT_RE = re.compile(r"\b(\d{4}\.\d{4,5})\b")
 
-# 偏好六轴对应的检索词（中英混合，服务端 q 搜索）
+# v1（2026-09-14）：围绕「稀疏视角 4DGS 新视角合成」主线的检索词（中英混合，服务端 q 搜索）
 KW_QUERIES = [
-    "三维重建", "世界模型", "3D reconstruction", "world model",
-    "Gaussian Splatting", "NeRF", "4D", "spatial intelligence",
-    "3D vision", "scene understanding",
+    "稀疏视角", "新视角合成", "4D高斯", "三维重建", "高斯泼溅",
+    "Gaussian Splatting", "novel view synthesis", "4D reconstruction",
+    "dynamic scene", "world model", "video diffusion", "depth estimation",
+    "3D reconstruction", "VGGT", "DUSt3R",
 ]
 
 W_CURATED = 0.08   # 精选论文池命中

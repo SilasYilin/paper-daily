@@ -25,15 +25,13 @@ HF_MIRROR = "https://hf-mirror.com/api/daily_papers"
 HF_DAYS = 7           # 拉最近 7 天的 daily papers（每天 50 篇，共约 350 条去重后~200）
 HF_MIN_UPVOTES = 30   # 双轨制约定：upvote >= 30 作为热度信号
 
-# 偏门方向排除（用户点名：医学、纯机器人；另加病理/超声/眼科/自动驾驶纯应用等）
+# v1（2026-09-14）：用户指令「去掉检索源限制，只进行审核就好」。
+# 因此这里不再是方向性黑名单，仅保留与本研究方向完全无关的领域做兜底，
+# 其余（含 robot / lidar / 自动驾驶 / 遥感等）一律放行，交由偏好画像打分排序决定去留。
 EXCLUDE_KEYWORDS = [
     "medical", "clinical", "patient", "hospital", "radiology", "patholog",
     "ultrasound", "fetal", "tumor", "cancer", "lesion", "endoscop",
-    "surgical", "diagnos", "disease", "ecg", "eeg signal", "ct scan", "mri ",
-    "robot", "manipulat", "embodied manipulation", "grasping", "locomotion",
-    "autonomous driving", "self-driving", "lidar", "point cloud seg for driving",
-    "fingerprint", "face recognition", "remote sensing", "satellite", "agricultur",
-    "wireless", "network", "circuit", "hardware design", "fpga",
+    "surgical", "disease", "ecg",
 ]
 
 

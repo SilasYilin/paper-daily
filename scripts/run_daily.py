@@ -396,7 +396,8 @@ def fallback_summarize(entry: dict, category: str):
 # ---------------------------------------------------------------- 主流程
 def main():
     ap = argparse.ArgumentParser(description="每日论文精选检索管道 v0.2")
-    ap.add_argument("--categories", default="cs.CV,cs.AI,cs.LG,cs.RO")
+    # v1（2026-09-14）：解除来源限制，覆盖图形学与机器人（渲染/具身都是 4D 相关邻域）
+    ap.add_argument("--categories", default="cs.CV,cs.GR,cs.AI,cs.LG,cs.RO")
     ap.add_argument("--max", type=int, default=8, help="精选篇数（5~8，默认 8）")
     ap.add_argument("--fetch-limit", type=int, default=200, help="arXiv 抓取条数")
     ap.add_argument("--window-days", type=int, default=120, help="时间窗：最近 N 天都算新论文")
@@ -465,7 +466,9 @@ def main():
         if aid not in merged:
             merged[aid] = {
                 "arxiv_id": aid, "title": v.get("title") or "",
-                "abstract": "", "authors": "", "published": (v.get("publishedAt") or "")[:10],
+                # v1：HF 载荷自带摘要/作者，arXiv 不可达时仍能打分（旧版留空导致 0 命中）
+                "abstract": v.get("abstract") or "", "authors": v.get("authors") or "",
+                "published": (v.get("publishedAt") or "")[:10],
                 "categories": [], "comment": "", "_from_hf": True, "_hf_up": v.get("upvotes", 0),
                 "_github": v.get("githubRepo") or "",
             }

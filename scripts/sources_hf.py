@@ -52,12 +52,23 @@ def fetch_hf_daily(days=HF_DAYS):
             aid = m.group(1)
             rec = seen.get(aid)
             up = p.get("upvotes") or paper.get("upvotes") or 0
+            # v1（2026-09-14）：HF 载荷自带 title/summary/authors，持久化为候选池兜底，
+            # 使 arXiv 接口不可达时仍能完成打分与筛选（此前摘要为空会导致 0 命中）。
+            authors = paper.get("authors") or []
+            if isinstance(authors, list):
+                authors = ", ".join(
+                    (a.get("name") if isinstance(a, dict) else str(a)) for a in authors
+                ).strip()
             if rec is None:
                 seen[aid] = {
                     "arxiv_id": aid,
                     "title": paper.get("title") or "",
+                    "abstract": paper.get("summary") or "",
+                    "authors": authors or "",
                     "upvotes": up,
                     "githubRepo": paper.get("githubRepo") or "",
+                    "githubStars": paper.get("githubStars") or 0,
+                    "projectPage": paper.get("projectPage") or "",
                     "publishedAt": paper.get("publishedAt") or "",
                 }
             else:  # 同篇多日出现取最高 upvote（今日热度回落则保留峰值）
