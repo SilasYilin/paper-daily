@@ -1,76 +1,56 @@
 {
- "fetched_at": "2026-09-10T16:05:28",
+ "fetched_at": "2026-09-14T14:45:01",
  "channel": "wechat-article-search(skill)/sogou",
  "mentions": [
   {
    "source": "weixin",
-   "query": "机器之心 三维重建",
-   "title": "Atlas发布:李飞飞把视频生成与3D重建塞进同一个模型",
-   "summary": "但需要冷静看待的是——机器之心在报道中明确指出,被对比的那... 出一个3D世界Atlas的另一半能力是稀疏视角三维重建——这是三...",
-   "time": "2026-09-03",
+   "query": "高斯泼溅 动态场景",
+   "title": "ACA-GS:给动态高斯泼溅的锚点配上＂弹性编制＂,画质不降,存储再省四成",
+   "summary": "用高斯泼溅做动态场景(4DGS)一直有个绕不开的死结:形变场路线存储省,但碰到快速大运动就糊;4D 基元路线画质好,代价是...",
+   "time": "2026-09-01",
    "arxiv_id": null,
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS7wlZ04ybojnpUPlBbaqNg2c9ooknb35NVqXa8Fplpd9ek7IR2Ovw0mQNCHGguTrBSJKJgHZvrQ7eXGeybOh3-3ocqBhGsxkCG-qO-lNBv1FFlZJPZTg-zugdLiBtAjS2vpVkUZlhSkS0dtClmoNk8T2_oiUMNIQ_JRytaAvjP-CkGwcRMLugJB-whluTcgQrBevqlaoV-D2S6n0CcQqxele0WC6Sbi7DA..&type=2&query=%E6%9C%BA%E5%99%A8%E4%B9%8B%E5%BF%83 %E4%B8%89%E7%BB%B4%E9%87%8D%E5%BB%BA&token=053C681AE23651261D1A4701720986351DDBD9836AA264D5",
-   "account": "Al OPC进化论"
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS-U3vLmM-br5MGx7zd4UDKXh_Y0El9f1zFqXa8Fplpd9lQQWkqt6X98J2voMOQ_AxJX0_EQXwO_YvXoENFdxoPJrYuTaKOxSCC0p8waMBTlMcAhhjTPVSk2wh_4yxMALi6pe3rsxQUQrwyBXUjTI6-tWk876DAD2-_RIxEjBFtsZBiKxgaDAxnQFVsnglHePeWc_Y9ds_4lqztfrgpxknwvm0CtGSSkZQQ..&type=2&query=%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85 %E5%8A%A8%E6%80%81%E5%9C%BA%E6%99%AF&token=229E71C7B48DA8E9989FC3F25F80714099EE554B6AA797EF",
+   "account": "老博侃程序"
   },
   {
    "source": "weixin",
-   "query": "机器之心 世界模型",
-   "title": "大模型企业「跨界」具身即登顶榜首!智象HiDream具身世界模型来了",
-   "summary": "机器之心发布世界模型正迎来关键转向.从 Genie、Sora 到 WorldLabs,它们已经将视觉世界模型推向了一个高度.但表象之下,它...",
-   "time": "2026-09-07",
-   "arxiv_id": null,
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS7wlZ04ybojnEgWtvN98ku-c9ooknb35NVqXa8Fplpd9sGTiM4TDuJMTnLVsohwmd-0eOBDxiJ-3BDBz3wWQe4jxCSKnPJoWZ_aZ2xVqXFAWkDyU9wvaN8mOMQfaClcVOxpIG8yoqQm7DyMo0n7ChiirU0-K1iDyZKxU7eJ5Ju7Hgj1c4afQMEkHvKB8RSbhA2kgpwU2fDeYIFzFkVQ5d_x5Nu7CnoSqqg..&type=2&query=%E6%9C%BA%E5%99%A8%E4%B9%8B%E5%BF%83 %E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B&token=053C7D163BEF8EFFC4C59FDFAC90DAD3C422DA566AA264D9",
-   "account": "机器之心"
-  },
-  {
-   "source": "weixin",
-   "query": "机器之心 世界模型",
-   "title": "皓思AI前沿动态|模型屠榜、开源易主、机器鸭卖爆的一周",
-   "summary": "机器之心评价:世界模型进入新时代.Atlas的关键跃迁在于从「生成画面」走向「物理一致性」——生成的画面要能支持下游的机器人...",
+   "query": "高斯泼溅 动态场景",
+   "title": "李飞飞团队开源的高斯泼溅引擎到底是什么?",
+   "summary": "总听到3D高斯泼溅到底是啥先想象一个场景:你在网页里看到一间客厅.它不是照片,也不是视频.你拖动鼠标,可以绕到沙发侧面...",
    "time": "2026-09-08",
    "arxiv_id": null,
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS7wlZ04ybojnEgWtvN98ku-c9ooknb35NVqXa8Fplpd97qZpbromLQsS_Wmc3D_ChEy8040dtreetvR02rEf9ewapbRxBvldL0EWZ6mMMxIBuyK9Q-AOaXwX4UQin7stZzS-sRXFWQFpXOBra42rC4sIjJ3XBOphKRDG9Uk157Hppk1q6QGjQTOSv2XpI0NWhIZaJ9Jxx_Tuci1eL0VWBy6rCDCayYmfpA..&type=2&query=%E6%9C%BA%E5%99%A8%E4%B9%8B%E5%BF%83 %E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B&token=053C7D163BEF8EFFC4C59FDFAC90DAD3C422DA566AA264D9",
-   "account": "皓思维度-AI视野"
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS-U3vLmM-br5MGx7zd4UDKXh_Y0El9f1zFqXa8Fplpd90FN0gJCuhZNJQ_DZ3Oz_y0-cJUcv94xuFVp9fuI-VrI84bEix9w-QRG03cBru8JiX2LXkTFYXevDeoGlJ6DbwCgh2B3gKMiZ_xlnNpziQgWulaKNpYQdsBOYntYiM7TY-M-seCNnhfv53q8Pdd9xx74CRlxxegZ8EVvLu6wtMLtAe0f8bRARvQ..&type=2&query=%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85 %E5%8A%A8%E6%80%81%E5%9C%BA%E6%99%AF&token=229E71C7B48DA8E9989FC3F25F80714099EE554B6AA797EF",
+   "account": "昆仑九章"
   },
   {
    "source": "weixin",
-   "query": "3D视觉工坊 三维",
-   "title": "点云、图像、语言终于要统一了:3D Token会不会成为空间智能的新接口?",
-   "summary": "让三维世界能够直接进入多模态大模型的计算空间. CVPR 2026 的 SAGE 将原始点云转换为离散3D Token;VLM-3R则从单目视频中...",
-   "time": "2026-09-06",
+   "query": "高斯泼溅 动态场景",
+   "title": "3D高斯泼溅:数字孪生建模技术跃迁",
+   "summary": "＂完成基于3D高斯泼溅技术变电站高精度数字孪生场景构建,并成功验证动态避障算法＂.注意后半句——这个高精度孪生场景不是...",
+   "time": "2026-09-05",
    "arxiv_id": null,
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS7wlZ04ybojn6g8kyQINwvac9ooknb35NVqXa8Fplpd9akeYenCSlmTzdWRGZU1xzYgRCey4qxniJCTN9Qsf3XXg2P3RJqgUKXayxHBUKLyEWX8Qsje3XQfN2-pZ13ETm-cMhLFAqqxROlKus3R5xhgbI5B4Rmugaw0hB2EKl0NmBeNXV80RqKqsVA02IdDXSCx-KB9O-NYM2bNaX5VEHsPdrgozfSg6bw..&type=2&query=3D%E8%A7%86%E8%A7%89%E5%B7%A5%E5%9D%8A %E4%B8%89%E7%BB%B4&token=053CA7A664B1D6A09B9DC187F45A821A9B87BD416AA264E0",
-   "account": "3D视觉工坊"
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS-U3vLmM-br5MGx7zd4UDKXh_Y0El9f1zFqXa8Fplpd9oaAZBVu7q2f7GSDVCwELuo8Vc1_-h7l_1uUW-e5rROESEW3eAOmzZXaYzqSs_HQOXrz8d3BmeXy5k5wzP_MIrXNwAvDf5EX0UEY_DmgP5IGJDIOJt9QC2RG1v88fcN2yGusb_Jovjy4D3c8-LhzgYxkcUu-mhuyCoSoiyK8wCcVhlgeRt7bSzA..&type=2&query=%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85 %E5%8A%A8%E6%80%81%E5%9C%BA%E6%99%AF&token=229E71C7B48DA8E9989FC3F25F80714099EE554B6AA797EF",
+   "account": "数字孪生城市"
   },
   {
    "source": "weixin",
-   "query": "3D视觉工坊 世界模型",
-   "title": "李飞飞发布全球首个多模态世界模型Atlas:像素级相机控制+单图生成完整3D世界,重塑机器人空间智能",
-   "summary": "点击->查看详情:3D视觉硬件汇总!涵盖科研级和产品级!包括3... Atlas的出现,标志着世界模型从「能看」走向了「能理解、能想象...",
-   "time": "2026-09-03",
+   "query": "三维重建 前馈",
+   "title": "【ChinaSI2026早鸟注册延期至8月15日】专题论坛:SLAM与三维重建",
+   "summary": "前馈神经表征驱动的高保真三维重建报告摘要:像素是三维成像系统最直接的观测,却未必是最适合几何推理的表征.在稀疏多视图重...",
+   "time": "2026-09-12",
    "arxiv_id": null,
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS7wlZ04ybojnFuKRjB6eAiSc9ooknb35NVqXa8Fplpd9akeYenCSlmTzdWRGZU1xzYgRCey4qxniJCTN9Qsf3XXg2P3RJqgUKd_HpNPTa_sfsYjLxddTibEVIATrK_NKFCg0dfRgv3J1gj7AhpgoRN3bA85uyMdtXwDOtcmA_YlICsxzFrl-yPuG9rfWibdYAr77KxxiC--RbxeJ-zCROmHuL0unUdKkuw..&type=2&query=3D%E8%A7%86%E8%A7%89%E5%B7%A5%E5%9D%8A %E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B&token=053CBF478F5A3C4A70772A6D017205B971BF77F86AA264E5",
-   "account": "3D视觉工坊"
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS-U3vLmM-br5MDjCtBsJ5_Hh_Y0El9f1zFqXa8Fplpd9wflrXCD1jO3mqFlcdifCCuGnGc2DpU810navE1Sba9cw0fJl84s9pU4qW4sCVzs1elBu3W18VN3FQLjfKb2V0yptTKi0TtmYQRC6JMSirgwjhR0IqOKpK5AWBs0RDM4JS2kp9jyntO2xqarQh8pMmeptHnvEqlPmM5CeuQcu60489kyxDwoXvg..&type=2&query=%E4%B8%89%E7%BB%B4%E9%87%8D%E5%BB%BA %E5%89%8D%E9%A6%88&token=229E788E11290D4E3D3B6556F80EE4463E9112DA6AA797F1",
+   "account": "CSIG IDP专委会"
   },
   {
    "source": "weixin",
-   "query": "3D视觉工坊 世界模型",
-   "title": "Puffin-World:面向空间智能的统一世界模型,从「生成画面」走向「理解并构建物理可信世界」",
-   "summary": "点击->查看详情:3D视觉硬件汇总!涵盖科研级和产品级!包括3D相机、机械臂抓取软件、手持扫描仪、小车、无人机等!世界模型...",
-   "time": "2026-09-10",
-   "arxiv_id": null,
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS7wlZ04ybojnFuKRjB6eAiSc9ooknb35NVqXa8Fplpd9akeYenCSlmTzdWRGZU1xzYgRCey4qxniJCTN9Qsf3XXg2P3RJqgUKWY2zNgMrrn7WRzcOicTRKXOCR4-GW90nm12Ftbj1VQ8I682UnYhD-xBj5oW32JHR88dYjvK1TphCjNPGArbmdvKdD1ovlgDtL76aVYdydR1ifax9erKzMVFkDr8IT4KYw..&type=2&query=3D%E8%A7%86%E8%A7%89%E5%B7%A5%E5%9D%8A %E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B&token=053CBF478F5A3C4A70772A6D017205B971BF77F86AA264E5",
-   "account": "3D视觉工坊"
-  },
-  {
-   "source": "weixin",
-   "query": "量子位 论文",
-   "title": "创造全球首个量子比特,27年后,这家公司宣布「退场」",
-   "summary": "这篇论文成为了在全球范围内加速固态量子计算机研究的催化剂.截至2026年,超导技术已成为量子计算机领域的主流路线. 后续...",
+   "query": "三维重建 前馈",
+   "title": "长序列3D重建新突破!NVIDIA提出Scal3R!",
+   "summary": "支持在长视频流上进行可扩展的在线三维重建.(a) 现有前馈模型,如 CUT3R 和 STream3R,会回归相对于固定首帧的绝对全局位姿 ...",
    "time": "2026-09-07",
    "arxiv_id": null,
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS7wlZ04ybojnbM-GWiun1Xqc9ooknb35NVqXa8Fplpd9q9k4aewDqymR8k9m3T82htUT1DY2wXyeQJkiLHDNl8vKUx83-q1cIUAAZDt9aakwIYNH8Bc0GT0f6RGGpaPyoobbi5MQg6xfQKfI5PGVVqVmOkIBnmTj56s4zdg3L1ebb0cpqvyI4Z3ns-lJ2NHcTB91gezk_FxUwzBQrSc45xfs46dn8Efgxg..&type=2&query=%E9%87%8F%E5%AD%90%E4%BD%8D %E8%AE%BA%E6%96%87&token=053CFE4E70A4C2B58E89D592FF2BE1FF8F9CE4546AA264F0",
-   "account": "光子盒"
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS-U3vLmM-br5MDjCtBsJ5_Hh_Y0El9f1zFqXa8Fplpd9m81sTyK6ZM1qTF0oIb3igJiWddnd0XAn56s9PV9pQFkouBqpop72i1MpSoxxpBdqF9T2YF1u2qMI78R6AXfmOc3CRDzpXQmwZfKkvAS2GtAP-VjHH4cCShqmiwQXOrKJWCQXMiyPx0FCmFEsGzVhiho31FDIdKHZQyEXMT_rF7lAe0f8bRARvQ..&type=2&query=%E4%B8%89%E7%BB%B4%E9%87%8D%E5%BB%BA %E5%89%8D%E9%A6%88&token=229E788E11290D4E3D3B6556F80EE4463E9112DA6AA797F1",
+   "account": "AI妙妙房"
   }
  ]
 }

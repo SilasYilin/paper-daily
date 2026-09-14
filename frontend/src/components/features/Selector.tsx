@@ -10,7 +10,7 @@ export function Selector({
   onPick: (i: number) => void;
 }) {
   return (
-    <div className="mx-auto mt-6 flex max-w-3xl flex-wrap items-center gap-2 px-5">
+    <div className="flex flex-wrap items-center gap-2">
       <span className="mr-1 text-[11px] tracking-[2px] text-paper-muted">本期论文</span>
       {papers.map((p, i) => (
         <button

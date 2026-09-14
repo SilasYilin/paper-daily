@@ -7,3 +7,5 @@ node_modules/
 frontend/dist/
 frontend/figs
 *.log
+# 工作区私有数据：内部记忆与自动化元数据，不得进公开仓库
+.workbuddy/

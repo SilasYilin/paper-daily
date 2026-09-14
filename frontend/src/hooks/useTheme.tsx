@@ -11,6 +11,11 @@ const STORE_KEY = 'pc-theme';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
+    // 分享链接可指定主题：?theme=dark|light（优先于本地记忆）
+    try {
+      const q = new URLSearchParams(window.location.search).get('theme');
+      if (q === 'dark' || q === 'light') return q;
+    } catch { /* ignore */ }
     try {
       const v = localStorage.getItem(STORE_KEY);
       if (v === 'dark' || v === 'light') return v;

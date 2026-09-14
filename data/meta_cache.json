@@ -94,5 +94,227 @@
   "_ts": "2026-09-10T16:07:20",
   "github": null,
   "stars": null
+ },
+ "2609.12641": {
+  "_ts": "2026-09-14T14:38:17",
+  "github": "https://github.com/MAGICLAB-NUS/LIT",
+  "stars": 25
+ },
+ "2609.11486": {
+  "_ts": "2026-09-14T14:38:20",
+  "github": "https://github.com/msu-video-group/freeflow",
+  "stars": 13
+ },
+ "2609.11548": {
+  "_ts": "2026-09-14T14:38:33",
+  "cited_by": 0,
+  "authors": [
+   {
+    "name": "Chenxi Song",
+    "institutions": []
+   },
+   {
+    "name": "Yanming Yang",
+    "institutions": []
+   },
+   {
+    "name": "Chi Zhang",
+    "institutions": []
+   }
+  ],
+  "github": "https://github.com/datainsightat/introduction_llm",
+  "stars": 75
+ },
+ "2608.12564": {
+  "_ts": "2026-09-14T14:38:40",
+  "cited_by": 0,
+  "authors": [
+   {
+    "name": "Xiyuan Yang",
+    "institutions": []
+   },
+   {
+    "name": "Sheikh Sarwar",
+    "institutions": []
+   },
+   {
+    "name": "Jingru Cheng",
+    "institutions": []
+   },
+   {
+    "name": "Zhan Shi",
+    "institutions": []
+   },
+   {
+    "name": "Duanshun Li",
+    "institutions": []
+   },
+   {
+    "name": "Huiyuan Chen",
+    "institutions": []
+   },
+   {
+    "name": "Haiyang Zhang",
+    "institutions": []
+   },
+   {
+    "name": "Xing Fan",
+    "institutions": []
+   },
+   {
+    "name": "Chenlei Guo",
+    "institutions": []
+   },
+   {
+    "name": "Jingrui He",
+    "institutions": []
+   },
+   {
+    "name": "Zhenyu Liao",
+    "institutions": []
+   }
+  ],
+  "github": "https://github.com/xiyuanyang45/WMRL",
+  "stars": 20
+ },
+ "2609.11929": {
+  "_ts": "2026-09-14T14:38:43",
+  "cited_by": 0,
+  "authors": [
+   {
+    "name": "Haiwen Diao",
+    "institutions": []
+   },
+   {
+    "name": "Jiahao Wang",
+    "institutions": []
+   },
+   {
+    "name": "Chenjing Ding",
+    "institutions": []
+   },
+   {
+    "name": "Hanming Deng",
+    "institutions": []
+   },
+   {
+    "name": "Jiangnan Chen",
+    "institutions": []
+   },
+   {
+    "name": "Ruixi Zhang",
+    "institutions": []
+   },
+   {
+    "name": "Ruohui Wang",
+    "institutions": []
+   },
+   {
+    "name": "Wenwen Tong",
+    "institutions": []
+   },
+   {
+    "name": "Xiangyu Fan",
+    "institutions": []
+   },
+   {
+    "name": "Yubo Wang",
+    "institutions": []
+   },
+   {
+    "name": "Yue Zhu",
+    "institutions": []
+   },
+   {
+    "name": "Yuwei Niu",
+    "institutions": []
+   }
+  ],
+  "github": null,
+  "stars": null
+ },
+ "2609.07064": {
+  "_ts": "2026-09-14T14:42:56",
+  "cited_by": 0,
+  "authors": [
+   {
+    "name": "Soohyun Ryu",
+    "institutions": []
+   },
+   {
+    "name": "Sohee Kim",
+    "institutions": []
+   },
+   {
+    "name": "Eunho Yang",
+    "institutions": []
+   }
+  ],
+  "github": "https://github.com/rsoohyun/SpatialBlock",
+  "stars": 5
+ },
+ "2609.11499": {
+  "_ts": "2026-09-14T14:43:00",
+  "cited_by": 0,
+  "authors": [
+   {
+    "name": "Zhiqi Li",
+    "institutions": []
+   },
+   {
+    "name": "Yuxuan Liao",
+    "institutions": []
+   },
+   {
+    "name": "Bo Zhu",
+    "institutions": []
+   }
+  ],
+  "github": "https://github.com/ZhiqiLi-CG/RecursiveCWM_code",
+  "stars": 2
+ },
+ "2609.09155": {
+  "_ts": "2026-09-14T14:45:11",
+  "cited_by": 0,
+  "authors": [
+   {
+    "name": "Yuncong Yang",
+    "institutions": []
+   },
+   {
+    "name": "Zhengtao Han",
+    "institutions": []
+   },
+   {
+    "name": "Furkan Özyurt",
+    "institutions": []
+   },
+   {
+    "name": "Zeyuan Yang",
+    "institutions": []
+   },
+   {
+    "name": "Han Yang",
+    "institutions": []
+   },
+   {
+    "name": "Junyi Cao",
+    "institutions": []
+   },
+   {
+    "name": "Haoyu Zhen",
+    "institutions": []
+   },
+   {
+    "name": "Yilun Du",
+    "institutions": []
+   },
+   {
+    "name": "Chuang Gan",
+    "institutions": []
+   }
+  ],
+  "github": "https://github.com/UMass-Embodied-AGI/SyncWorld",
+  "stars": 19
  }
 }

@@ -26,20 +26,42 @@ ROOT = os.path.dirname(BASE_DIR)
 DATA_DIR = os.path.join(ROOT, "data")
 SEARCH_JS = os.path.join(BASE_DIR, "wechat_search", "search_wechat.js")
 
-# node 可执行文件：环境变量可覆盖；否则在常见托管/系统位置探测
+def _ver_key(path: str):
+    """从路径中解析语义化版本，用于挑选最新的受管 node（22.22.2-10 > 22.22.2-3）。"""
+    m = re.search(r"(\d+)\.(\d+)\.(\d+)(?:-(\d+))?", path)
+    if not m:
+        return (0, 0, 0, 0)
+    return (int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4) or 0))
+
+
 def _find_node():
+    """node 可执行文件：环境变量 > 受管目录中最新版本 > PATH。
+
+    注意：不要硬编码版本号——受管 node 升级（如 22.22.2-2 → -3）会让路径失效，
+    而静默失败会被管道的「源失败自动降级」吞掉，表现为公众号源长期零结果。
+    """
     env = os.environ.get("PAPER_DAILY_NODE")
     if env and os.path.exists(env):
         return env
-    for p in (
-        r"C:\Users\25432\.workbuddy\binaries\node\versions\22.22.2-2\node.exe",
-        "node",
-    ):
-        try:
-            if subprocess.run([p, "--version"], capture_output=True, timeout=15).returncode == 0:
-                return p
-        except Exception:  # noqa: BLE001
-            continue
+
+    managed = r"C:\Users\25432\.workbuddy\binaries\node\versions"
+    if os.path.isdir(managed):
+        cands = sorted(
+            (os.path.join(managed, d, "node.exe") for d in os.listdir(managed)),
+            key=_ver_key,
+        )
+        for p in reversed([c for c in cands if os.path.exists(c)]):
+            try:
+                if subprocess.run([p, "--version"], capture_output=True, timeout=15).returncode == 0:
+                    return p
+            except Exception:  # noqa: BLE001
+                continue
+
+    try:
+        if subprocess.run(["node", "--version"], capture_output=True, timeout=15).returncode == 0:
+            return "node"
+    except Exception:  # noqa: BLE001
+        pass
     return "node"
 
 

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Copy, Share2, Keyboard } from 'lucide-react';
+import { Copy, Share2, Keyboard, ArrowLeft } from 'lucide-react';
 import type { DataBundle } from './types/data';
 import { allPapers, buildCopyText, copyToClipboard, saveFeedback, sharePaper, canShare } from './utils/helpers';
 import { pagesOf } from './utils/pages';
-import { TopBar } from './components/layout/TopBar';
+import { humanDate } from './utils/groups';
+import { TopBar, type ViewMode } from './components/layout/TopBar';
 import { Colophon } from './components/layout/Colophon';
 import { Selector } from './components/features/Selector';
 import { NavBar } from './components/features/NavBar';
@@ -14,6 +15,7 @@ import { FigurePage } from './components/features/FigurePage';
 import { FieldsPage } from './components/features/FieldsPage';
 import { EndPage } from './components/features/EndPage';
 import { EmptyState } from './components/features/EmptyState';
+import { Overview } from './components/features/Overview';
 import { useToast } from './hooks/useToast';
 import { useTheme } from './hooks/useTheme';
 
@@ -29,9 +31,18 @@ export function App({ data }: { data: DataBundle }) {
   for (const d of decks) { offsets.push(acc); acc += d.length; }
   const total = acc;
 
-  const [flatIdx, setFlatIdx] = useFlatPager(total);
+  // 深链：#read/<n> 直接进入第 n 篇的精读视图（可分享）
+  const [view, setView] = useState<ViewMode>(() =>
+    /^#read\/\d+/.test(window.location.hash) ? 'read' : 'overview',
+  );
+  const [flatIdx, setFlatIdx] = useFlatPager(total, view === 'read', () => {
+    const m = /^#read\/(\d+)/.exec(window.location.hash);
+    if (!m) return 0;
+    const i = Math.max(0, Math.min(papers.length - 1, Number(m[1]) - 1));
+    return offsets[i] ?? 0;
+  });
 
-  const meta = `${data.axes || '三维重建 × 世界模型'} · ${data.date || ''} · ${papers.length} 篇`;
+  const meta = `${data.axes || '三维重建 × 世界模型'} · ${humanDate(data.date) || data.date || ''} · ${papers.length} 篇`;
   const issue = data.issue || '';
 
   if (data.empty || papers.length === 0) {
@@ -68,6 +79,20 @@ export function App({ data }: { data: DataBundle }) {
     show(v > 0 ? '已记录：有帮助 ✓（下次同步给助手）' : '已记录：不对口（用于调低同类）');
   };
 
+  /** 从概览进入精读：定位到指定论文的首张卡 */
+  const goRead = useCallback((i: number) => {
+    setFlatIdx(offsets[i] ?? 0);
+    setView('read');
+    history.replaceState(null, '', `#read/${i + 1}`);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [offsets, setFlatIdx]);
+
+  const goOverview = useCallback(() => {
+    setView('overview');
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
+
   // 浏览器标签页标题跟随当前论文
   useEffect(() => {
     const cur = papers[paperIdx];
@@ -75,13 +100,30 @@ export function App({ data }: { data: DataBundle }) {
     document.title = `Paper卡片 · ${data.axes || '三维重建 × 世界模型'}${name ? ` · ${name.slice(0, 30)}` : ''}`;
   }, [paperIdx, papers, data.axes]);
 
-  // 全局快捷键：Home/End 首末卡、T 切主题、C 复制、? 帮助、Esc 关闭
+  // 深链同步：#read/<n> 跟随当前论文，便于分享单篇
+  useEffect(() => {
+    if (view !== 'read') return;
+    const h = `#read/${paperIdx + 1}`;
+    if (window.location.hash !== h) history.replaceState(null, '', h);
+  }, [view, paperIdx]);
+
+  // 全局快捷键：G 切视图、Home/End 首末卡、T 切主题、C 复制、? 帮助、Esc 返回/关闭
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null;
       if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
-      if (e.key === 'Escape') { setHelpOpen(false); return; }
+      if (e.key === 'Escape') {
+        if (helpOpen) { setHelpOpen(false); return; }
+        if (view === 'read') { goOverview(); }
+        return;
+      }
+      if ((e.key === 'g' || e.key === 'G') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        if (view === 'read') goOverview(); else setView('read');
+        return;
+      }
       if (e.key === '?' || (e.key === '/' && e.shiftKey)) { e.preventDefault(); setHelpOpen(v => !v); return; }
+      if (view !== 'read') return;   // 以下仅精读视图生效
       if (e.key === 'Home') { e.preventDefault(); setFlatIdx(0); return; }
       if (e.key === 'End') { e.preventDefault(); setFlatIdx(total - 1); return; }
       if ((e.key === 't' || e.key === 'T') && !e.ctrlKey && !e.metaKey && !e.altKey) { toggleTheme(); return; }
@@ -89,10 +131,40 @@ export function App({ data }: { data: DataBundle }) {
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [total, toggleTheme, onCopy, setFlatIdx]);
+  }, [total, toggleTheme, onCopy, setFlatIdx, view, helpOpen, goOverview]);
 
   const shareable = canShare();
 
+  /* ============ 概览（仪表盘）视图 ============ */
+  if (view === 'overview') {
+    return (
+      <div className="min-h-dvh bg-paper-50 font-sans">
+        <TopBar
+          meta={meta}
+          issue={issue}
+          wide
+          view={view}
+          onView={setView}
+        />
+        <Overview data={data} onRead={goRead} />
+        {helpOpen && <HelpOverlay onClose={() => setHelpOpen(false)} view={view} />}
+        <div className="fixed right-4 bottom-4 z-40 flex gap-2">
+          <button
+            onClick={onCopy}
+            aria-label="复制全部文案"
+            title="复制全部文案（快捷键 C）"
+            className="flex size-11 cursor-pointer items-center justify-center rounded-full bg-paper-ink text-paper-50 shadow-lg transition-colors duration-200 hover:bg-paper-accent sm:min-h-11 sm:w-auto sm:rounded-full sm:px-4"
+          >
+            <Copy className="size-4" aria-hidden />
+            <span className="ml-1.5 hidden text-xs font-semibold sm:inline">复制文案</span>
+          </button>
+        </div>
+        {toastNode}
+      </div>
+    );
+  }
+
+  /* ============ 精读（翻卡）视图 ============ */
   return (
     <div className="min-h-dvh bg-paper-50 font-sans">
       {/* 阅读进度条 */}
@@ -100,9 +172,20 @@ export function App({ data }: { data: DataBundle }) {
         <div className="pd-progress-bar" style={{ width: `${((flatIdx + 1) / total) * 100}%` }} />
       </div>
 
-      <TopBar meta={meta} issue={issue} />
+      <TopBar meta={meta} issue={issue} view={view} onView={setView} />
 
-      <Selector papers={papers} cur={paperIdx} onPick={i => setFlatIdx(offsets[i])} />
+      <div className="mx-auto mt-6 flex max-w-3xl items-center gap-3 px-5">
+        <button
+          onClick={goOverview}
+          className="flex h-8 cursor-pointer items-center gap-1.5 rounded-lg border border-paper-line bg-paper-card px-2.5 text-xs text-paper-ink2 transition-colors duration-200 hover:border-paper-accent hover:text-paper-accent"
+        >
+          <ArrowLeft className="size-3.5" aria-hidden />
+          返回概览
+        </button>
+        <div className="min-w-0 flex-1">
+          <Selector papers={papers} cur={paperIdx} onPick={i => setFlatIdx(offsets[i])} />
+        </div>
+      </div>
 
       <div className="mx-auto max-w-3xl px-5 pb-10">
         <div key={flatIdx} className="pd-card">
@@ -125,7 +208,7 @@ export function App({ data }: { data: DataBundle }) {
           onDot={i => setFlatIdx(offsets[paperIdx] + i)}
         />
         <p className="mt-3 hidden text-center text-[11px] text-paper-muted sm:block">
-          ←/→ 翻卡（触屏可滑动） · <span className="pd-kbd">T</span> 切主题 · <span className="pd-kbd">C</span> 复制文案 · <span className="pd-kbd">?</span> 全部快捷键
+          ←/→ 翻卡（触屏可滑动） · <span className="pd-kbd">G</span> 回概览 · <span className="pd-kbd">T</span> 切主题 · <span className="pd-kbd">C</span> 复制文案 · <span className="pd-kbd">?</span> 全部快捷键
         </p>
       </div>
 
@@ -167,7 +250,7 @@ export function App({ data }: { data: DataBundle }) {
         </button>
       </div>
 
-      {helpOpen && <HelpOverlay onClose={() => setHelpOpen(false)} />}
+      {helpOpen && <HelpOverlay onClose={() => setHelpOpen(false)} view={view} />}
 
       <Colophon axes={data.axes || '三维重建 × 世界模型'} count={papers.length} date={data.date || ''} />
       {toastNode}
@@ -176,15 +259,16 @@ export function App({ data }: { data: DataBundle }) {
 }
 
 /** 快捷键帮助浮层 */
-function HelpOverlay({ onClose }: { onClose: () => void }) {
+function HelpOverlay({ onClose, view }: { onClose: () => void; view: ViewMode }) {
   const rows: [string[], string][] = [
-    [['←', '→'], '上一张 / 下一张卡'],
-    [['PageUp', 'PageDown'], '翻卡（同方向键）'],
-    [['Home', 'End'], '跳到本期第一张 / 最后一张'],
+    [['G'], '在「概览」与「精读」之间切换'],
+    [['Esc'], view === 'read' ? '返回概览 / 关闭浮层' : '关闭浮层'],
+    [['←', '→'], '精读：上一张 / 下一张卡'],
+    [['PageUp', 'PageDown'], '精读：翻卡（同方向键）'],
+    [['Home', 'End'], '精读：跳到本期第一张 / 最后一张'],
     [['T'], '切换浅色 / 暗色主题'],
     [['C'], '复制全部文案（公众号粘贴友好）'],
     [['?'], '打开 / 关闭本帮助'],
-    [['Esc'], '关闭浮层'],
   ];
   return (
     <div
@@ -221,7 +305,7 @@ function HelpOverlay({ onClose }: { onClose: () => void }) {
           ))}
         </ul>
         <p className="mt-5 border-t border-paper-line pt-3 text-[11px] text-paper-muted">
-          触屏设备：左右滑动翻卡。点击论文列表可直达对应论文。
+          触屏设备：左右滑动翻卡。概览页点击「精读」直达该篇。
         </p>
       </div>
     </div>
@@ -229,10 +313,11 @@ function HelpOverlay({ onClose }: { onClose: () => void }) {
 }
 
 /** 扁平翻页（键盘/触摸/按钮共用），一张卡 = 一个索引步进 */
-function useFlatPager(total: number) {
-  const [idx, setIdx] = useState(0);
+function useFlatPager(total: number, enabled: boolean, initial: () => number = () => 0) {
+  const [idx, setIdx] = useState(initial);
 
   useEffect(() => {
+    if (!enabled) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight' || e.key === 'PageDown') {
         e.preventDefault();
@@ -259,7 +344,7 @@ function useFlatPager(total: number) {
       document.removeEventListener('touchstart', onTS);
       document.removeEventListener('touchend', onTE);
     };
-  }, [total]);
+  }, [total, enabled]);
 
   return [idx, setIdx] as const;
 }

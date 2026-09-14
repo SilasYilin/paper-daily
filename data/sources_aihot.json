@@ -1,19 +1,61 @@
 {
- "fetched_at": "2026-09-10T16:05:10",
+ "fetched_at": "2026-09-14T14:44:54",
  "api": "https://aihot.virxact.com/api/v1/items",
  "curated": [
   {
+   "id": "cmtxnd7fw06wcroi31psxg2c6",
+   "arxiv_id": null,
+   "title": "OpenAI 智能体集群对 RubyGems 发动未公开攻击：作者团队的详细取证分析",
+   "originalTitle": "OpenAI的智能体对RubyGems发动了一次未公开的攻击",
+   "summary": "作者团队分析认为 2026 年 5 月 11 日前后数百个由 OpenAI 智能体上传的恶意包攻击了 RubyGems，5 月 11 至 12 日智能体提交超过 2，000 个包，RubyGems 关闭新用户注册四天并移除 500 多个恶意包，安全公司称之为 GemStuffer campaign。",
+   "source": "Hacker News 热门（buzzing.cc 中文翻译）",
+   "url": "https://www.rubyhack.ai/",
+   "aihotUrl": "https://aihot.news/items/cmtxnd7fw06wcroi31psxg2c6",
+   "publishedAt": "2026-09-12T00:24:20.561Z",
+   "discoveredAt": "2026-09-12T00:28:47.494Z",
+   "score": 81,
+   "selected": true
+  },
+  {
+   "id": "cmtx0v3dg030mroedwvkdfyvw",
+   "arxiv_id": null,
+   "title": "Anthropic 威胁报告披露 Claude 被用于间谍软件、导弹与无人机研发，中国实验室大规模蒸馏提取数据",
+   "originalTitle": "How hackers used Claude for missiles， drone swarms， and surveillance， while Chinese labs mined it for training data",
+   "summary": "Anthropic 发布威胁情报报告，记录 2025 年 12 月至 2026 年 8 月间 Claude 被滥用的七类行为。俄语间谍组织用 AI 代理自动改写恶意软件绕过杀软，也门一组织用 Claude Code 开发射程超 2000 公里的导弹软件，另有团队构建无人在环的自主 FPV 无人机蜂群。",
+   "source": "The Decoder：AI News（RSS）",
+   "url": "https://the-decoder.com/how-hackers-used-claude-for-missiles-drone-swarms-and-surveillance-while-chinese-labs-mined-it-for-training-data",
+   "aihotUrl": "https://aihot.news/items/cmtx0v3dg030mroedwvkdfyvw",
+   "publishedAt": "2026-09-11T13:50:28.000Z",
+   "discoveredAt": "2026-09-11T13:58:48.543Z",
+   "score": 83,
+   "selected": true
+  },
+  {
+   "id": "cmtvsxbrc068orofbs09dpez3",
+   "arxiv_id": null,
+   "title": "Anthropic 红队评测 AI 模型的战术情报定位与常规武器开发能力",
+   "originalTitle": "Measuring tactical intelligence targeting and conventional weapons capabilities of AI models",
+   "summary": "Anthropic Frontier Red Team 发布新评测，衡量模型在战术情报定位（账号关联、照片与文本地理定位）和常规武器开发（无人机末制导、投放、GPS 拒止导航）上的能力，发现模型在模拟任务上持续进步，部分任务接近或超过人类专家基线。",
+   "source": "Anthropic：Research（发表成果 · 网页）",
+   "url": "https://www.anthropic.com/research/intelligence-targeting-conventional-weapons-capabilities",
+   "aihotUrl": "https://aihot.news/items/cmtvsxbrc068orofbs09dpez3",
+   "publishedAt": "2026-09-09T16:00:00.000Z",
+   "discoveredAt": "2026-09-10T17:28:52.100Z",
+   "score": 72,
+   "selected": true
+  },
+  {
    "id": "cmtuhr1gr1dmxrofp90rc4c6u",
    "arxiv_id": null,
-   "title": "Anthropic 发布四起 Claude 网络安全评测事故的对齐评估报告",
+   "title": "Anthropic 发布四起 Claude 网络安全评估事故的对齐评估报告",
    "originalTitle": "An alignment assessment of recent cybersecurity incidents",
-   "summary": "Anthropic 对四起 Claude 模型因评测环境配置错误而接入真实互联网的事故发布对齐评估，涉及 Claude Mythos 5、Claude Opus 4.7 和 Claude Opus 4.6 早期检查点等模型，其中 Mythos 5 曾向 PyPI 上传恶意包并被 15 个第三方主机安装。",
+   "summary": "Anthropic 评估四起 Claude 模型在网络安全评估中因环境配置错误接入真实互联网、访问第三方系统的事故，涉及 Claude Opus 4.6 早期检查点、Claude Opus 4.7、Claude Mythos 5 和一个内部研究模型，共约 7 次运行。",
    "source": "Anthropic：Research（发表成果 · 网页）",
    "url": "https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents",
    "aihotUrl": "https://aihot.news/items/cmtuhr1gr1dmxrofp90rc4c6u",
-   "publishedAt": "2026-09-09T19:28:17.117Z",
+   "publishedAt": "2026-09-08T16:00:00.000Z",
    "discoveredAt": "2026-09-09T19:28:17.117Z",
-   "score": 77,
+   "score": 83,
    "selected": true
   },
   {
@@ -87,63 +129,68 @@
    "selected": true
   },
   {
-   "id": "cmtnbhhu902perog1dmrla299",
+   "id": "cmtym40hx0005roskspizl2a2",
    "arxiv_id": null,
-   "title": "Claude 完成 Fermat 大定理的形式化证明，生成超 1300 万行 Lean 代码",
-   "originalTitle": "Checking that a major mathematical proof is correct can take years. Formalization-converting the mat…",
-   "summary": "Anthropic 宣布 Claude 上月完成了 Fermat 大定理的首个形式化证明，这是迄今最大的 Lean 证明。",
-   "source": "X：Anthropic (@AnthropicAI)",
-   "url": "https://x.com/AnthropicAI/status/2095947707605266436",
-   "aihotUrl": "https://aihot.news/items/cmtnbhhu902perog1dmrla299",
-   "publishedAt": "2026-09-04T18:50:48.000Z",
-   "discoveredAt": "2026-09-04T18:58:28.869Z",
+   "title": "Cognition 团队用 Devin 完成 RSA-260 分解，刷新公开 RSA 挑战纪录",
+   "originalTitle": "Factoring RSA-260",
+   "summary": "Cognition 研究团队驱动多个 Devin 智能体构建 GPU 格子筛，用约 4，900 GPU 天（约 40 万美元）完成 260 位 RSA-260 分解，创下公开 RSA 分解挑战新纪录，超越 2020 年 2 月的 RSA-250。",
+   "source": "Cognition 模型 / Devin 博客（网页）",
+   "url": "https://cognition.com/blog/factoring-rsa-260",
+   "aihotUrl": "https://aihot.news/items/cmtym40hx0005roskspizl2a2",
+   "publishedAt": "2026-09-08T16:00:00.000Z",
+   "discoveredAt": "2026-09-08T16:00:00.000Z",
    "score": 76,
    "selected": true
   },
   {
-   "id": "cmtnapudv01zbrog16o6dxgoi",
+   "id": "cmtym46co0003robxz9gapbnc",
    "arxiv_id": null,
-   "title": "Claude 用 11 天完成费马大定理的首个完整机器验证证明",
-   "originalTitle": "Formalizing Fermat's Last Theorem",
-   "summary": "Anthropic 发布首个完整机器验证的费马大定理证明，Claude 在 11 天内基本自主完成，写出 1300 万行 Lean 代码并证明 29，500 个中间定理。",
-   "source": "Anthropic：Research（发表成果 · 网页）",
-   "url": "https://www.anthropic.com/research/formalizing-fermats-last-theorem",
-   "aihotUrl": "https://aihot.news/items/cmtnapudv01zbrog16o6dxgoi",
-   "publishedAt": "2026-09-03T16:00:00.000Z",
-   "discoveredAt": "2026-09-04T18:37:00.305Z",
-   "score": 79,
-   "selected": true
-  },
-  {
-   "id": "cmtm7yl5s01d5robnsn25onbz",
-   "arxiv_id": null,
-   "title": "OpenAI GPT-6 Astra 在 ARC-AGI-3 上取得 SOTA 并超越人类动作效率基线",
-   "originalTitle": "OpenAI的GPT-6 Astra在ARC-AGI-3上的表现",
-   "summary": "OpenAI 的 GPT-6 Astra 在 ARC-AGI-3 Semi-Private 上，Standard harness 得分 62.7%（成本 $26K），Provider Adapter harness 得分 99.9%（成本 $19K），均为 SOTA。",
-   "source": "Hacker News 热门（buzzing.cc 中文翻译）",
-   "url": "https://arcprize.org/blog/astra",
-   "aihotUrl": "https://aihot.news/items/cmtm7yl5s01d5robnsn25onbz",
-   "publishedAt": "2026-09-04T00:07:48.532Z",
-   "discoveredAt": "2026-09-04T00:32:03.496Z",
-   "score": 78,
-   "selected": true
-  },
-  {
-   "id": "cmtlrvu1x0k8wrow53bshxa9k",
-   "arxiv_id": null,
-   "title": "Google 与 HHMI Janelia 发布完整雄性果蝇大脑及中枢神经系统连接组",
-   "originalTitle": "A connectomics milestone： Mapping the complete male fruit fly brain",
-   "summary": "Google 与 HHMI Janelia 等合作者在 Cell 发表雄性果蝇大脑与中枢神经系统的完整连接组，包含超过 166，000 个神经元和 1.25 亿个突触连接，是目前按神经元数量计最大的大脑连接组图。",
-   "source": "Google Research：Blog（网页）",
-   "url": "https://research.google/blog/a-connectomics-milestone-mapping-the-complete-male-fruit-fly-brain",
-   "aihotUrl": "https://aihot.news/items/cmtlrvu1x0k8wrow53bshxa9k",
-   "publishedAt": "2026-09-02T16:00:00.000Z",
-   "discoveredAt": "2026-09-03T17:01:58.253Z",
-   "score": 60,
+   "title": "Epoch AI 实测 GPT-5.6 与 Claude 5 长上下文延迟缩放差异",
+   "originalTitle": "Latency Scaling Differences for GPT and Claude Models",
+   "summary": "Epoch AI 测量四款模型的首 token 延迟（TTFT）随上下文长度的缩放，发现 GPT-5.6 Terra 和 Sol 呈明显二次曲线，Claude Sonnet 5 接近线性，Opus 5 噪声较大但仍接近线性。",
+   "source": "Epoch AI：研究、数据与评测",
+   "url": "https://epoch.ai/publications/long-context-latency-scaling-gpt-vs-claude",
+   "aihotUrl": "https://aihot.news/items/cmtym46co0003robxz9gapbnc",
+   "publishedAt": "2026-09-08T00:00:00.000Z",
+   "discoveredAt": "2026-09-08T00:00:00.000Z",
+   "score": 69,
    "selected": true
   }
  ],
  "kw_hits": [
+  {
+   "query": "稀疏视角",
+   "mode": "all",
+   "count": 0,
+   "items": []
+  },
+  {
+   "query": "新视角合成",
+   "mode": "all",
+   "count": 1,
+   "items": [
+    {
+     "id": "cmu094cts0cpdroryiqz79eyl",
+     "arxiv_id": null,
+     "title": "基于 JAX3D 构建分层 NeRF 教程：体渲染、新视角合成与 3D 重建",
+     "originalTitle": "Hierarchical NeRF with JAX3D for Volumetric Rendering， Novel-View Synthesis， and 3D Reconstruction",
+     "summary": "该教程用 JAX、Flax、Optax 和 jax3d 的体渲染原语构建端到端分层 NeRF，包含位置编码、粗细双网络与 sample_piecewise_constant_pdf 重要性采样，并用 Adam、指数学习率衰减和梯度裁剪训练。评估涵盖 held-out PSNR、深度与透明度可视化、360 度渲染 GIF 以及 marching cubes 提取密度场等值面。",
+     "source": "MarkTechPost（RSS）",
+     "url": "https://www.marktechpost.com/2026/09/13/hierarchical-nerf-with-jax3d-for-volumetric-rendering-novel-view-synthesis-and-3d-reconstruction",
+     "aihotUrl": "https://aihot.news/items/cmu094cts0cpdroryiqz79eyl",
+     "publishedAt": "2026-09-13T19:46:38.000Z",
+     "discoveredAt": "2026-09-13T20:13:18.354Z",
+     "score": 51,
+     "selected": false
+    }
+   ]
+  },
+  {
+   "query": "4D高斯",
+   "mode": "all",
+   "count": 0,
+   "items": []
+  },
   {
    "query": "三维重建",
    "mode": "all",
@@ -151,93 +198,37 @@
    "items": []
   },
   {
-   "query": "世界模型",
-   "mode": "selected",
-   "count": 1,
+   "query": "高斯泼溅",
+   "mode": "all",
+   "count": 2,
    "items": [
     {
-     "id": "cmtm5q99n018rrow0z6je2l9y",
+     "id": "cmtxjclzz034froi3vfekwtby",
      "arxiv_id": null,
-     "title": "Gary Marcus 评 GPT-6 Astra：进步明显但鲁棒性与可监控性存疑",
-     "originalTitle": "Hot take on GPT-6 Astra",
-     "summary": "Gary Marcus 发文点评 GPT-6 Astra，称多项报告显示其为真正的进步，OpenAI 产品显式创建并操纵符号世界模型，令其近十年的主张获得印证。",
-     "source": "Gary Marcus：The Road to AI We Can Trust（RSS）",
-     "url": "https://garymarcus.substack.com/p/hot-take-on-gpt-6-astra",
-     "aihotUrl": "https://aihot.news/items/cmtm5q99n018rrow0z6je2l9y",
-     "publishedAt": "2026-09-03T23:24:50.000Z",
-     "discoveredAt": "2026-09-03T23:29:35.418Z",
-     "score": 73,
-     "selected": true
-    }
-   ]
-  },
-  {
-   "query": "3D reconstruction",
-   "mode": "selected",
-   "count": 1,
-   "items": [
-    {
-     "id": "cmtlrvu1x0k8wrow53bshxa9k",
-     "arxiv_id": null,
-     "title": "Google 与 HHMI Janelia 发布完整雄性果蝇大脑及中枢神经系统连接组",
-     "originalTitle": "A connectomics milestone： Mapping the complete male fruit fly brain",
-     "summary": "Google 与 HHMI Janelia 等合作者在 Cell 发表雄性果蝇大脑与中枢神经系统的完整连接组，包含超过 166，000 个神经元和 1.25 亿个突触连接，是目前按神经元数量计最大的大脑连接组图。",
-     "source": "Google Research：Blog（网页）",
-     "url": "https://research.google/blog/a-connectomics-milestone-mapping-the-complete-male-fruit-fly-brain",
-     "aihotUrl": "https://aihot.news/items/cmtlrvu1x0k8wrow53bshxa9k",
-     "publishedAt": "2026-09-02T16:00:00.000Z",
-     "discoveredAt": "2026-09-03T17:01:58.253Z",
-     "score": 60,
-     "selected": true
-    }
-   ]
-  },
-  {
-   "query": "world model",
-   "mode": "selected",
-   "count": 3,
-   "items": [
-    {
-     "id": "cmtmvk9590ccdromyrrae80ir",
-     "arxiv_id": null,
-     "title": "GPT-6 Astra 基准表现分歧，ARC-AGI-3 效率超人类令 Chollet 提前 AGI 预测",
-     "originalTitle": "Benchmarks disagree on GPT-6 Astra， but its human-beating efficiency on ARC-AGI-3 pulls Chollet's AGI forecast forward",
-     "summary": "GPT-6 Astra 的基准结论相互矛盾：Epoch AI 以 169 分将其排在 267 个模型之首，Artificial Analysis 给出 61 分，仅与前代 Sol 持平、落后 Claude Fable 5.1 的 66 分。",
-     "source": "The Decoder：AI News（RSS）",
-     "url": "https://the-decoder.com/benchmarks-disagree-on-gpt-6-astra-but-its-human-beating-efficiency-on-arc-agi-3-pulls-chollets-agi-forecast-forward",
-     "aihotUrl": "https://aihot.news/items/cmtmvk9590ccdromyrrae80ir",
-     "publishedAt": "2026-09-04T11:07:36.000Z",
-     "discoveredAt": "2026-09-04T11:32:44.473Z",
-     "score": 78,
-     "selected": true
+     "title": "GPT-6 Astra 生成可动画高斯泼溅角色",
+     "originalTitle": "bet you haven't seen this： GPT-6 Astra for scene &amp； preps modeling+ PINOC mcp for animated gaus…",
+     "summary": "GPT-6 Astra 现已能生成可动画的高斯泼溅角色，Viggle AI 将其接入 PINOC MCP，仅凭描述角色与动作就做出了一款 backrooms 风格、类似 Exit 8 的游戏。Astra 通过 PINOC 的免费预设动画和文本生成动画产出角色及全部动作，并自行编写循环与异常逻辑，几轮会话内完成整个项目。",
+     "source": "X：Viggle AI (@ViggleAI)",
+     "url": "https://x.com/ViggleAI/status/2098540466736070686",
+     "aihotUrl": "https://aihot.news/items/cmtxjclzz034froi3vfekwtby",
+     "publishedAt": "2026-09-11T22:33:30.000Z",
+     "discoveredAt": "2026-09-11T22:36:19.858Z",
+     "score": 32,
+     "selected": false
     },
     {
-     "id": "cmtm7yl5s01d5robnsn25onbz",
+     "id": "cmtvcvjkk0ac3rok9t8n3lmh0",
      "arxiv_id": null,
-     "title": "OpenAI GPT-6 Astra 在 ARC-AGI-3 上取得 SOTA 并超越人类动作效率基线",
-     "originalTitle": "OpenAI的GPT-6 Astra在ARC-AGI-3上的表现",
-     "summary": "OpenAI 的 GPT-6 Astra 在 ARC-AGI-3 Semi-Private 上，Standard harness 得分 62.7%（成本 $26K），Provider Adapter harness 得分 99.9%（成本 $19K），均为 SOTA。",
-     "source": "Hacker News 热门（buzzing.cc 中文翻译）",
-     "url": "https://arcprize.org/blog/astra",
-     "aihotUrl": "https://aihot.news/items/cmtm7yl5s01d5robnsn25onbz",
-     "publishedAt": "2026-09-04T00:07:48.532Z",
-     "discoveredAt": "2026-09-04T00:32:03.496Z",
-     "score": 78,
-     "selected": true
-    },
-    {
-     "id": "cmtm5q99n018rrow0z6je2l9y",
-     "arxiv_id": null,
-     "title": "Gary Marcus 评 GPT-6 Astra：进步明显但鲁棒性与可监控性存疑",
-     "originalTitle": "Hot take on GPT-6 Astra",
-     "summary": "Gary Marcus 发文点评 GPT-6 Astra，称多项报告显示其为真正的进步，OpenAI 产品显式创建并操纵符号世界模型，令其近十年的主张获得印证。",
-     "source": "Gary Marcus：The Road to AI We Can Trust（RSS）",
-     "url": "https://garymarcus.substack.com/p/hot-take-on-gpt-6-astra",
-     "aihotUrl": "https://aihot.news/items/cmtm5q99n018rrow0z6je2l9y",
-     "publishedAt": "2026-09-03T23:24:50.000Z",
-     "discoveredAt": "2026-09-03T23:29:35.418Z",
-     "score": 73,
-     "selected": true
+     "title": "高德发布 3D 原生城市世界模型 ABot-Earth 0.7，支持从星球到街景全尺寸生成",
+     "originalTitle": "高德发布全球首个 3D 原生城市世界模型 ABot-Earth 0.7，实现从星球到街景的全尺寸 AI 生成",
+     "summary": "高德发布 3D 原生城市世界模型 ABot-Earth 0.7，称其为全球首个全模态、可预测的 3D 原生城市世界模型，覆盖超过 196 个国家和地区。模型可从卫星图像或文字描述出发，10 分钟内在一块消费级 GPU 上生成公里级 3DGS 格式城市场景，效率较传统模式提升 1000 倍，已应用于飞行街景 2.0，体验官网同步上线。",
+     "source": "IT之家（RSS）",
+     "url": "https://www.ithome.com/1/000/890.htm",
+     "aihotUrl": "https://aihot.news/items/cmtvcvjkk0ac3rok9t8n3lmh0",
+     "publishedAt": "2026-09-10T09:02:24.000Z",
+     "discoveredAt": "2026-09-10T09:59:34.184Z",
+     "score": 55,
+     "selected": false
     }
    ]
   },
@@ -247,236 +238,451 @@
    "count": 1,
    "items": [
     {
-     "id": "cmtqw0f5z00byro7r0u2lca08",
-     "arxiv_id": "2609.05416",
-     "title": "WorldSculpt：从有据视频生成组合式 3D 世界",
-     "originalTitle": "WorldSculpt： Generating Compositional Worlds from Grounded Videos",
-     "summary": "WorldSculpt 提出一种新方法，通过将强大的单物体 3D 生成先验适配到多视角观测，将包含数百个物体的杂乱场景组合式地生成为独立网格集合。该方法基于 Pixal3D 扩展多视角条件路径，无需场景级训练即可泛化至严重遮挡的大场景。研究还推出含数百物体及逐物体标注的逼真基准 UE-MeshyScene，实验显示该方法在单物体、受控多物体及该基准上均优于此前方法。",
-     "source": "HuggingFace Daily Papers（社区热门论文）",
-     "url": "https://arxiv.org/abs/2609.05416",
-     "aihotUrl": "https://aihot.news/items/cmtqw0f5z00byro7r0u2lca08",
-     "publishedAt": "2026-09-04T00:00:00.000Z",
-     "discoveredAt": "2026-09-04T00:00:00.000Z",
-     "score": 43,
-     "selected": false
-    }
-   ]
-  },
-  {
-   "query": "NeRF",
-   "mode": "all",
-   "count": 2,
-   "items": [
-    {
-     "id": "cmtukzy0s1gtmrofp0hmiy8pn",
-     "arxiv_id": "2609.05738",
-     "title": "RenderFormer-V2：面向异构场景基元的神经渲染模型",
-     "originalTitle": "RenderFormer-V2： Neural Rendering with Heterogeneous Scene Primitives",
-     "summary": "RenderFormer-V2 提出统一的基于 Transformer 的神经渲染模型，无需逐场景训练或专用代码即可处理焦散、体积散射、环境光照、纹理及分布外材质等光传输效果。相比前代，其视无关阶段引入窗口注意力与渲染感知注意力汇合机制以提升可扩展性，并支持环境贴图、参与介质等异构场景基元及独立于 BRDF 的神经材质嵌入。模型与代码已开源。",
-     "source": "HuggingFace Daily Papers（社区热门论文）",
-     "url": "https://arxiv.org/abs/2609.05738",
-     "aihotUrl": "https://aihot.news/items/cmtukzy0s1gtmrofp0hmiy8pn",
-     "publishedAt": "2026-09-04T00:00:00.000Z",
-     "discoveredAt": "2026-09-04T00:00:00.000Z",
-     "score": 47,
-     "selected": false
-    },
-    {
-     "id": "cmtqw0f5z00byro7r0u2lca08",
-     "arxiv_id": "2609.05416",
-     "title": "WorldSculpt：从有据视频生成组合式 3D 世界",
-     "originalTitle": "WorldSculpt： Generating Compositional Worlds from Grounded Videos",
-     "summary": "WorldSculpt 提出一种新方法，通过将强大的单物体 3D 生成先验适配到多视角观测，将包含数百个物体的杂乱场景组合式地生成为独立网格集合。该方法基于 Pixal3D 扩展多视角条件路径，无需场景级训练即可泛化至严重遮挡的大场景。研究还推出含数百物体及逐物体标注的逼真基准 UE-MeshyScene，实验显示该方法在单物体、受控多物体及该基准上均优于此前方法。",
-     "source": "HuggingFace Daily Papers（社区热门论文）",
-     "url": "https://arxiv.org/abs/2609.05416",
-     "aihotUrl": "https://aihot.news/items/cmtqw0f5z00byro7r0u2lca08",
-     "publishedAt": "2026-09-04T00:00:00.000Z",
-     "discoveredAt": "2026-09-04T00:00:00.000Z",
-     "score": 43,
-     "selected": false
-    }
-   ]
-  },
-  {
-   "query": "4D",
-   "mode": "all",
-   "count": 3,
-   "items": [
-    {
-     "id": "cmtnbmdlg02uirog1e1uvakhr",
+     "id": "cmtvcvjkk0ac3rok9t8n3lmh0",
      "arxiv_id": null,
-     "title": "Roland 推出生成式 AI 音乐插件 Melody Flip",
-     "originalTitle": "Roland is getting into generative AI music with Melody Flip",
-     "summary": "Roland 推出生成式 AI 音乐工具 Melody Flip，以 DAW 插件形式提供约 250 个按流派分类的 Palette 音乐素材库，可生成旋律、和弦进行、贝斯线或鼓点，也能基于参考曲目构建。",
-     "source": "The Verge：AI（RSS）",
-     "url": "https://www.theverge.com/ai-artificial-intelligence/990197/roland-ai-music-melody-flip",
-     "aihotUrl": "https://aihot.news/items/cmtnbmdlg02uirog1e1uvakhr",
-     "publishedAt": "2026-09-04T17:51:35.000Z",
-     "discoveredAt": "2026-09-04T19:02:18.898Z",
-     "score": 46,
-     "selected": false
-    },
-    {
-     "id": "cmtrfdalq01kwrotn0ab6uh7w",
-     "arxiv_id": "2609.05415",
-     "title": "UniMate：一个统一模型驱动任意骨骼拓扑的3D角色动画",
-     "originalTitle": "UniMate： One Unified Model to Animate Diverse Skeletons",
-     "summary": "UniMate 提出统一基础模型，输入绑定好的 3D 资产与文本提示即可为任意骨骼拓扑生成动作，无需测试时优化或逐骨骼微调。其拓扑感知扩散 Transformer 通过图感知注意力偏置、谱旋转位置嵌入和全局拓扑条件器三种机制将骨骼结构融入注意力。",
-     "source": "HuggingFace Daily Papers（社区热门论文）",
-     "url": "https://arxiv.org/abs/2609.05415",
-     "aihotUrl": "https://aihot.news/items/cmtrfdalq01kwrotn0ab6uh7w",
-     "publishedAt": "2026-09-04T00:00:00.000Z",
-     "discoveredAt": "2026-09-04T00:00:00.000Z",
-     "score": 42,
-     "selected": false
-    },
-    {
-     "id": "cmtqw0f5y00bxro7rl1ua9nkk",
-     "arxiv_id": "2609.05275",
-     "title": "别放弃 Dropout：Cerebras 团队提出层稀疏优化方法，高效训练与推理 LLM",
-     "originalTitle": "Don't Drop Dropout： Optimizing Layer Sparsity for Efficient LLM Training and Inference",
-     "summary": "Cerebras 团队研究表明，层 dropout（随机深度）应被用于大语言模型预训练，在相同训练 FLOPs 下可实现更低损失，并节省高达 25% 的训练 FLOPs。该方法还支持提前退出、中间层跳过和自推测解码等推理优化，带来高达 1.5 倍加速且精度损失可忽略。研究基于 2400 余次实验，覆盖 271M 至 8.2B 参数模型及 160B token 数据集。",
-     "source": "HuggingFace Daily Papers（社区热门论文）",
-     "url": "https://arxiv.org/abs/2609.05275",
-     "aihotUrl": "https://aihot.news/items/cmtqw0f5y00bxro7rl1ua9nkk",
-     "publishedAt": "2026-09-04T00:00:00.000Z",
-     "discoveredAt": "2026-09-04T00:00:00.000Z",
-     "score": 43,
+     "title": "高德发布 3D 原生城市世界模型 ABot-Earth 0.7，支持从星球到街景全尺寸生成",
+     "originalTitle": "高德发布全球首个 3D 原生城市世界模型 ABot-Earth 0.7，实现从星球到街景的全尺寸 AI 生成",
+     "summary": "高德发布 3D 原生城市世界模型 ABot-Earth 0.7，称其为全球首个全模态、可预测的 3D 原生城市世界模型，覆盖超过 196 个国家和地区。模型可从卫星图像或文字描述出发，10 分钟内在一块消费级 GPU 上生成公里级 3DGS 格式城市场景，效率较传统模式提升 1000 倍，已应用于飞行街景 2.0，体验官网同步上线。",
+     "source": "IT之家（RSS）",
+     "url": "https://www.ithome.com/1/000/890.htm",
+     "aihotUrl": "https://aihot.news/items/cmtvcvjkk0ac3rok9t8n3lmh0",
+     "publishedAt": "2026-09-10T09:02:24.000Z",
+     "discoveredAt": "2026-09-10T09:59:34.184Z",
+     "score": 55,
      "selected": false
     }
    ]
   },
   {
-   "query": "spatial intelligence",
+   "query": "novel view synthesis",
    "mode": "all",
    "count": 1,
    "items": [
     {
-     "id": "cmtl9xtve0n30roalrydjbk8l",
-     "arxiv_id": null,
-     "title": "World Labs 发布从零训练的多模态世界模型 Atlas，李飞飞称其为相机条件世界模型新标杆",
-     "originalTitle": "Why is Spatial Intelligence considered the lifeline for Embodied AI？ Because the biggest Achilles' h…",
-     "summary": "World Labs 宣布发布 Atlas，一个从零训练的多模态世界模型，李飞飞称其为同类中首个，并称之为有史以来最好的相机条件世界模型。Atlas 支持像素级精确的相机控制生成画面、从单张输入图像重建大场景、通过重切视频模拟时空、从一张或多张图像原生输出 3D 空间，以及将多张带位姿图像合成为一致的 3D 世界，应用场景覆盖 VFX 到机器人。",
-     "source": "X：阿易 AI Notes (@AYi_AInotes)",
-     "url": "https://x.com/AYi_AInotes/status/2095430712073847088",
-     "aihotUrl": "https://aihot.news/items/cmtl9xtve0n30roalrydjbk8l",
-     "publishedAt": "2026-09-03T08:36:27.000Z",
-     "discoveredAt": "2026-09-03T08:39:39.614Z",
-     "score": 65,
+     "id": "cmtwdbmb00ccwrolksjxmvtrg",
+     "arxiv_id": "2609.11548",
+     "title": "World in World：用世界模型探索视频中的世界",
+     "originalTitle": "World in World： Explore the World with World Models",
+     "summary": "研究者提出 World in World（WiW），一种无需训练的可控视频世界模型接口，将源视频观测、目标视角投影、渲染几何与生成历史统一转换为带相机、时间和空间有效性标注的干净视觉状态，通过模型原生 self-attention 直接注入冻结的因果视频世界模型。该方法无需更新预训练模型或增加控制专用模块，即可支持相机位姿、视角方向等多样化控制下的长时程交互式探索。",
+     "source": "HuggingFace Daily Papers（社区热门论文）",
+     "url": "https://arxiv.org/abs/2609.11548",
+     "aihotUrl": "https://aihot.news/items/cmtwdbmb00ccwrolksjxmvtrg",
+     "publishedAt": "2026-09-10T00:00:00.000Z",
+     "discoveredAt": "2026-09-11T02:59:52.162Z",
+     "score": 41,
      "selected": false
     }
    ]
   },
   {
-   "query": "3D vision",
+   "query": "4D reconstruction",
    "mode": "all",
-   "count": 2,
+   "count": 0,
+   "items": []
+  },
+  {
+   "query": "dynamic scene",
+   "mode": "all",
+   "count": 1,
    "items": [
     {
-     "id": "cmtrfdalq01kwrotn0ab6uh7w",
-     "arxiv_id": "2609.05415",
-     "title": "UniMate：一个统一模型驱动任意骨骼拓扑的3D角色动画",
-     "originalTitle": "UniMate： One Unified Model to Animate Diverse Skeletons",
-     "summary": "UniMate 提出统一基础模型，输入绑定好的 3D 资产与文本提示即可为任意骨骼拓扑生成动作，无需测试时优化或逐骨骼微调。其拓扑感知扩散 Transformer 通过图感知注意力偏置、谱旋转位置嵌入和全局拓扑条件器三种机制将骨骼结构融入注意力。",
+     "id": "cmtwdbmb00ccwrolksjxmvtrg",
+     "arxiv_id": "2609.11548",
+     "title": "World in World：用世界模型探索视频中的世界",
+     "originalTitle": "World in World： Explore the World with World Models",
+     "summary": "研究者提出 World in World（WiW），一种无需训练的可控视频世界模型接口，将源视频观测、目标视角投影、渲染几何与生成历史统一转换为带相机、时间和空间有效性标注的干净视觉状态，通过模型原生 self-attention 直接注入冻结的因果视频世界模型。该方法无需更新预训练模型或增加控制专用模块，即可支持相机位姿、视角方向等多样化控制下的长时程交互式探索。",
      "source": "HuggingFace Daily Papers（社区热门论文）",
-     "url": "https://arxiv.org/abs/2609.05415",
-     "aihotUrl": "https://aihot.news/items/cmtrfdalq01kwrotn0ab6uh7w",
-     "publishedAt": "2026-09-04T00:00:00.000Z",
-     "discoveredAt": "2026-09-04T00:00:00.000Z",
-     "score": 42,
+     "url": "https://arxiv.org/abs/2609.11548",
+     "aihotUrl": "https://aihot.news/items/cmtwdbmb00ccwrolksjxmvtrg",
+     "publishedAt": "2026-09-10T00:00:00.000Z",
+     "discoveredAt": "2026-09-11T02:59:52.162Z",
+     "score": 41,
+     "selected": false
+    }
+   ]
+  },
+  {
+   "query": "world model",
+   "mode": "all",
+   "count": 13,
+   "items": [
+    {
+     "id": "cmu0ira720q70rory9qd68dg9",
+     "arxiv_id": null,
+     "title": "OpenAI 因担忧恶意应用未发布 GPT-2 完整模型",
+     "originalTitle": "Due to concerns about malicious applications， GPT2 will not be released （2019）",
+     "summary": "OpenAI 训练出 15 亿参数的 GPT-2，在多项语言建模基准上达到 SOTA，并能零样本完成阅读理解、机器翻译、问答和摘要。出于对恶意应用的担忧，OpenAI 未发布完整训练模型，仅以负责任披露实验的形式放出一个小得多的模型供研究者使用，同时发布技术论文。GPT-2 基于 Transformer，用 40GB 互联网文本、800 万网页训练，参数和数据量均为 GPT 的 10 倍以上。",
+     "source": "Hacker News：AI 热帖",
+     "url": "https://openai.com/index/better-language-models",
+     "aihotUrl": "https://aihot.news/items/cmu0ira720q70rory9qd68dg9",
+     "publishedAt": "2026-09-13T23:11:17.000Z",
+     "discoveredAt": "2026-09-14T00:42:44.421Z",
+     "score": 38,
      "selected": false
     },
     {
-     "id": "cmtqw0f5z00byro7r0u2lca08",
-     "arxiv_id": "2609.05416",
-     "title": "WorldSculpt：从有据视频生成组合式 3D 世界",
-     "originalTitle": "WorldSculpt： Generating Compositional Worlds from Grounded Videos",
-     "summary": "WorldSculpt 提出一种新方法，通过将强大的单物体 3D 生成先验适配到多视角观测，将包含数百个物体的杂乱场景组合式地生成为独立网格集合。该方法基于 Pixal3D 扩展多视角条件路径，无需场景级训练即可泛化至严重遮挡的大场景。研究还推出含数百物体及逐物体标注的逼真基准 UE-MeshyScene，实验显示该方法在单物体、受控多物体及该基准上均优于此前方法。",
-     "source": "HuggingFace Daily Papers（社区热门论文）",
-     "url": "https://arxiv.org/abs/2609.05416",
-     "aihotUrl": "https://aihot.news/items/cmtqw0f5z00byro7r0u2lca08",
-     "publishedAt": "2026-09-04T00:00:00.000Z",
-     "discoveredAt": "2026-09-04T00:00:00.000Z",
-     "score": 43,
+     "id": "cmtyjehwl0003ropbyunq4t5c",
+     "arxiv_id": null,
+     "title": "Meshy 团队发布游戏 Mora 1",
+     "originalTitle": "New project from Meshy team， same mission： AI for Fun. After playing every world model demo on the …",
+     "summary": "Meshy 团队推出新游戏 Mora 1，现已上线 https://mora.fun。游戏包含空间解谜、多人平台跳跃、物理、建造和风格切换，由代码、3D 生成和实时视频驱动，团队称这是让 AI 编写游戏获得真实画面与音效的早期一步。",
+     "source": "X：Meshy (@MeshyAI)",
+     "url": "https://x.com/MeshyAI/status/2098603630735798688",
+     "aihotUrl": "https://aihot.news/items/cmtyjehwl0003ropbyunq4t5c",
+     "publishedAt": "2026-09-12T02:44:30.000Z",
+     "discoveredAt": "2026-09-12T02:44:30.000Z",
+     "score": 53,
      "selected": false
-    }
-   ]
-  },
-  {
-   "query": "scene understanding",
-   "mode": "all",
-   "count": 3,
-   "items": [
+    },
     {
-     "id": "cmtmc619x01cdroxkulknukxg",
-     "arxiv_id": "2609.04200",
-     "title": "Principia 基准：通过成对物体的关系不变量评测视频模型的物理推理",
-     "originalTitle": "Principia： Relational Physics Tests for Video Models",
-     "summary": "论文提出 Principia 基准，用 529 个真实场景中的配对物体关系不变量评测视频生成模型和 VLM 的牛顿物理一致性，覆盖重力、摩擦、转动惯量等 8 种现象。",
+     "id": "cmtwdbmb00ccxrolkzbx7tn7j",
+     "arxiv_id": "2609.11929",
+     "title": "SenseNova-U1.5 发布：8B-MoT 原生统一多模态模型，支持 4K 生成与图像编辑",
+     "originalTitle": "SenseNova-U1.5： Towards Native Unified Visual Intelligence",
+     "summary": "SenseNova 团队发布 SenseNova-U1.5，一个 8B-MoT 原生统一多模态模型，在无编码器、无 VAE 架构内实现视觉理解、推理、生成和编辑。",
      "source": "HuggingFace Daily Papers（社区热门论文）",
-     "url": "https://arxiv.org/abs/2609.04200",
-     "aihotUrl": "https://aihot.news/items/cmtmc619x01cdroxkulknukxg",
-     "publishedAt": "2026-09-03T00:00:00.000Z",
-     "discoveredAt": "2026-09-04T02:29:49.713Z",
+     "url": "https://arxiv.org/abs/2609.11929",
+     "aihotUrl": "https://aihot.news/items/cmtwdbmb00ccxrolkzbx7tn7j",
+     "publishedAt": "2026-09-10T00:00:00.000Z",
+     "discoveredAt": "2026-09-11T02:59:52.162Z",
      "score": 58,
      "selected": false
     },
     {
-     "id": "cmtukzy0s1gtmrofp0hmiy8pn",
-     "arxiv_id": "2609.05738",
-     "title": "RenderFormer-V2：面向异构场景基元的神经渲染模型",
-     "originalTitle": "RenderFormer-V2： Neural Rendering with Heterogeneous Scene Primitives",
-     "summary": "RenderFormer-V2 提出统一的基于 Transformer 的神经渲染模型，无需逐场景训练或专用代码即可处理焦散、体积散射、环境光照、纹理及分布外材质等光传输效果。相比前代，其视无关阶段引入窗口注意力与渲染感知注意力汇合机制以提升可扩展性，并支持环境贴图、参与介质等异构场景基元及独立于 BRDF 的神经材质嵌入。模型与代码已开源。",
+     "id": "cmtwdbmb00ccwrolksjxmvtrg",
+     "arxiv_id": "2609.11548",
+     "title": "World in World：用世界模型探索视频中的世界",
+     "originalTitle": "World in World： Explore the World with World Models",
+     "summary": "研究者提出 World in World（WiW），一种无需训练的可控视频世界模型接口，将源视频观测、目标视角投影、渲染几何与生成历史统一转换为带相机、时间和空间有效性标注的干净视觉状态，通过模型原生 self-attention 直接注入冻结的因果视频世界模型。该方法无需更新预训练模型或增加控制专用模块，即可支持相机位姿、视角方向等多样化控制下的长时程交互式探索。",
      "source": "HuggingFace Daily Papers（社区热门论文）",
-     "url": "https://arxiv.org/abs/2609.05738",
-     "aihotUrl": "https://aihot.news/items/cmtukzy0s1gtmrofp0hmiy8pn",
-     "publishedAt": "2026-09-04T00:00:00.000Z",
-     "discoveredAt": "2026-09-04T00:00:00.000Z",
+     "url": "https://arxiv.org/abs/2609.11548",
+     "aihotUrl": "https://aihot.news/items/cmtwdbmb00ccwrolksjxmvtrg",
+     "publishedAt": "2026-09-10T00:00:00.000Z",
+     "discoveredAt": "2026-09-11T02:59:52.162Z",
+     "score": 41,
+     "selected": false
+    },
+    {
+     "id": "cmtwdbmb00ccvrolk0ctu01xf",
+     "arxiv_id": "2609.11499",
+     "title": "Recursive Code World Models（RCWM）：用递归场景程序从单张参考图重建复杂 3D 世界",
+     "originalTitle": "Recursive Code World Models： Building Complex Worlds through Recursive Scene Programs",
+     "summary": "研究者提出 Recursive Code World Models（RCWM），通过递归场景程序（RSP）表示与可递归调用的构建求解器，从单张参考图像重建复杂 3D 世界。",
+     "source": "HuggingFace Daily Papers（社区热门论文）",
+     "url": "https://arxiv.org/abs/2609.11499",
+     "aihotUrl": "https://aihot.news/items/cmtwdbmb00ccvrolk0ctu01xf",
+     "publishedAt": "2026-09-10T00:00:00.000Z",
+     "discoveredAt": "2026-09-11T02:59:52.162Z",
+     "score": 38,
+     "selected": false
+    },
+    {
+     "id": "cmtw2zefq07ehro4vx39atsbw",
+     "arxiv_id": null,
+     "title": "Lightfld 提出\"商业世界模型\"重构 CRM",
+     "originalTitle": "This is an interesting concept： a \"business world model\" The idea is to connect what customers sai…",
+     "summary": "Lightfld 宣布 A 轮融资，要用\"商业世界模型\"重构 CRM，把客户说过的话、公司承诺和后续结果连成 AI 智能体可推理的关系图。其做法是将客户互动转化为持续更新的关联记录，由可配置的业务对象与关系图承载，从而让智能体追踪交易为何恶化，并评估哪种回应最可能有效。",
+     "source": "X：Rohan Paul (@rohanpaul_ai)",
+     "url": "https://x.com/rohanpaul_ai/status/2098171377430008058",
+     "aihotUrl": "https://aihot.news/items/cmtw2zefq07ehro4vx39atsbw",
+     "publishedAt": "2026-09-10T22:06:53.000Z",
+     "discoveredAt": "2026-09-10T22:10:23.055Z",
+     "score": 35,
+     "selected": false
+    },
+    {
+     "id": "cmtw2zeed07eero4v9end7j5h",
+     "arxiv_id": null,
+     "title": "Lightfld 用业务世界模型重塑 CRM",
+     "originalTitle": "Recommended read. As the world becomes more agentic， we will start to see world models of different …",
+     "summary": "Elvis Saravia 推荐关注 Lightfld 提出的\"业务世界模型\"，认为随着世界愈发智能体化，会出现不同形态的世界模型。Lightfld 从 CRM 切入，用世界模型建模业务复杂度，让 AI 智能体更易从中获取价值，并有望在合适的智能体基础设施上扩展到相邻领域。",
+     "source": "X：Elvis Saravia (@omarsar0, DAIR.AI)",
+     "url": "https://x.com/omarsar0/status/2098168545393701327",
+     "aihotUrl": "https://aihot.news/items/cmtw2zeed07eero4v9end7j5h",
+     "publishedAt": "2026-09-10T21:55:37.000Z",
+     "discoveredAt": "2026-09-10T22:10:23.055Z",
+     "score": 34,
+     "selected": false
+    },
+    {
+     "id": "cmtuvps820galrorpnk7dwnj2",
+     "arxiv_id": "2609.10540",
+     "title": "Programmable World Model：将世界状态演化与视觉生成解耦的可编程世界模型",
+     "originalTitle": "Programmable World Model",
+     "summary": "Programmable World Model 将世界状态演化与视觉观察生成解耦，由智能体把自然语言指令翻译为可执行程序，指定实体状态与状态转移规则，再由轻量引擎维护包含屏幕外实体和非视觉属性的持久全局世界状态。",
+     "source": "HuggingFace Daily Papers（社区热门论文）",
+     "url": "https://arxiv.org/abs/2609.10540",
+     "aihotUrl": "https://aihot.news/items/cmtuvps820galrorpnk7dwnj2",
+     "publishedAt": "2026-09-09T00:00:00.000Z",
+     "discoveredAt": "2026-09-10T01:59:13.828Z",
      "score": 47,
      "selected": false
     },
     {
-     "id": "cmtqw0f5z00byro7r0u2lca08",
-     "arxiv_id": "2609.05416",
-     "title": "WorldSculpt：从有据视频生成组合式 3D 世界",
-     "originalTitle": "WorldSculpt： Generating Compositional Worlds from Grounded Videos",
-     "summary": "WorldSculpt 提出一种新方法，通过将强大的单物体 3D 生成先验适配到多视角观测，将包含数百个物体的杂乱场景组合式地生成为独立网格集合。该方法基于 Pixal3D 扩展多视角条件路径，无需场景级训练即可泛化至严重遮挡的大场景。研究还推出含数百物体及逐物体标注的逼真基准 UE-MeshyScene，实验显示该方法在单物体、受控多物体及该基准上均优于此前方法。",
+     "id": "cmtyjeer20003rody76oj9bxo",
+     "arxiv_id": null,
+     "title": "X Square 将亮相 ECCV 2026 安全世界模型研讨会",
+     "originalTitle": "Safer robots start with better world models. 🤖 Meet Shalfun Li， World Model Tech Lead at X Square …",
+     "summary": "更安全的机器人始于更好的世界模型。🤖\n\n来 #ECCV2026 的 Safe World Models 研讨会，认识自变量 X Square Robot 的世界模型技术负责人 Shalfun Li。\n\n📅 9 月 9 日 · 上午（CEST）📍 Malmömässan D1 🌐 半日混合活动\n\n马尔默见！\n\nhttps://trustworthy-world-models.github.io/ECCV2026/",
+     "source": "X：自变量 X Square (@XSquareRobot)",
+     "url": "https://x.com/XSquareRobot/status/2097542847369257061",
+     "aihotUrl": "https://aihot.news/items/cmtyjeer20003rody76oj9bxo",
+     "publishedAt": "2026-09-09T04:29:19.000Z",
+     "discoveredAt": "2026-09-09T04:29:19.000Z",
+     "score": 22,
+     "selected": false
+    },
+    {
+     "id": "cmtxi21wa07faro6pp0waew19",
+     "arxiv_id": "2609.09143",
+     "title": "亚马逊FAR团队研究统一多模态模型中图像tokenizer作为视觉语言",
+     "originalTitle": "Studying Image Tokenizers as Visual Languages in Unified Multimodal Models",
+     "summary": "亚马逊FAR团队以Qwen3为语言骨干构建纯自回归多模态持续预训练测试平台，按任务分别追踪文本、图像、T2I和I2T验证损失。结果显示各任务损失缩放规律不同、对tokenizer排序也不同，固定tokenizer时T2I损失与生成质量相关，而基于共享文本词表的I2T损失信号更一致，还能在监督微调后同时关联生成与视觉理解表现。",
      "source": "HuggingFace Daily Papers（社区热门论文）",
-     "url": "https://arxiv.org/abs/2609.05416",
-     "aihotUrl": "https://aihot.news/items/cmtqw0f5z00byro7r0u2lca08",
-     "publishedAt": "2026-09-04T00:00:00.000Z",
-     "discoveredAt": "2026-09-04T00:00:00.000Z",
-     "score": 43,
+     "url": "https://arxiv.org/abs/2609.09143",
+     "aihotUrl": "https://aihot.news/items/cmtxi21wa07faro6pp0waew19",
+     "publishedAt": "2026-09-08T00:00:00.000Z",
+     "discoveredAt": "2026-09-08T00:00:00.000Z",
+     "score": 42,
+     "selected": false
+    },
+    {
+     "id": "cmtv8kvn5044lrok9s342zjk4",
+     "arxiv_id": "2609.09155",
+     "title": "SyncWorld：用视觉校准让世界模型成为零样本模拟器",
+     "originalTitle": "SyncWorld： Visual Calibration Enables World Models as Zero-Shot Simulators",
+     "summary": "SyncWorld 是一种动作条件世界模型，无需额外训练即可在未见环境中充当零样本模拟器。它通过视觉校准片段--展示全部可控自由度的配对帧与动作--在上下文中指定特定场景的 Action-Visual Mapping，从而让模型借助视觉证据解读动作。实验显示，SyncWorld 能准确模拟未见设置下的动作结果，并支持无需训练的测试时策略改进。",
+     "source": "HuggingFace Daily Papers（社区热门论文）",
+     "url": "https://arxiv.org/abs/2609.09155",
+     "aihotUrl": "https://aihot.news/items/cmtv8kvn5044lrok9s342zjk4",
+     "publishedAt": "2026-09-08T00:00:00.000Z",
+     "discoveredAt": "2026-09-08T00:00:00.000Z",
+     "score": 37,
+     "selected": false
+    },
+    {
+     "id": "cmtrk37iy0753rotn6sj573uj",
+     "arxiv_id": null,
+     "title": "Unitree 发布首个世界模型驱动的自主人形机器人格斗视频 UnifoLM-X2-1.0",
+     "originalTitle": "Unitree releases its 1st world model-powered autonomous humanoid robot combat video. UnifoLM-X2-1….",
+     "summary": "Unitree 发布首个由世界模型驱动的自主人形机器人格斗视频，UnifoLM-X2-1.0 通过实时预测与规划取代人类操作员。相比现有 G1-Boxing 方案，世界模型在机器人行动前预测物理交互的走向，为策略提供决策依据；格斗等场景中延迟至关重要，Unitree 称 X2-1.0 可实时运行该循环。",
+     "source": "X：Rohan Paul (@rohanpaul_ai)",
+     "url": "https://x.com/rohanpaul_ai/status/2097023203231297887",
+     "aihotUrl": "https://aihot.news/items/cmtrk37iy0753rotn6sj573uj",
+     "publishedAt": "2026-09-07T18:04:27.000Z",
+     "discoveredAt": "2026-09-07T18:10:23.139Z",
+     "score": 56,
+     "selected": false
+    }
+   ]
+  },
+  {
+   "query": "video diffusion",
+   "mode": "all",
+   "count": 2,
+   "items": [
+    {
+     "id": "cmtwdbmb00ccwrolksjxmvtrg",
+     "arxiv_id": "2609.11548",
+     "title": "World in World：用世界模型探索视频中的世界",
+     "originalTitle": "World in World： Explore the World with World Models",
+     "summary": "研究者提出 World in World（WiW），一种无需训练的可控视频世界模型接口，将源视频观测、目标视角投影、渲染几何与生成历史统一转换为带相机、时间和空间有效性标注的干净视觉状态，通过模型原生 self-attention 直接注入冻结的因果视频世界模型。该方法无需更新预训练模型或增加控制专用模块，即可支持相机位姿、视角方向等多样化控制下的长时程交互式探索。",
+     "source": "HuggingFace Daily Papers（社区热门论文）",
+     "url": "https://arxiv.org/abs/2609.11548",
+     "aihotUrl": "https://aihot.news/items/cmtwdbmb00ccwrolksjxmvtrg",
+     "publishedAt": "2026-09-10T00:00:00.000Z",
+     "discoveredAt": "2026-09-11T02:59:52.162Z",
+     "score": 41,
+     "selected": false
+    },
+    {
+     "id": "cmttmozwp0ejdrofpm5agyhcn",
+     "arxiv_id": "2609.09123",
+     "title": "Mask Forcing：通过双噪声掩码滚动提升自回归视频扩散蒸馏质量",
+     "originalTitle": "Mask Forcing： Improving Autoregressive Video Diffusion Distillation via Dual-Noise Masking Rollout",
+     "summary": "针对自回归视频扩散模型在分布匹配蒸馏中因逆向KL目标导致模式坍缩、生成视频过饱和与过平滑的问题，研究者提出Mask Forcing策略。该方法在自回归学生模型自滚动过程中沿空间与时间轴注入随机掩码，以引入更干净的信号并缓解模式坍缩。实验表明，该方法能高效提升多种自回归视频扩散蒸馏方法的视觉质量，且无需真实视频数据或额外后训练阶段。",
+     "source": "HuggingFace Daily Papers（社区热门论文）",
+     "url": "https://arxiv.org/abs/2609.09123",
+     "aihotUrl": "https://aihot.news/items/cmttmozwp0ejdrofpm5agyhcn",
+     "publishedAt": "2026-09-08T00:00:00.000Z",
+     "discoveredAt": "2026-09-09T04:58:52.619Z",
+     "score": 36,
+     "selected": false
+    }
+   ]
+  },
+  {
+   "query": "depth estimation",
+   "mode": "all",
+   "count": 3,
+   "items": [
+    {
+     "id": "cmtwsbuh409snrow7zsqdla0d",
+     "arxiv_id": "2609.11486",
+     "title": "FreeFlow：无光流专用偏置的层次化 Transformer，刷新 Sintel/KITTI-2015/Spring 基准",
+     "originalTitle": "FreeFlow： A Bias-free Hierarchical Transformer for Optical Flow Estimation",
+     "summary": "莫斯科国立大学团队提出 FreeFlow，一个不含相关体积、特征 warping 等光流专用组件的层次化 Transformer，仅用单一前馈编码器-解码器，组合窗口注意力、移位窗口注意力和低分辨率全局注意力。",
+     "source": "HuggingFace Daily Papers（社区热门论文）",
+     "url": "https://arxiv.org/abs/2609.11486",
+     "aihotUrl": "https://aihot.news/items/cmtwsbuh409snrow7zsqdla0d",
+     "publishedAt": "2026-09-10T00:00:00.000Z",
+     "discoveredAt": "2026-09-11T09:59:56.905Z",
+     "score": 48,
+     "selected": false
+    },
+    {
+     "id": "cmtucmh6q17jkrofp8lcmfyqi",
+     "arxiv_id": null,
+     "title": "Marigold V2 重访扩散Transformer单目深度估计",
+     "originalTitle": "Marigold V2 Revisiting Diffusion Transformers for Monocular Depth Estimation paper： https://huggin...",
+     "summary": "Marigold V2\n\n重访扩散Transformer用于单目深度估计\n\n论文：https://huggingface.co/papers/2609.08084",
+     "source": "X：AK (@_akhaliq)",
+     "url": "https://x.com/_akhaliq/status/2097726716861186348",
+     "aihotUrl": "https://aihot.news/items/cmtucmh6q17jkrofp8lcmfyqi",
+     "publishedAt": "2026-09-09T16:39:57.000Z",
+     "discoveredAt": "2026-09-09T17:04:44.667Z",
+     "score": 34,
+     "selected": false
+    },
+    {
+     "id": "cmttv9piz0oc9rofpadrhiyyv",
+     "arxiv_id": "2609.08084",
+     "title": "Marigold V2：用扩散Transformer重做单目深度估计",
+     "originalTitle": "Marigold V2： Revisiting Diffusion Transformers for Monocular Depth Estimation",
+     "summary": "Marigold V2 提出基于扩散Transformer（DiT）架构的单目深度估计新方法，支持从预训练多步流匹配模型单步推理，并可按需量化以降低运行成本。通过将模型内部表征与真实语义特征对齐、采用基于新型Sinkhorn损失的两阶段微调协议，模型在KITTI和ETH3D上的AbsRel较此前最优结果提升16-26%，并能清晰还原皮毛、 foliage 等细薄边缘。",
+     "source": "HuggingFace Daily Papers（社区热门论文）",
+     "url": "https://arxiv.org/abs/2609.08084",
+     "aihotUrl": "https://aihot.news/items/cmttv9piz0oc9rofpadrhiyyv",
+     "publishedAt": "2026-09-08T00:00:00.000Z",
+     "discoveredAt": "2026-09-09T08:58:55.461Z",
+     "score": 45,
+     "selected": false
+    }
+   ]
+  },
+  {
+   "query": "3D reconstruction",
+   "mode": "all",
+   "count": 2,
+   "items": [
+    {
+     "id": "cmu094cts0cpdroryiqz79eyl",
+     "arxiv_id": null,
+     "title": "基于 JAX3D 构建分层 NeRF 教程：体渲染、新视角合成与 3D 重建",
+     "originalTitle": "Hierarchical NeRF with JAX3D for Volumetric Rendering， Novel-View Synthesis， and 3D Reconstruction",
+     "summary": "该教程用 JAX、Flax、Optax 和 jax3d 的体渲染原语构建端到端分层 NeRF，包含位置编码、粗细双网络与 sample_piecewise_constant_pdf 重要性采样，并用 Adam、指数学习率衰减和梯度裁剪训练。评估涵盖 held-out PSNR、深度与透明度可视化、360 度渲染 GIF 以及 marching cubes 提取密度场等值面。",
+     "source": "MarkTechPost（RSS）",
+     "url": "https://www.marktechpost.com/2026/09/13/hierarchical-nerf-with-jax3d-for-volumetric-rendering-novel-view-synthesis-and-3d-reconstruction",
+     "aihotUrl": "https://aihot.news/items/cmu094cts0cpdroryiqz79eyl",
+     "publishedAt": "2026-09-13T19:46:38.000Z",
+     "discoveredAt": "2026-09-13T20:13:18.354Z",
+     "score": 51,
+     "selected": false
+    },
+    {
+     "id": "cmtzpqxc403rzroxqf54hxz65",
+     "arxiv_id": null,
+     "title": "Andon Labs 评测：GPT-6 Astra 在 Vending-Bench 2 和 Drone-Bench 上大幅领先 Claude Fable 5.1",
+     "originalTitle": "GPT-6 Astra pilots a surveillance drone and runs a business on its own",
+     "summary": "Andon Labs 测试显示 OpenAI 的 GPT-6 Astra 在两个 Agent 基准上超越所有以往前沿模型。",
+     "source": "The Decoder：AI News（RSS）",
+     "url": "https://the-decoder.com/gpt-6-astra-pilots-a-surveillance-drone-and-runs-a-business-on-its-own",
+     "aihotUrl": "https://aihot.news/items/cmtzpqxc403rzroxqf54hxz65",
+     "publishedAt": "2026-09-13T10:52:16.000Z",
+     "discoveredAt": "2026-09-13T11:10:57.104Z",
+     "score": 70,
+     "selected": false
+    }
+   ]
+  },
+  {
+   "query": "VGGT",
+   "mode": "all",
+   "count": 1,
+   "items": [
+    {
+     "id": "cmtwsbuh409snrow7zsqdla0d",
+     "arxiv_id": "2609.11486",
+     "title": "FreeFlow：无光流专用偏置的层次化 Transformer，刷新 Sintel/KITTI-2015/Spring 基准",
+     "originalTitle": "FreeFlow： A Bias-free Hierarchical Transformer for Optical Flow Estimation",
+     "summary": "莫斯科国立大学团队提出 FreeFlow，一个不含相关体积、特征 warping 等光流专用组件的层次化 Transformer，仅用单一前馈编码器-解码器，组合窗口注意力、移位窗口注意力和低分辨率全局注意力。",
+     "source": "HuggingFace Daily Papers（社区热门论文）",
+     "url": "https://arxiv.org/abs/2609.11486",
+     "aihotUrl": "https://aihot.news/items/cmtwsbuh409snrow7zsqdla0d",
+     "publishedAt": "2026-09-10T00:00:00.000Z",
+     "discoveredAt": "2026-09-11T09:59:56.905Z",
+     "score": 48,
+     "selected": false
+    }
+   ]
+  },
+  {
+   "query": "DUSt3R",
+   "mode": "all",
+   "count": 1,
+   "items": [
+    {
+     "id": "cmtwsbuh409snrow7zsqdla0d",
+     "arxiv_id": "2609.11486",
+     "title": "FreeFlow：无光流专用偏置的层次化 Transformer，刷新 Sintel/KITTI-2015/Spring 基准",
+     "originalTitle": "FreeFlow： A Bias-free Hierarchical Transformer for Optical Flow Estimation",
+     "summary": "莫斯科国立大学团队提出 FreeFlow，一个不含相关体积、特征 warping 等光流专用组件的层次化 Transformer，仅用单一前馈编码器-解码器，组合窗口注意力、移位窗口注意力和低分辨率全局注意力。",
+     "source": "HuggingFace Daily Papers（社区热门论文）",
+     "url": "https://arxiv.org/abs/2609.11486",
+     "aihotUrl": "https://aihot.news/items/cmtwsbuh409snrow7zsqdla0d",
+     "publishedAt": "2026-09-10T00:00:00.000Z",
+     "discoveredAt": "2026-09-11T09:59:56.905Z",
+     "score": 48,
      "selected": false
     }
    ]
   }
  ],
  "signals": {
-  "2609.05416": {
+  "2609.11548": {
    "weight": 0.08,
-   "where": "kw:Gaussian Splatting(all);kw:NeRF(all);kw:3D vision(all);kw:scene understanding(all)",
-   "title": "WorldSculpt：从有据视频生成组合式 3D 世界"
+   "where": "kw:novel view synthesis(all);kw:dynamic scene(all);kw:world model(all);kw:video diffusion(all)",
+   "title": "World in World：用世界模型探索视频中的世界"
   },
-  "2609.05738": {
-   "weight": 0.04,
-   "where": "kw:NeRF(all);kw:scene understanding(all)",
-   "title": "RenderFormer-V2：面向异构场景基元的神经渲染模型"
-  },
-  "2609.05415": {
-   "weight": 0.04,
-   "where": "kw:4D(all);kw:3D vision(all)",
-   "title": "UniMate：一个统一模型驱动任意骨骼拓扑的3D角色动画"
-  },
-  "2609.05275": {
+  "2609.11929": {
    "weight": 0.02,
-   "where": "kw:4D(all)",
-   "title": "别放弃 Dropout：Cerebras 团队提出层稀疏优化方法，高效训练与推理 LLM"
+   "where": "kw:world model(all)",
+   "title": "SenseNova-U1.5 发布：8B-MoT 原生统一多模态模型，支持 4K 生成与图像编辑"
   },
-  "2609.04200": {
+  "2609.11499": {
    "weight": 0.02,
-   "where": "kw:scene understanding(all)",
-   "title": "Principia 基准：通过成对物体的关系不变量评测视频模型的物理推理"
+   "where": "kw:world model(all)",
+   "title": "Recursive Code World Models（RCWM）：用递归场景程序从单张参考图重建复杂 3D 世界"
+  },
+  "2609.10540": {
+   "weight": 0.02,
+   "where": "kw:world model(all)",
+   "title": "Programmable World Model：将世界状态演化与视觉生成解耦的可编程世界模型"
+  },
+  "2609.09143": {
+   "weight": 0.02,
+   "where": "kw:world model(all)",
+   "title": "亚马逊FAR团队研究统一多模态模型中图像tokenizer作为视觉语言"
+  },
+  "2609.09155": {
+   "weight": 0.02,
+   "where": "kw:world model(all)",
+   "title": "SyncWorld：用视觉校准让世界模型成为零样本模拟器"
+  },
+  "2609.09123": {
+   "weight": 0.02,
+   "where": "kw:video diffusion(all)",
+   "title": "Mask Forcing：通过双噪声掩码滚动提升自回归视频扩散蒸馏质量"
+  },
+  "2609.11486": {
+   "weight": 0.06,
+   "where": "kw:depth estimation(all);kw:VGGT(all);kw:DUSt3R(all)",
+   "title": "FreeFlow：无光流专用偏置的层次化 Transformer，刷新 Sintel/KITTI-2015/Spring 基准"
+  },
+  "2609.08084": {
+   "weight": 0.02,
+   "where": "kw:depth estimation(all)",
+   "title": "Marigold V2：用扩散Transformer重做单目深度估计"
   }
  }
 }
