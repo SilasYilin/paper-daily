@@ -1,463 +1,558 @@
 window.PAPER_DAILY_DATA = {
-  "issue": "No.253",
-  "date": "2026-09-10",
-  "axes": "三维重建 × 世界模型",
-  "edNote": "本期精选基于偏好画像筛选与排序；检索源：HF Daily 主源 + AI HOT 中文策展池 + 公众号定向 + arXiv 兜底。",
+  "issue": "No.257",
+  "date": "2026-09-14",
+  "axes": "稀疏视角 4DGS · 新视角合成",
+  "edNote": "优先收录知名高校/企业与 CCF-A 类会议 Oral·Highlight 论文；检索源：HF Daily + arXiv RSS + AI HOT + 公众号。",
   "hero": {
-    "title": "Programmable World Model",
-    "titleZh": "可编程世界模型：状态归程序，画面归渲染",
-    "hook": "把世界规则写成程序，视频模型只当渲染器",
+    "title": "AnyView: Synthesizing Any Novel View in Dynamic Scenes",
+    "titleZh": "AnyView：让动态场景的任意新视角都能被生成出来",
+    "hook": "不依赖几何假设，扩散模型也能在剧烈动态场景里自由换视角",
     "cards": [
       {
         "emoji": "🎯",
         "title": "问题与背景",
-        "body": "视频世界模型生成的画面日益逼真、可交互，但缺乏维护持久世界状态的可靠机制，也难以在长程交互中强制执行可编程规则。状态隐含在网络参数与生成画面之中，交互轮次一多便出现不一致、实体状态失控等现象。要将其用于可玩游戏等应用，必须让\"规则\"与\"画面\"解耦，而现有交互式视频世界模型尚未系统性解决该问题。"
+        "body": "生成式视频模型能产出逼真画面，但在高度动态的真实环境里难以维持多视图与时空一致性。传统动态视角合成依赖显式几何（如动态高斯、变形场）与较强制导假设，一旦场景运动剧烈、监督信号稀缺，重建与渲染都会失稳。如何在尽量少的几何归纳偏置下获得跨视角、跨时间的稳定生成，是本文要解决的核心矛盾。"
       },
       {
         "emoji": "⚙️",
         "title": "方法设计",
-        "body": "框架将世界状态演化与视觉生成分离。`agent` 把自然语言指令翻译为可执行程序，显式定义实体状态与状态转移规则；轻量引擎执行程序，维护包含屏外实体与非视觉属性的全局持久状态。为衔接状态与生成，提出状态增强 `3D OBB` 作为中间表示，与目标相机轨迹一起被确定性编译为像素对齐的时空条件信号，驱动预训练视频模型充当生成式渲染器。该设计支持对单个实体的直接控制与预定义游戏机制。"
+        "body": "AnyView 是一套基于扩散的视频生成框架，面向 `dynamic view synthesis`。它把单目（2D）、多视图静态（3D）、多视图动态（4D）三类监督层级不同的数据统一起来，训练一个通用的时空隐式表示（generalist spatiotemporal implicit representation），使其能从任意相机位置与轨迹零样本产出新视角视频。框架刻意保持最小归纳偏置与几何假设，把一致性交给数据驱动的表示学习。"
       },
       {
         "emoji": "📊",
         "title": "实验结果",
-        "body": "提出 `CombatStateBench` 基准用于评测可编程世界模型。该方法取得 94% 的 `Count Accuracy` 与 98% 的 `State Accuracy`，大幅优于现有交互式视频世界模型，并支持连贯的长时域生成。更多消融与对比详见原文。"
+        "body": "作者在标准基准上与当前 SOTA 进行了对比，报告了具竞争力的结果（具体指标数值详见原文）。此外提出 `AnyViewBench`，专门面向多样真实场景中的「极端」动态视角合成；在这一更严苛的设定下，作者观察到现有方法的表现出现明显下滑，用于说明该问题尚未被解决。"
       },
       {
         "emoji": "⚠️",
         "title": "局限与展望",
-        "body": "摘要未列明作者承认的具体局限。从设计看，显式状态表示依赖 `3D OBB` 与预定义规则程序，对开放世界、非刚体交互及超出编排范围的涌现行为可能受限；可玩性与画质上限也受预训练视频模型能力约束，具体以原文 Discussion 为准。"
+        "body": "摘要指出在极端动态场景中，即便最强的方法也会失效（原文以「we find that...」引出，具体结论详见原文）。这类纯数据驱动的生成式方法通常还受限于训练数据的动态覆盖度与算力开销；`AnyViewBench` 本身也可视作对社区的一次挑战发布。"
       }
     ],
-    "figureNote": "以原文流程图为准；预期展示：自然语言指令经 `agent` 编译为状态程序，轻量引擎执行并维护全局持久状态；状态增强 `3D OBB` 与相机轨迹经确定性编译生成像素对齐的时空条件，注入预训练视频模型完成生成式渲染。",
-    "figures": [],
-    "authors": "Zheng-Hui Huang et al.",
-    "venue": "arXiv 2026.09 · Homepage: https://alaya-lab.github.io/pwm GitHub: https://gi",
-    "summary": "想象你要做一个能玩的游戏：角色会掉血、金币会消失、出了屏幕的敌人还得记得在哪。现在的视频世界模型只会\"画\"，画着画着状态就乱了。这篇工作把两件事拆开：一个轻量引擎用可执行程序管理世界的真实状态（谁在哪、血量多少），预训练视频模型只负责把这些状态\"渲染\"成画面。状态用带属性的 `3D OBB` 表示，连同相机轨迹被确定性编译成像素对齐的时空条件信号。结果是可以做出手感正确、状态持久的可玩游戏，新基准 `CombatStateBench` 上状态准确率达 98%。",
-    "paperUrl": "https://arxiv.org/abs/2609.10540",
-    "score": 0.86,
+    "figureNote": "以原文流程图为准。整体应是「多源数据 → 通用时空隐式表示 → 扩散式视频生成 → 任意轨迹新视角」的链路，图中会标出 2D/3D/4D 三类监督如何汇入同一表示。",
+    "figures": [
+      {
+        "file": "2601_16982-fig1.jpg",
+        "caption": "Figure 2 : The AnyView architecture. For both the clean input and noisy target videos, we concatenate pixels (RGB values) and camera information (Plücker vectors) belonging to the same viewpoint along",
+        "kind": "pipeline"
+      }
+    ],
+    "authors": "Basile Van Hoorick et al. · Toyota Research Institute, CA, USA / Amazon Web Services, CA, USA",
+    "venue": "arXiv 2026.09 · Project webpage: this https URL",
+    "venueLabel": "",
+    "awardLabel": "",
+    "instLabel": "Amazon",
+    "summary": "手机拍一段人来人往的街景，想换个机位重看一遍——这在静态场景已经能做，但一到人流、车流剧烈变化就崩。AnyView 把这件事交给扩散式视频生成模型，尽量不预设几何假设，只用「单目 2D + 多视图静态 3D + 多视图动态 4D」三类不同监督层级的数据，训练出一个通用的时空隐式表示，从而在任意相机位置与轨迹上零样本生成新视角视频。作者还构建了面向极端动态场景的新基准 `AnyViewBench`，用来暴露当前方法在这种更剧烈设定下的短板。",
+    "paperUrl": "https://arxiv.org/abs/2601.16982",
+    "score": 0.83,
     "scores": {
-      "innovation": 9,
-      "effectiveness": 8
+      "innovation": 8,
+      "effectiveness": 7
     },
-    "category": "WORLD MODEL × 可编程状态",
-    "influence": "中文社区 3D视觉工坊、机器之心 热议 · HF upvote 35 · 开源主页与代码（Alaya Lab）",
-    "github": "https://github.com/AlayaLab/pwm",
-    "stars": null,
-    "citedBy": null,
-    "institutions": [],
+    "category": "4D 动态视角合成 × 扩散生成",
+    "influence": "Toyota Research Institute 与 Amazon 合作出品",
+    "github": "https://github.com/TRI-ML/AnyView-DVS",
+    "stars": 5,
+    "citedBy": 0,
+    "institutions": [
+      "Toyota Research Institute, CA, USA",
+      "Amazon Web Services, CA, USA"
+    ],
     "figure": {
       "url": null,
       "caption": ""
     },
     "fields": {
-      "background": "arXiv 2026-09-09 新论文，主分类 cs.CV。视频世界模型缺乏持久状态维护与可编程规则执行机制。",
-      "task": "构建可编程世界模型：用户以自然语言定义实体状态与转移规则，模型在长程交互中维护一致的世界状态并生成相应画面。",
-      "insight": "把『状态演化』与『视觉生成』解耦：显式程序化状态 + 隐式生成式渲染，各司其职。",
-      "pipeline": "自然语言指令 → agent 编译为可执行状态程序 → 轻量引擎维护全局持久状态（含屏外实体、非视觉属性）→ 状态增强 3D OBB + 相机轨迹 → 确定性编译为像素对齐时空条件 → 预训练视频模型生成画面。",
-      "methods": "状态-生成解耦架构、状态增强 3D OBB 中间表示、确定性条件编译、CombatStateBench 评测基准。",
-      "experiment": "CombatStateBench 上 Count Accuracy 94%、State Accuracy 98%，优于现有交互式视频世界模型，支持连贯长时域生成。",
-      "limitation": "摘要未明示局限；OBB+规则的显式状态表示对开放域涌现行为可能受限，以原文为准。"
+      "background": "生成式视频模型在动态真实环境中的多视图与时空一致性不足，显式几何方法在剧烈动态下失稳。",
+      "task": "动态视角合成（dynamic view synthesis）：从任意相机位置与轨迹零样本生成新视角视频。",
+      "insight": "用「单目 2D / 多视图静态 3D / 多视图动态 4D」多级监督训练通用时空隐式表示，尽量不引入几何归纳偏置。",
+      "pipeline": "多源数据混合训练 → 时空隐式表示 → 扩散式视频生成 → 任意轨迹新视角输出，另附 AnyViewBench 评测。",
+      "methods": "扩散式视频生成框架；最小归纳偏置与几何假设；多层级监督数据的联合训练；配套极端动态基准 AnyViewBench。",
+      "experiment": "在标准基准上与 SOTA 对比取得有竞争力结果（数值详见原文）；在 AnyViewBench 极端动态设定下方法普遍退化。",
+      "limitation": "极端动态场景仍难以处理；依赖大规模多源训练数据；摘要未给出完整的失败模式分析。"
     }
   },
   "papers": [
     {
-      "title": "Why Is Video Still So Expensive? A Survey of Inference-Efficiency Mechanisms in Video and Audiovisual LLMs",
-      "titleZh": "视频 LLM 为什么还是这么贵？推理效率机制综述",
-      "hook": "一网打尽 VideoLLM 省算力的十八般武艺",
+      "title": "NOVA-GS: Noise-Aware View-Consistent Gaussian Splatting for Low-Light Novel View Synthesis",
+      "titleZh": "NOVA-GS：让低光场景也能稳定重建的高斯泼溅",
+      "hook": "不用 SfM、不用先拍一张亮图，退化输入直接出位姿与几何",
       "cards": [
         {
           "emoji": "🎯",
           "title": "问题与背景",
-          "body": "VideoLLM 将视频表征与预训练 LLM 耦合，在字幕生成、问答、检索与时序定位上表现出色，但计算与显存开销随帧数与上下文长度增长，制约实时、移动与资源受限场景的部署。已有效率工作散落各处、评测口径不一，缺乏按流水线阶段组织的系统梳理。"
+          "body": "真实低光条件下的三维重建面临严重传感器噪声、低信噪比与光度一致性退化，会同时破坏几何估计与新视角合成。现有路线有两条明显的两难：一是依赖光照良好的参考数据来获得可靠的 `SfM` 初始化，在退化输入下不可用；二是对每个视图单独做增强，但逐视图处理会引入跨视图不一致。"
         },
         {
           "emoji": "⚙️",
           "title": "方法设计",
-          "body": "综述只收录报告了参数量、单输入 FLOPs、延迟、显存或视听 `token` 数量具体下降的推理效率机制。分析沿流水线展开：帧采样、模态编码、连接器层 `token` 压缩、LLM `prefill/decode`。在共享主机模型与输入协议可得之处汇编文献报告的精度-成本对比，并与异质跨论文证据相区分；覆盖 2022 年底以来的 VideoLLM 及仍被沿用的早期帧采样与视觉编码器机制。"
+          "body": "NOVA-GS 是一个统一的噪声感知低光 3D 高斯泼溅框架，把增强、去噪与几何优化纳入单一过程。它利用 `VGGT` 前馈估计从退化输入直接获得稳健的相机位姿与几何，从而免去 `SfM` 初始化。在此基础上集成三个耦合组件：结构感知增强模块负责曝光校正，自监督去噪模块处理噪声（摘要在此处截断，其余组件与细节详见原文）。"
         },
         {
           "emoji": "📊",
           "title": "实验结果",
-          "body": "本文为综述，无新实验；核心产出是对文献证据的结构化汇编：按流水线阶段的效率机制分类谱系、同协议下的精度-成本对比表，以及视听效率与标准化评测两方面的研究空白识别。配套 GitHub 仓库持续更新。"
+          "body": "摘要未给出具体数据集名称与数值指标，建议以原文为准。可作为质量旁证的是：该工作被 CVPR 2026 的 3D4S Workshop 接收并获最佳论文（Best Paper Award）。"
         },
         {
           "emoji": "⚠️",
           "title": "局限与展望",
-          "body": "作者指出视听（audiovisual）效率与标准化评测是当前研究空白。证据本身依赖文献自报数字，跨论文对比的异质性难以完全消除；对训练效率与最新架构的覆盖范围以原文为准。"
+          "body": "摘要未明确列出局限。从方法形态推断：整条链路依赖 VGGT 前馈估计的先验能力，若退化程度超出其训练分布可能受影响；免 SfM 的位姿精度上限也值得关注。以上为判断，非作者结论。"
         }
       ],
-      "figureNote": "以原文流程图/分类图表为准；预期展示 VideoLLM 推理流水线（帧采样 → 模态编码 → 连接器 token 压缩 → LLM prefill/decode）及各阶段对应的效率机制分类。",
-      "figures": [],
-      "authors": "Killian Steunou et al.",
-      "venue": "arXiv 2026.09 · Supplementary material at https://www.killian-steunou.com/vi",
-      "summary": "让大模型\"看懂\"一段视频，代价是几百帧图像塞进上下文：帧数越多、上下文越长，算力和显存一路暴涨，实时和端侧部署望而却步。这篇综述把 VideoLLM 的推理开销拆到流水线的每个阶段——帧采样、模态编码、连接器层 `token` 压缩、LLM 的 `prefill` 与 `decode`——逐个盘点能省参数、省 FLOPs、省延迟、省显存的机制。覆盖 2022 年底以来的 VideoLLM 与仍作为组件沿用的更早机制，并严格区分同主机同协议的对比与异质跨论文证据。配套维护 `awesome-efficient-videollm` 仓库持续更新。",
-      "paperUrl": "https://arxiv.org/abs/2609.10355",
-      "score": 0.45,
-      "scores": {
-        "innovation": 6,
-        "effectiveness": 6
-      },
-      "category": "SURVEY × 推理效率",
-      "influence": "配套开源仓库 awesome-efficient-videollm 持续更新 · 新论文：团队信息以原文为准",
-      "github": "",
-      "stars": null,
-      "citedBy": null,
-      "institutions": [],
-      "figure": {
-        "url": null,
-        "caption": ""
-      },
-      "fields": {
-        "background": "arXiv 2026-09-09 新论文，主分类 cs.CV/cs.CL/cs.MM。VideoLLM 推理成本随帧数与上下文增长，部署受限。",
-        "task": "系统综述视频与视听 LLM 的推理效率机制，按流水线阶段组织并汇编可对比的精度-成本证据。",
-        "insight": "效率机制应按其作用的流水线阶段（帧采样/编码/连接器/LLM 解码）分类审视，并严格区分同协议对比与异质证据。",
-        "pipeline": "帧采样 → 模态编码 → 连接器层 token 压缩 → LLM prefill/decode；各阶段的效率机制构成分类体系。",
-        "methods": "文献筛选标准（须报告参数/FLOPs/延迟/显存/token 数的具体下降）；共享主机模型与输入协议下的对比汇编。",
-        "experiment": "综述无新实验；成果为机制谱系、精度-成本对比汇编与研究空白（视听效率、标准化评测）识别。",
-        "limitation": "视听效率与标准化评测覆盖不足；依赖文献自报数字，异质性难以完全消除。"
-      }
-    },
-    {
-      "title": "Field Converter: Geometry-Initialized Temporal Residual Refinement for World-Grounded Player Pose Estimation from Soccer Broadcasts",
-      "titleZh": "足球转播的世界系 3D 姿态：几何初始化 + 时序残差修正",
-      "hook": "几何初始化误差 49cm，残差修正后仅 10cm",
-      "cards": [
+      "figureNote": "以原文流程图为准。预期依次为「退化输入 → VGGT 前馈位姿/几何初始化 → 结构感知增强 + 自监督去噪 → 高斯泼溅优化」，三个模块之间应存在耦合迭代关系。",
+      "figures": [
         {
-          "emoji": "🎯",
-          "title": "问题与背景",
-          "body": "从单目体育转播恢复 3D 人体姿态已较成熟，但战术分析要求把球员定位到共享的米制世界坐标系，而非仅相对自身身体重建。单目视角、遮挡与投影深度歧义使该问题显著更难；已有方法常直接回归全局根位置，误差大且不稳定。"
-        },
-        {
-          "emoji": "⚙️",
-          "title": "方法设计",
-          "body": "`Field Converter` 是几何初始化的时序残差框架。首先利用相机内外参与球场标定，通过射线-地面求交初始化球员根位置；随后从姿态、图像、相机与几何线索预测时序残差修正。时序骨干比较了逐帧 `MLP`、`TCN` 与 `Transformer`；消融显示残差预测明显优于直接全局根回归，且时序上下文比具体时序骨干的选择更关键。"
-        },
-        {
-          "emoji": "📊",
-          "title": "实验结果",
-          "body": "在比赛不重叠的评测序列上，根误差从纯几何的 49cm 降至逐帧 `MLP` 的 14cm 与 `TCN` 的 10cm，`Transformer` 达相近的 11cm；世界系 `MPJPE` 达 13.2cm。失败分析定位腾空动作为几何初始化的主要局限。更多消融见原文。"
-        },
-        {
-          "emoji": "⚠️",
-          "title": "局限与展望",
-          "body": "作者承认的局限是腾空运动（跳跃、争顶等）破坏地面几何假设，成为误差主源。方法依赖球场标定与广播视角，跨场馆泛化与多人遮挡场景的表现以原文为准。"
+          "file": "2609_12682-fig1.jpg",
+          "caption": "Figure 1 : Overview of our proposed unified optimization framework (NOVA-GS). Given low-light inputs, our pipeline concurrently performs preliminary denoising and enhances in enhancement module, self-",
+          "kind": "pipeline"
         }
       ],
-      "figureNote": "以原文流程图为准；预期展示：标定相机与球场几何 → 射线-地面求交得到根位置初值 → 时序残差网络融合姿态/图像/相机/几何线索输出修正 → 世界系 3D 姿态。",
-      "figures": [],
-      "authors": "Simon Khan et al.",
-      "venue": "arXiv 2026.09 · 11 pages, 5 figures. Code available at https://github.com/Kh",
-      "summary": "看球赛转播时，想把某个球员\"放进\"球场的真实米制坐标系——他站在草皮哪个点、朝哪个方向——比只重建他自己的身体姿态难得多。这篇工作先用相机与球场几何，通过射线-地面求交给球员脚底位置一个初值，再用网络从姿态、图像、相机与几何线索里预测时序残差修正量，把误差一步步磨下去。在比赛不重叠的评测序列上，纯几何初始化 49cm 的根误差经残差修正降至 10cm（`TCN`），世界系 `MPJPE` 达 13.2cm。失败分析指出腾空动作是几何初始化的主要短板。",
-      "paperUrl": "https://arxiv.org/abs/2609.10498",
-      "score": 0.36,
+      "authors": "Shaurya Pavan A et al. · Indian Institute of Technology Madras / Abstract",
+      "venue": "arXiv 2026.09 · Accepted to the 3D4S Workshop at CVPR 2026; selected for the",
+      "venueLabel": "CVPR Workshop",
+      "awardLabel": "Best Paper",
+      "instLabel": "Indian Institute of Technology Madras",
+      "summary": "夜里或暗光下拍的照片噪点大、亮度低，普通三维重建方法连相机位姿都算不准——因为它们的初始化步骤依赖清晰图像。NOVA-GS 干脆跳过这个步骤：用 VGGT 这类前馈模型直接从退化图像里估出相机位姿和几何，再把「提亮、去噪、几何优化」放进同一个过程里一起做，避免逐张增强带来的跨视角不一致。该工作被 CVPR 2026 的 3D4S Workshop 选为最佳论文。",
+      "paperUrl": "https://arxiv.org/abs/2609.12682",
+      "score": 0.78,
       "scores": {
         "innovation": 7,
         "effectiveness": 7
       },
-      "category": "FEED-FORWARD 3D × 体育分析",
-      "influence": "11 页 5 图，代码开源（GitHub）· 新论文：团队影响力标注以原文为准",
+      "category": "3DGS × 低光重建",
+      "influence": "CVPR 2026 3D4S Workshop 最佳论文；印度理工学院马德拉斯分校（IIT Madras）",
       "github": "",
       "stars": null,
       "citedBy": null,
-      "institutions": [],
+      "institutions": [
+        "Indian Institute of Technology Madras",
+        "Abstract"
+      ],
       "figure": {
         "url": null,
         "caption": ""
       },
       "fields": {
-        "background": "arXiv 2026-09-09 新论文，主分类 cs.CV。单目转播中世界坐标系球员定位服务于战术分析，但深度歧义与遮挡使其困难。",
-        "task": "从标定足球转播中恢复世界接地（world-grounded）的 3D 球员姿态：根位置位于共享米制球场坐标系。",
-        "insight": "与其直接回归全局根，不如用几何解析解初始化、再让网络学习时序残差修正。",
-        "pipeline": "相机+球场几何 → 射线-地面求交根初始化 → 时序残差修正（姿态/图像/相机/几何线索）→ 世界系 3D 姿态。",
-        "methods": "几何初始化、时序残差修正、逐帧 MLP/TCN/Transformer 骨干对比、比赛不重叠评测协议。",
-        "experiment": "根误差 49cm（纯几何）→14cm（MLP）→10cm（TCN）、11cm（Transformer）；世界系 MPJPE 13.2cm；残差预测优于直接全局根回归。",
-        "limitation": "腾空动作破坏地面假设为主要局限；依赖球场标定，跨场景泛化以原文为准。"
+        "background": "低光场景存在严重噪声与光度退化，破坏几何估计与新视角合成。",
+        "task": "低光条件下的 3D 高斯泼溅重建与新视角合成。",
+        "insight": "用前馈模型替代 SfM 初始化，并把增强、去噪、几何优化统一在单过程内，规避逐视图增强导致的不一致。",
+        "pipeline": "退化输入 → VGGT 前馈估计位姿与几何 → 结构感知增强 / 自监督去噪 → 高斯泼溅几何优化。",
+        "methods": "统一噪声感知框架；VGGT 前馈相机位姿与几何估计；结构感知曝光校正模块；自监督去噪模块。",
+        "experiment": "摘要未给出数据集与指标数值，以原文为准；佐证为该工作获 CVPR 2026 3D4S Workshop 最佳论文。",
+        "limitation": "摘要未列出局限；对前馈估计先验的依赖与免 SfM 位姿精度上限值得后续验证。"
       }
     },
     {
-      "title": "A Later Test Set Is Not a New Domain: Pretraining Familiarity Survives a Contamination-Free Hold-Out",
-      "titleZh": "测试集晚于模型不等于新领域：预训练熟悉度穿透时间留出集",
-      "hook": "换了新时间窗的考卷，防不住模型「见过世面」",
+      "title": "Dense Dynamic Scene Reconstruction and Camera Pose Estimation from Multi-View Videos",
+      "titleZh": "多台自由运动相机下的稠密动态重建与位姿估计",
+      "hook": "不用刚性支架、不用预先标定，多机各拍各的也能拼出同一个动态场景",
       "cards": [
         {
           "emoji": "🎯",
           "title": "问题与背景",
-          "body": "时序基础模型几乎只在早于自身的公开档案上评测，高分无法与\"预训练时见过测试集\"区分。直接后推时间的留出集是显然对策，但\"晚于模型\"是否等于\"全新领域\"缺乏系统检验；若领域熟悉度能跨时间窗存活，则时间留出并不充分。"
+          "body": "目标设定是「多台自由运动相机」下的稠密动态场景重建与相机位姿估计——这自然出现在多观察者共同拍摄同一事件的场景中。既有方法存在两类限制：只能处理单相机输入，或要求相机以刚性支架安装且预先标定。前者无法利用多视角互补，后者在真实拍摄中几乎不可行，实用性受限。"
         },
         {
           "emoji": "⚙️",
           "title": "方法设计",
-          "body": "构建完全后于模型发布的留出基准：13 个预测器（4 个经典、3 个逐数据集训练、6 个预训练）、5 领域 7 组数据，全部观测晚于最后模型发布，且数据可无 `API key` 复现。随后做胜负归因：检验季节强度与谱熵两个序列内在属性能否解释预训练优势，并在预训练家族内部用同序列比较让序列难度相消，考察语料熟悉度效应。"
+          "body": "作者提出两阶段优化框架，把任务解耦为鲁棒的相机跟踪与稠密深度精修。第一阶段把单相机视觉 `SLAM` 扩展到多相机设定：构建时空连接图（spatiotemporal connection graph），同时利用相机内的时间连续性与相机间的空间重叠，从而获得一致的尺度与鲁棒跟踪。为应对相机间重叠有限的情况，引入基于前馈重建模型的宽基线初始化策略。第二阶段在相机内与相机间联合优化稠密深度与相机位姿。"
         },
         {
           "emoji": "📊",
           "title": "实验结果",
-          "body": "预训练模型赢 7 组中 5 组，输一组给 `Theta` 基线，在日频汇率上与季节朴素法不可区分。两个内在属性解释不了胜负格局，季节强度甚至与优势负相关；最大收益（较最优经典方法 `MASE` 低 28%）落在 TimesFM 预训练语料主体的维基百科周度浏览量上；预训练家族内 TimesFM 对 Chronos 在维基百科上排名差 -0.53（其余领域 -0.09，Mann-Whitney p<1e-5）。"
+          "body": "摘要未给出具体数据集、指标与对比数值，以原文为准。"
         },
         {
           "emoji": "⚠️",
           "title": "局限与展望",
-          "body": "结论基于 5 领域 7 组与 6 个预训练模型的有限样本；\"语料熟悉度\"归因依赖作者披露的预训练语料描述，披露不准则归因受影响。实践者选模型时应先问：我的领域是不是这个模型从小长大的领域。"
+          "body": "摘要未明确列出局限。从设定推断：方法仍依赖相机间存在一定空间重叠，若各机视角几乎不相交，连接图的构建与尺度一致性可能退化；自由运动相机带来的动态遮挡也是潜在难点。以上为判断。"
         }
       ],
-      "figureNote": "以原文流程图/表格为准；预期展示留出集构建协议（时间线、领域分组）与预训练优势随语料熟悉度的归因分析。",
-      "figures": [],
-      "authors": "Mahdi Naser Moghadasi et al.",
-      "venue": "arXiv 2026.09 · 11 pages, 2 figures, 5 tables. Code, data fetchers and per-s",
-      "summary": "时序基础模型的评测几乎都用模型发布前就存在的公开数据，考高分和\"考前背过题\"分不开。直觉解法是换一份模型发布之后才产生的数据当考卷——这篇工作真造了一份：十三个预测器、五领域七组数据，每条观测都晚于最后一个模型发布。结果预训练模型赢了 7 组中的 5 组，但赢在哪？作者发现常用的两个序列内在属性解释不了，真正起作用的是\"语料熟悉度\"：最大收益（比最优经典方法 `MASE` 低 28%）恰好落在 TimesFM 作者自称预训练语料主体的维基百科页面浏览量上。结论：时间留出集挡得住背题，挡不住领域熟悉度。",
-      "paperUrl": "https://arxiv.org/abs/2609.10357",
-      "score": 0.36,
+      "figureNote": "以原文流程图为准。可预期为两阶段结构：先由多相机时空连接图 + 宽基线前馈初始化完成跟踪，再进入稠密深度与位姿的联合精修。",
+      "figures": [
+        {
+          "file": "2603_12064-fig1.jpg",
+          "caption": "Figure 2 : Method Overview. Given multiple video inputs: Our method first uses a feed-forward model for initialization to achieve a global scale anchor and initialized poses. Then, we build a spatio-t",
+          "kind": "pipeline"
+        }
+      ],
+      "authors": "Shuo Sun et al. · Örebro University, Sweden / Schindler EPFL Lab, Lausanne, Switzerland",
+      "venue": "arXiv 2026.09 · fix typos",
+      "venueLabel": "",
+      "awardLabel": "",
+      "instLabel": "EPFL",
+      "summary": "演唱会、体育比赛这类场合，多个人各拿一台相机从不同角度拍同一个事件。传统方法要么只吃单相机输入，要么要求相机装在刚性支架上并预先标定好——后者在现场几乎不可能满足。这篇工作提出两阶段优化框架，把问题拆成「先鲁棒跟踪相机，再精修稠密深度」，并用前馈重建模型做宽基线初始化，从而在相机间重叠有限的情况下仍能稳定工作。",
+      "paperUrl": "https://arxiv.org/abs/2603.12064",
+      "score": 0.77,
       "scores": {
         "innovation": 7,
         "effectiveness": 7
       },
-      "category": "EVALUATION × 时序基础模型",
-      "influence": "代码、数据抓取器与分题结果开源（摘要注明）· 新论文：团队信息以原文为准",
+      "category": "动态重建 × 多相机 SLAM",
+      "influence": "Örebro University（瑞典）与 EPFL 合作",
       "github": "",
       "stars": null,
-      "citedBy": null,
-      "institutions": [],
+      "citedBy": 0,
+      "institutions": [
+        "Örebro University, Sweden",
+        "Schindler EPFL Lab, Lausanne, Switzerland",
+        "Technical University of Munich, Germany"
+      ],
       "figure": {
         "url": null,
         "caption": ""
       },
       "fields": {
-        "background": "arXiv 2026-09-09 新论文，主分类 cs.LG。时序基础模型评测被预训练数据污染疑云笼罩。",
-        "task": "构建严格时间留出基准，检验「晚于模型的测试集」能否消除预训练优势，并归因优势来源。",
-        "insight": "时间留出消除窗口记忆，但消除不了领域熟悉度；评测需要相对公开语料声明的领域留出。",
-        "pipeline": "构建后发布留出集（13 预测器 × 5 领域 7 组）→ 对比经典/逐数据集/预训练三类方法 → 内在属性归因（季节强度、谱熵）→ 语料熟悉度归因（组内同序列排名比较）。",
-        "methods": "时间后置留出协议、无 API key 可复现数据、组内同序列排名比较（Mann-Whitney 检验）。",
-        "experiment": "预训练赢 5/7 组；日频汇率与季节朴素不可分；维基百科周度浏览量上 MASE 较最优经典法低 28%；TimesFM 家族 vs Chronos 排名差 -0.53（维基百科）vs -0.09（其他），p<1e-5。",
-        "limitation": "样本限于 5 领域 7 组；归因依赖预训练语料披露的准确性。"
+        "background": "多自由运动相机拍摄同一事件的场景很常见，但既有方法只支持单相机，或要求刚性安装与预标定。",
+        "task": "从多台自由运动相机输入中同时恢复稠密动态场景几何与各相机位姿。",
+        "insight": "把问题解耦为「鲁棒相机跟踪 + 稠密深度精修」两阶段，并用时空连接图统一相机内时间连续与相机间空间重叠。",
+        "pipeline": "多相机输入 → 时空连接图构建 → 宽基线前馈初始化 → 鲁棒跟踪 → 稠密深度与位姿联合精修。",
+        "methods": "两阶段优化框架；扩展单相机 SLAM 至多相机；时空连接图；基于前馈重建模型的宽基线初始化。",
+        "experiment": "摘要未给出数据集与指标数值，以原文为准。",
+        "limitation": "依赖相机间存在空间重叠；视角几乎不相交时的尺度一致性与遮挡处理未在摘要中说明。"
       }
     },
     {
-      "title": "RealSimLoop: Online Real-to-Sim Adaptation via Differentiable Reduced-Order Simulation with Vision Feedback",
-      "titleZh": "视觉反馈 + 可微降阶仿真：在线 Real-to-Sim 适配",
-      "hook": "一边看一边修：在线把真实世界塞进仿真器",
+      "title": "FreeFlow: A Bias-free Hierarchical Transformer for Optical Flow Estimation",
+      "titleZh": "FreeFlow：不带任何光流专用组件的分层 Transformer",
+      "hook": "把相关体和迭代精修全删掉，纯注意力反而刷到 Sintel 榜首",
       "cards": [
         {
           "emoji": "🎯",
           "title": "问题与背景",
-          "body": "可变形物体的真实观测稀疏且多为表面级，而下游任务需要内部形变、应力场与交互力等隐藏物理量。物理仿真可恢复这些量，但在线 real-to-sim 适配面临三重困难：全空间优化代价高、反馈信号有限、材料属性随时间变化。离线标定方法无法应对运行中的物性漂移。"
+          "body": "主流光流方法依赖任务特定的归纳偏置——相关体（correlation volumes）、特征 warp、迭代精修等——来达到高精度。这些偏置虽然有效，却把模型限制在预设的启发式范围内，可能压制表达能力，并导致流程更复杂、计算开销更高。问题在于：去掉这些专用组件后，能否仍然取得同等甚至更好的精度？"
         },
         {
           "emoji": "⚙️",
           "title": "方法设计",
-          "body": "`RealSimLoop` 是以视觉数据为物理反馈的可微在线适配框架。核心有三：一是在降阶神经子空间中执行可微仿真，大幅加速优化环，达到准实时；二是耦合可微渲染，从高保真像素数据直接反传梯度精化材料刚度等物理参数；三是滑动窗口目标函数，支持在线跟踪时变材料属性，弥合模型降阶与未建模动力学带来的 real-to-sim 差距。"
+          "body": "FreeFlow 是一个分层（hierarchical）Transformer，完全不使用任何光流专用组件，仅由单一的前馈编码—解码器构成。其核心是三种注意力的组合：`窗口注意力`负责局部处理，`移位窗口注意力`实现跨窗口信息交换，另有一路在降采样分辨率上运行的`全局注意力`。这种设计使架构能随模型容量自然扩展。"
         },
         {
           "emoji": "📊",
           "title": "实验结果",
-          "body": "摘要报告方法优于常规离线方法（具体指标与场景以原文实验为准），并在下游应用中验证了框架的通用性，包括外力预测与带新视角合成的 3D 应力场重建。"
+          "body": "尽管没有任何标准归纳偏置，FreeFlow 在多个主要基准上取得 SOTA，摘要给出 Sintel 上 Clean/Final 的 EPE 为 0.68 / 1.48。模型容量从较小变体扩展到较大变体时，精度呈一致性提升（具体各变体的完整对比表详见原文）。"
         },
         {
           "emoji": "⚠️",
           "title": "局限与展望",
-          "body": "摘要未列明具体局限。降阶子空间的表达力限制可建模动力学范围；可微渲染对光照与遮挡敏感；时变跟踪依赖滑动窗口设计，具体边界以原文 Discussion 为准。"
+          "body": "摘要未列出局限。可考虑的边界：低分辨率全局注意力在高分辨率输入下的计算成本、以及去除归纳偏置后对训练数据规模的依赖程度，均值得在原文中查证。"
         }
       ],
-      "figureNote": "以原文流程图为准；预期展示：真实视频 → 可微渲染 → 梯度反传 → 降阶神经子空间中的可微仿真 → 物理参数（如刚度）在线更新 → 滑动窗口闭环适配。",
-      "figures": [],
-      "authors": "Zhihao Cen et al.",
-      "venue": "arXiv 2026.09",
-      "summary": "真实世界里的可变形物体（布料、软体）通常只能看到表面，但下游任务需要内部形变、应力场、交互力这些\"藏起来的量\"。仿真可以补上，但让仿真在线贴合真实——real-to-sim——很难：全空间优化太贵、反馈信号有限、材料属性还会随时间变。这篇工作把可微仿真放进一个降阶神经子空间里跑，速度上来了，接近实时；再接上可微渲染，让像素级观测直接反传梯度去修材料刚度等物理参数；滑动窗口目标函数支持在线跟踪时变的材料属性。下游验证了外力预测与带新视角合成的 3D 应力场重建。",
-      "paperUrl": "https://arxiv.org/abs/2609.09828",
-      "score": 0.36,
-      "scores": {
-        "innovation": 8,
-        "effectiveness": 7
-      },
-      "category": "REAL2SIM × 可微仿真",
-      "influence": "新论文：团队信息以原文为准（Zhihao Cen 等，主分类 cs.GR/cs.CV/cs.RO）",
-      "github": "",
-      "stars": null,
-      "citedBy": null,
-      "institutions": [],
-      "figure": {
-        "url": null,
-        "caption": ""
-      },
-      "fields": {
-        "background": "arXiv 2026-09-09 新论文，主分类 cs.GR/cs.CV/cs.RO。可变形物体真实观测表面化，隐藏物理量需仿真恢复。",
-        "task": "在线 real-to-sim 适配：以视觉数据为反馈，实时校准物理仿真参数以贴合真实观测。",
-        "insight": "降阶子空间让可微仿真准实时化；可微渲染把像素变成物理参数的梯度来源。",
-        "pipeline": "真实视频 → 可微渲染 → 梯度反传 → 降阶神经子空间可微仿真 → 物理参数更新 → 滑动窗口在线跟踪时变属性。",
-        "methods": "可微降阶仿真、可微渲染耦合、滑动窗口目标、时变材料跟踪。",
-        "experiment": "优于常规离线方法（数字以原文为准）；下游验证外力预测与带新视角合成的 3D 应力场重建。",
-        "limitation": "降阶子空间表达力与可微渲染敏感性构成边界；以原文为准。"
-      }
-    },
-    {
-      "title": "View-Structured Conformal Prediction for 3D Gaussian Splatting",
-      "titleZh": "给 3DGS 新视角渲染配置信区间：视图结构化保形预测",
-      "hook": "一个模型顶十个：覆盖率达标还省 22% 区间宽度",
-      "cards": [
+      "figureNote": "以原文流程图为准。图中应体现分层编码—解码结构，以及窗口注意力 / 移位窗口注意力 / 低分辨率全局注意力三种模块的交替排布。",
+      "figures": [
         {
-          "emoji": "🎯",
-          "title": "问题与背景",
-          "body": "`3DGS` 实时渲染新视角，但不确定性热力图无法证明某次渲染满足指定的预测覆盖率。将新视角合成视为结构化回归后，需要有限样本有效的联合保证：以至少 1-α 的概率，RGB 预测框覆盖新视图中至少 1-β 比例的像素。像素级独立校准会导致视图级覆盖率塌陷，是保形预测用于结构化输出时的核心难题。"
-        },
-        {
-          "emoji": "⚙️",
-          "title": "方法设计",
-          "body": "`VSCP` 将预校准尺度分解为两部分：来自渲染器的空间形状，与一个可迁移的视图难度因子——预测形状所需的最小视图级乘子。`View-CP` 在视图层面做留出分位数，即使迁移到新场景也保持有限样本有效性。该分解还使分析精确：一致性得分为 oracle 与预测视图难度之比，过剩宽度可分离为测试侧与校准侧两项。"
-        },
-        {
-          "emoji": "📊",
-          "title": "实验结果",
-          "body": "13 个真实场景上，像素池化校准在 90% 目标下仅达 61.4% 视图事件覆盖率（边缘像素覆盖 89.9%），`View-CP` 达 91.7–92.0%。同等覆盖率下较常数尺度省 22.1% 宽度，用单模型达到十模型集成 21.0% 的削减（每查询 4 次而非 10 次光栅化）；比 `3DGS-U` 高 4.7 点（p=0.0225）；视图预测子从有界源域迁移到全部九个无界 `Mip-NeRF 360` 场景，全尺度较常数尺度省 20.7% 宽度；换致密化骨干仍省 18.3%；`RTX 4090` 上 216–280 FPS。"
-        },
-        {
-          "emoji": "⚠️",
-          "title": "局限与展望",
-          "body": "方法依赖渲染器输出的尺度形状质量与校准集的视图覆盖；视图难度因子从有界源域向无界场景的迁移在实验中得到验证，但对更极端采集协议或动态场景的泛化未在摘要中报告，以原文为准。"
+          "file": "2609_11486-fig1.jpg",
+          "caption": "Figure 3 : Method overview. Given an image pair ( I 1 , I 2 ) (I_{1},I_{2}) , we patchify each input into 8 × 8 8{\\times}8 tokens and extract features using two shared-weight encoders composed of Wind",
+          "kind": "pipeline"
         }
       ],
-      "figureNote": "以原文流程图为准；预期展示：预校准尺度分解为「渲染器空间形状 × 视图难度因子」→ 视图级留出分位数（View-CP）→ RGB 预测框，并保证联合覆盖率。",
-      "figures": [],
-      "authors": "Junzheng Chu et al.",
-      "venue": "arXiv 2026.09",
-      "summary": "3D Gaussian Splatting 渲染新视角又快又好，但热力图式的\"不确定性\"说不清\"这次渲染有多大把握\"。这篇把新视角合成当成结构化回归，要求以至少 1-α 的概率，RGB 预测框盖住新视图中至少 1-β 比例的像素。方法 `VSCP` 把预校准尺度拆成渲染器给出的空间形状与一个可迁移的\"视图难度因子\"，再对视图做保形预测，保证迁移到新场景也有有限样本有效性。13 个真实场景上，像素池化校准的视图事件覆盖率只有 61.4%（目标 90%），`View-CP` 达到 91.7–92.0%；同等覆盖率下区间宽度省 22.1%，单模型顶上十模型集成，RTX 4090 上跑 216–280 FPS。",
-      "paperUrl": "https://arxiv.org/abs/2609.10307",
-      "score": 0.32,
+      "authors": "V et al. · AI Center, Lomonosov MSU, Moscow, Russia / Lomonosov Moscow State University, Moscow, Russia",
+      "venue": "arXiv 2026.09 · Accepted at ECCV 2026. Project page: this https URL",
+      "venueLabel": "ECCV",
+      "awardLabel": "",
+      "instLabel": "Lomonosov Moscow State University",
+      "summary": "过去十年光流估计几乎默认要用相关体、特征 warp、迭代精修这些「专用零件」。FreeFlow 反其道而行：整网不含任何光流专用组件，只用一个前馈的编码—解码器，靠窗口注意力、移位窗口注意力和低分辨率全局注意力三种组合来同时抓局部与全局对应关系。结果不仅在主要基准上达到 SOTA，模型从小到大还能稳定涨点，说明这套结构有良好的可扩展性。",
+      "paperUrl": "https://arxiv.org/abs/2609.11486",
+      "score": 0.65,
       "scores": {
-        "innovation": 8,
+        "innovation": 7,
         "effectiveness": 8
       },
-      "category": "3DGS × 不确定性量化",
-      "influence": "新论文：作者影响力标注以原文为准（Bin Pan / Zhenwei Shi 等）",
+      "category": "光流估计 × 前馈 Transformer",
+      "influence": "ECCV 2026 录用；莫斯科国立大学 AI Center（Lomonosov MSU）",
+      "github": "https://github.com/msu-video-group/freeflow",
+      "stars": 13,
+      "citedBy": null,
+      "institutions": [
+        "AI Center, Lomonosov MSU, Moscow, Russia",
+        "Lomonosov Moscow State University, Moscow, Russia",
+        "MSU Institute for Artificial Intelligence, Moscow, Russia"
+      ],
+      "figure": {
+        "url": null,
+        "caption": ""
+      },
+      "fields": {
+        "background": "光流方法普遍依赖相关体、特征 warp、迭代精修等任务特定归纳偏置，限制了表达力并推高复杂度。",
+        "task": "在完全不使用光流专用组件的条件下做高精度光流估计。",
+        "insight": "用窗口 + 移位窗口 + 低分辨率全局注意力的组合替代人工设计的匹配与精修机制。",
+        "pipeline": "输入图像对 → 分层前馈编码—解码器（三种注意力交替）→ 光流输出。",
+        "methods": "分层 Transformer；无光流专用组件；窗口注意力、移位窗口注意力、降分辨率全局注意力；单一前馈编码—解码器。",
+        "experiment": "Sintel Clean/Final EPE 0.68 / 1.48，取得 SOTA；模型容量增大时精度一致性提升。",
+        "limitation": "摘要未列出局限；全局注意力的计算开销与数据规模依赖需查原文。"
+      }
+    },
+    {
+      "title": "VS-Splat: Voxel-Selective feed-forward Gaussian Splatting for end-to-end 3D object reconstruction from sparse-views",
+      "titleZh": "VS-Splat：只在「像物体」的体素里放高斯点",
+      "hook": "监督信号只有 2D 渲染，却能自己学出哪些体素该放高斯",
+      "cards": [
+        {
+          "emoji": "🎯",
+          "title": "问题与背景",
+          "body": "前馈高斯泼溅模型已能从少量二维图像重建三维物体，甚至可泛化到未见物体。但现有方法通常在三维空间中均匀预测高斯原语，导致大多数原语被放在非物体区域，这会挤占表示容量、妨碍精细物体细节的刻画，也造成不必要的存储与渲染开销。"
+        },
+        {
+          "emoji": "⚙️",
+          "title": "方法设计",
+          "body": "VS-Splat（Voxel-Selective Gaussian Splatting）是一个端到端的前馈高斯泼溅框架，只在被判定「可能属于物体」的选定体素内预测大量高斯原语，且不需要三维结构监督。为实现这一点，作者提出可学习的`体素选择`方法，仅依靠二维渲染监督来识别以物体为中心的体素。整体是一个无需 3D 结构标注的端到端流程。"
+        },
+        {
+          "emoji": "📊",
+          "title": "实验结果",
+          "body": "作者在三个基准数据集上做了稀疏视角渲染实验，报告 VS-Splat 优于若干现有 SOTA 方法（具体指标数值详见原文）。此外还进一步验证了该模型作为 backbone 的有效性。"
+        },
+        {
+          "emoji": "⚠️",
+          "title": "局限与展望",
+          "body": "摘要未列出局限。作为物体级（object-centric）方法，其在完整大场景上的可扩展性、以及体素选择对场景类型的敏感性，是需要进一步确认的边界。以上为判断。"
+        }
+      ],
+      "figureNote": "以原文流程图为准。预期展示「输入少量图像 → 可学习体素选择 → 仅在选中体素内预测高斯原语 → 2D 渲染监督」的端到端回路。",
+      "figures": [
+        {
+          "file": "2609_12343-fig1.jpg",
+          "caption": "Fig. 1: Overview of the proposed framework vs. existing E2E feed-forward object reconstruction approaches in generalizable Gaussian splatting under a sparse-view setup. (a) Existing methods predict a ",
+          "kind": "pipeline"
+        }
+      ],
+      "authors": "Yunsu Jeong et al.",
+      "venue": "arXiv 2026.09 · Main paper: 10 pages, 4 figures. Appendix: 4 pages, 5 figure",
+      "venueLabel": "",
+      "awardLabel": "",
+      "instLabel": "",
+      "summary": "前馈式高斯泼溅能从几张照片直接重建三维物体，但现有方法在整片空间里均匀撒高斯点，大量点落在空无一物的区域，真正需要细节的地方反而不够密。VS-Splat 的做法是先判断哪些体素大概率属于物体，只在这些体素内预测高斯原语。关键是不需要任何三维结构标注，仅靠二维渲染监督就能学出这套选择机制，在三个基准的稀疏视角渲染上都优于现有方法。",
+      "paperUrl": "https://arxiv.org/abs/2609.12343",
+      "score": 0.55,
+      "scores": {
+        "innovation": 7,
+        "effectiveness": 7
+      },
+      "category": "前馈 3DGS × 稀疏视角",
+      "influence": "作者单位未在摘要中标注，以原文为准",
       "github": "",
       "stars": null,
-      "citedBy": null,
+      "citedBy": 0,
       "institutions": [],
       "figure": {
         "url": null,
         "caption": ""
       },
       "fields": {
-        "background": "arXiv 2026-09-09 新论文，主分类 cs.LG/cs.CV。3DGS 渲染缺少带覆盖率保证的不确定性度量。",
-        "task": "新视角合成的结构化保形预测：以至少 1-α 概率使 RGB 预测框覆盖新视图至少 1-β 比例的像素。",
-        "insight": "把保形尺度分解为「渲染器空间形状 + 可迁移视图难度因子」，结构化输出的视图级有效性与精确分析即可同时达成。",
-        "pipeline": "渲染器输出空间形状 → 视图难度因子预测最小视图级乘子 → 视图级留出分位数（View-CP）→ RGB 预测框。",
-        "methods": "保形尺度分解、视图级一致性得分、View-CP、跨场景迁移分析、过剩宽度分解。",
-        "experiment": "13 场景：像素池化视图事件覆盖 61.4% vs View-CP 91.7–92.0%（目标 90%）；等覆盖下省 22.1% 宽度；单模型=十模型集成（21.0%）；胜 3DGS-U 4.7 点（p=0.0225）；Mip-NeRF 360 九场景省 20.7%；RTX 4090 上 216–280 FPS。",
-        "limitation": "极端采集协议与动态场景的泛化未在摘要验证；依赖校准集视图覆盖。"
+        "background": "前馈高斯泼溅在三维空间中均匀放置原语，大量点落在非物体区域，损害细节表示效率。",
+        "task": "稀疏视角下的前馈高斯泼溅物体重建，且不依赖三维结构监督。",
+        "insight": "先用可学习体素选择筛出物体中心体素，再只在其中密集预测高斯原语，全程仅用二维渲染监督。",
+        "pipeline": "少量输入图像 → 可学习体素选择 → 选中体素内的高斯原语预测 → 二维渲染监督优化。",
+        "methods": "端到端前馈高斯泼溅框架；可学习体素选择；无 3D 结构监督。",
+        "experiment": "在三个基准数据集的稀疏视角渲染实验中优于若干 SOTA（数值详见原文）；并验证了作为 backbone 的有效性。",
+        "limitation": "摘要未列出局限；面向物体级的设定在完整大场景上的扩展性待验证。"
       }
     },
     {
-      "title": "Beyond Weak Labels: Prompt-Guided Local Refinement for Weakly Supervised Water Segmentation in High-Resolution Multispectral Imagery",
-      "titleZh": "弱标签不止于弱：提示引导局部精修的高分水体分割",
-      "hook": "官方矢量当老师，提示引导再补边界细节",
+      "title": "SUCCESS-GS: Survey of Compactness and Compression for Efficient Static and Dynamic Gaussian Splatting",
+      "titleZh": "SUCCESS-GS：3D/4D 高斯泼溅压缩与加速的首个统一综述",
+      "hook": "把 3DGS 与 4DGS 的高效化路线第一次收进同一张地图",
       "cards": [
         {
           "emoji": "🎯",
           "title": "问题与背景",
-          "body": "高分辨率多光谱影像的水体制图支撑环境监测，但像素级标注昂贵。官方水文矢量可作为可扩展的弱监督，却自带边界噪声、时间失配与小水体缺失等伪影。如何在不依赖精细标注的前提下修正这些系统性局部误差，是弱监督分割的现实痛点。"
+          "body": "3D 高斯泼溅已成为一种强大的显式表示，能够支持实时、高保真的三维重建与新视角合成。但其实际应用受制于存储与渲染数百万个高斯所需的巨大内存与算力开销；在 4D 动态场景中，这些问题会进一步加剧。因此「高效高斯泼溅」方向近年快速演进，但缺少统一的梳理。"
         },
         {
           "emoji": "⚙️",
           "title": "方法设计",
-          "body": "两阶段框架。`Stage 1` 以栅格化矢量伪标签训练，学习初始水体掩膜；`Stage 2` 将初始掩膜转换为结构化的逐组件提示（`component-wise prompts`），驱动局部化精修——针对伪标签误差呈局部性、全局训练监督难以捕捉的特点。精修面向边界溢出与细结构等局部误差。"
+          "body": "本文是一篇综述，提出对高效 3D 与 4D 高斯泼溅技术的首个统一概述。作者对两种设定分别把已有方法系统归入两大方向：`参数压缩`（Parameter Compression）与`重构压缩`（Restructuring Compression），并逐类总结其核心思想与方法论趋势。此外还覆盖了广泛使用的数据集、评价指标与代表性基准对比。"
         },
         {
           "emoji": "📊",
           "title": "实验结果",
-          "body": "在人工校正的验证集上，精修使 `SegFormer-B0` 的 IoU 从 0.9509 升至 0.9535，`U-Net` 从 0.9408 升至 0.9486；对应 F1 分别从 0.9749→0.9762 与 0.9695→0.9736。定性上获得更锐利的海岸线、更少的边界溢出与更好的细结构刻画。"
+          "body": "作为综述，本文不提出新方法，主要贡献是分类体系与基准汇总；具体的分类细节、数据统计与对比表格详见原文。"
         },
         {
           "emoji": "⚠️",
           "title": "局限与展望",
-          "body": "摘要未列明具体局限。伪标签的系统性遗漏（如极小水体、时相错配严重的区域）可能限制上限；IoU 增益为千分位量级，在更大区域或更差标注质量下的稳健性以原文为准。"
+          "body": "综述类工作通常受限于截稿时间点，快速演进的新方法可能未被纳入。摘要末尾提到会讨论未来方向（具体内容详见原文）。作为文献入口更合适，不宜直接当作方法选型依据。"
         }
       ],
-      "figureNote": "以原文流程图为准；预期展示：矢量伪标签栅格化 → Stage 1 全局弱监督初始掩膜 → 连通组件结构化提示 → Stage 2 局部精修输出。",
-      "figures": [],
-      "authors": "Muhammad Farhan Humayun et al.",
-      "venue": "arXiv 2026.09 · Accepted for presentation at ICIP Workshop 2026 and to be pu",
-      "summary": "高分辨率遥感影像里做水体制图，对环境监测很重要，但逐像素人工标注又贵又慢。官方水文矢量图可以当免费的\"弱标签\"大规模使用，可它毛病不少：边界噪声、时间不匹配、小水体漏标。这篇工作分两步走：第一阶段先拿栅格化的矢量伪标签学出初始水体掩膜；第二阶段把掩膜拆成结构化的连通组件，当作提示（`prompt`）喂给模型做局部精修。在人工校正的验证集上，`SegFormer-B0` 的 IoU 从 0.9509 提到 0.9535，`U-Net` 从 0.9408 提到 0.9486，海岸线更锐利、薄结构水体更清楚。",
-      "paperUrl": "https://arxiv.org/abs/2609.10371",
-      "score": 0.31,
+      "figureNote": "以原文流程图为准。预期是一张分类总览图，把 3D 与 4D 两类设定各自沿参数压缩 / 重构压缩两条主干展开。",
+      "figures": [
+        {
+          "file": "2512_07197-fig1.png",
+          "caption": "Figure 1 . Overview of the static 3D Gaussian Splatting (3DGS) pipeline. A scene is represented as a set of 3D Gaussians with attributes including position 𝝁 \\boldsymbol{\\mu} , scale 𝒔 \\boldsymbol{s} ",
+          "kind": "pipeline"
+        }
+      ],
+      "authors": "Youn, Seokhyun et al. · Chung-Ang University / Kyung Hee University",
+      "venue": "arXiv 2026.09 · The first three authors contributed equally to this work. Th",
+      "venueLabel": "",
+      "awardLabel": "",
+      "instLabel": "Chung-Ang University",
+      "summary": "3D 高斯泼溅虽然能实时高保真渲染，但动辄百万级高斯点带来的显存和算力开销让落地上限很低；到了 4D 动态场景，问题还要再放大一层。这篇综述把这几年「高效高斯泼溅」的工作第一次统一梳理了一遍，把方法分成参数压缩与重构压缩两条主线，并整理了常用数据集、评价指标和代表性基准对比，适合作为该方向的入门地图。",
+      "paperUrl": "https://arxiv.org/abs/2512.07197",
+      "score": 0.54,
+      "scores": {
+        "innovation": 5,
+        "effectiveness": 6
+      },
+      "category": "3DGS 综述 × 压缩加速",
+      "influence": "中央大学（Chung-Ang University）等合作；前三位作者贡献等同",
+      "github": "",
+      "stars": null,
+      "citedBy": 0,
+      "institutions": [
+        "Chung-Ang University",
+        "Kyung Hee University"
+      ],
+      "figure": {
+        "url": null,
+        "caption": ""
+      },
+      "fields": {
+        "background": "3DGS 的内存与算力开销巨大，4D 动态场景更严重，高效化方法快速涌现但缺乏统一梳理。",
+        "task": "对高效 3D 与 4D 高斯泼溅技术做首个统一综述。",
+        "insight": "以「参数压缩 / 重构压缩」两大类为主线，统一组织 3D 与 4D 两种设定下的方法体系。",
+        "pipeline": "文献归类 → 两大类方法展开 → 数据集与评价指标汇总 → 代表性基准对比 → 未来方向讨论。",
+        "methods": "综述性分类框架；参数压缩与重构压缩二分法；基准与指标梳理。",
+        "experiment": "无新实验；提供分类体系与代表性基准对比（详见原文）。",
+        "limitation": "受截稿时间限制可能遗漏最新工作，宜作文献地图而非选型结论。"
+      }
+    },
+    {
+      "title": "DRS-VPT: Directly Relocalizing in a Scan with Vision Point Transformers",
+      "titleZh": "DRS-VPT：把查询图像直接对齐到点云扫描里",
+      "hook": "一个模型同时搞定自动驾驶标定与室内重定位，还不用为每张地图单独训练",
+      "cards": [
+        {
+          "emoji": "🎯",
+          "title": "问题与背景",
+          "body": "图像到扫描（image-to-scan）配准是空间定位的基础问题：给定查询图像与参考三维点云，需要恢复扫描与相机之间的相对位姿。这类问题同时出现在自动驾驶的相机-LiDAR 标定与室内重定位等下游任务中，但既有方案往往针对单一任务或单一环境定制，泛化性与零样本迁移能力有限。"
+        },
+        {
+          "emoji": "⚙️",
+          "title": "方法设计",
+          "body": "DRS-VPT 是一个前馈 Transformer 架构，面向基础性的图像—扫描配准。给定查询图像与参考点云，模型预测扫描位姿与点图，以及每个相机的位姿与点图，全部表达在第一个相机的坐标系下。此外它还预测由粗到细的逐点与逐像素特征金字塔，用于把扫描直接重投影对齐到首帧图像。这一形式统一了相机-LiDAR 标定与室内相机到地图重定位等下游任务。"
+        },
+        {
+          "emoji": "📊",
+          "title": "实验结果",
+          "body": "单一 DRS-VPT 模型在自动驾驶的图像到 LiDAR 配准上达到 SOTA，在室内重定位上取得有竞争力的表现且无需训练地图特定权重，并展现出较强的零样本迁移能力（具体数据集与数值详见原文）。作者还定性地展示了模型学到了遮挡背面点等复杂扫描到图像的投影性质。"
+        },
+        {
+          "emoji": "⚠️",
+          "title": "局限与展望",
+          "body": "摘要未列出局限。可预期的边界包括：对点云质量与坐标系一致性的依赖、以及室内场景「有竞争力」但未必领先的定位精度。以上为判断，非作者结论。"
+        }
+      ],
+      "figureNote": "以原文流程图为准。应体现「查询图像 + 参考点云 → 共享编码器 → 位姿/点图与多尺度特征金字塔 → 重投影对齐」的单阶段前馈结构。",
+      "figures": [
+        {
+          "file": "2609_12557-fig1.jpg",
+          "caption": "Figure 2 : DRS-VPT architecture. Query images and a reference 3D point cloud are encoded using DINOv2 and a Sonata point transformer respectively. Their tokens are fused using a transformer with alter",
+          "kind": "pipeline"
+        }
+      ],
+      "authors": "Lanke Frank Tarimo Fu et al. · University of Oxford, Oxford OX2 6NN, United Kingdom",
+      "venue": "arXiv 2026.09",
+      "venueLabel": "",
+      "awardLabel": "",
+      "instLabel": "University of Oxford",
+      "summary": "手上有一份三维点云地图，想凭一张现场照片算出相机在其中的位置——这就是图像到扫描的配准问题。DRS-VPT 用一个前馈 Transformer 一次预测出扫描位姿、点图以及每个相机的位姿与点图，并额外给出由粗到细的特征金字塔用于重投影对齐。同一个模型既能做自动驾驶里的相机-LiDAR 标定，也能做室内相机到地图的重定位，而且不需要针对具体地图训练权重。",
+      "paperUrl": "https://arxiv.org/abs/2609.12557",
+      "score": 0.52,
+      "scores": {
+        "innovation": 7,
+        "effectiveness": 7
+      },
+      "category": "图像-点云配准 × 前馈几何",
+      "influence": "牛津大学（University of Oxford）团队",
+      "github": "",
+      "stars": null,
+      "citedBy": null,
+      "institutions": [
+        "University of Oxford, Oxford OX2 6NN, United Kingdom"
+      ],
+      "figure": {
+        "url": null,
+        "caption": ""
+      },
+      "fields": {
+        "background": "图像到点云扫描的配准是相机-LiDAR 标定与室内重定位的共同基础，既有方案多针对单任务或单环境定制。",
+        "task": "基础性的 image-to-scan 配准：从查询图像与参考点云恢复扫描位姿与相机位姿。",
+        "insight": "用统一的前馈 Transformer 在首相机坐标系下同时输出扫描位姿、点图与多尺度特征金字塔，直接重投影对齐。",
+        "pipeline": "查询图像 + 参考点云 → 前馈 Transformer → 扫描/相机位姿与点图 + 由粗到细特征金字塔 → 重投影对齐。",
+        "methods": "前馈 Transformer；统一的首相机坐标系表达；逐点/逐像素特征金字塔；无需地图特定权重。",
+        "experiment": "自动驾驶图像到 LiDAR 配准达 SOTA；室内重定位有竞争力且免地图特定训练；零样本迁移表现强（数值详见原文）。",
+        "limitation": "摘要未列出局限；对点云质量与配准精度的边界条件需查原文。"
+      }
+    },
+    {
+      "title": "SpatialBlock: Enhancing Spatial Intelligence in LVLMs via Synthetic Block-Stacking Problem",
+      "titleZh": "SpatialBlock：用积木题给多模态大模型补空间感",
+      "hook": "不标一个 3D 点，1.5 万道合成积木题就能提升空间推理",
+      "cards": [
+        {
+          "emoji": "🎯",
+          "title": "问题与背景",
+          "body": "大型视觉语言模型（LVLMs）在多种视觉任务上表现强劲，但在重建与推理二维图像所描绘的三维场景结构——即所谓空间智能——方面仍存在明显局限。现有方法尝试用真实场景的空间问答数据集来弥补，但这类数据需要稠密几何标注，构建成本高、耗时长，且因依赖外部感知模块而常常带有噪声。"
+        },
+        {
+          "emoji": "⚙️",
+          "title": "方法设计",
+          "body": "作者提出一种受人类认知发展启发的新范式：通过学习结构化的积木操作任务来掌握基础空间技能。为此构建了 `SpatialBlock-15k` 合成数据集，包含 15,000 道积木堆叠问题，覆盖三维到二维投影、视角变换与结构组合三类能力。数据集还引入了受控的颜色调制作为视觉线索，用于在视觉复杂条件下鼓励基于锚点的推理。"
+        },
+        {
+          "emoji": "📊",
+          "title": "实验结果",
+          "body": "摘要在此处截断，未给出具体基准名称与提升幅度，训练与评测结果详见原文。摘要可确认的量化信息是数据集规模：15,000 道合成问题。"
+        },
+        {
+          "emoji": "⚠️",
+          "title": "局限与展望",
+          "body": "合成数据与真实场景之间存在域差距，积木任务学到的空间技能能否迁移到自然图像中的复杂三维推理，是需要验证的关键点。此外摘要未给出评测结果，实际增益幅度尚不明确。以上为判断。"
+        }
+      ],
+      "figureNote": "以原文流程图为准。预期展示「积木堆叠任务生成 → SpatialBlock-15k（投影/视角/组合）→ 颜色线索注入 → LVLM 空间能力训练与评测」的数据流水线。",
+      "figures": [
+        {
+          "file": "2609_07064-fig1.png",
+          "caption": "Figure 1: Performance Gap Between Humans and LVLMs in Block-Stacking Problem . The top row shows a block-stacking task that requires predicting a 2D projection from a given 3D structure. While humans ",
+          "kind": "other"
+        }
+      ],
+      "authors": "Soohyun Ryu et al. · KAIST / South Korea",
+      "venue": "arXiv 2026.09",
+      "venueLabel": "",
+      "awardLabel": "",
+      "instLabel": "KAIST",
+      "summary": "多模态大模型看图很在行，但让它判断图里物体的三维结构关系就常常答错。现有做法依赖真实场景的空间问答数据，而这类标注需要稠密几何信息，既贵又噪。SpatialBlock 换了个思路：向人类儿童认知发展取经，用积木堆叠这类结构化任务来训练基础空间技能，构建了 1.5 万道题的合成数据集，覆盖三维到二维投影、视角变换与结构组合。",
+      "paperUrl": "https://arxiv.org/abs/2609.07064",
+      "score": 0.51,
       "scores": {
         "innovation": 6,
         "effectiveness": 6
       },
-      "category": "遥感 × 弱监督分割",
-      "influence": "ICIP Workshop 2026 接收报告 · 新论文：团队信息以原文为准",
-      "github": "",
-      "stars": null,
-      "citedBy": null,
-      "institutions": [],
-      "figure": {
-        "url": null,
-        "caption": ""
-      },
-      "fields": {
-        "background": "arXiv 2026-09-09 新论文，主分类 cs.CV；ICIP Workshop 2026 接收。",
-        "task": "高分辨率多光谱影像的弱监督水体分割：利用官方水文矢量伪标签，无需精细像素标注。",
-        "insight": "伪标签误差呈局部性；将初始掩膜转为结构化逐组件提示做局部精修，可修正全局监督难以捕捉的局部误差。",
-        "pipeline": "官方矢量 → 栅格化伪标签 → Stage 1 初始掩膜 → 结构化组件提示 → Stage 2 局部精修 → 精修水体图。",
-        "methods": "两阶段弱监督、矢量伪标签、组件级提示引导精修、人工校正验证集。",
-        "experiment": "SegFormer-B0 IoU 0.9509→0.9535、U-Net 0.9408→0.9486；F1 0.9749→0.9762、0.9695→0.9736；海岸线更锐利、边界溢出更少。",
-        "limitation": "伪标签系统性遗漏限制上限；增益幅度较小；更大范围稳健性以原文为准。"
-      }
-    },
-    {
-      "title": "Fortunate Recall: Ontology-Driven Memory Lifecycle Management for Persistent Coherence in LLMs",
-      "titleZh": "Fortunate Recall：给 LLM 记忆装上分类生命周期管理",
-      "hook": "记忆不该一刀切：按事实类型定生老病死",
-      "cards": [
-        {
-          "emoji": "🎯",
-          "title": "问题与背景",
-          "body": "LLM 记忆系统对所有个人事实同质处理，导致存储无界增长与检索精度退化。核心挑战在生命周期管理：记忆的持久、替换与淘汰速率应取决于事实的行为类型（偏好会变、事件有有效期、关系有结构），而现有系统缺乏类型化机制。"
-        },
-        {
-          "emoji": "⚙️",
-          "title": "方法设计",
-          "body": "`Fortunate Recall (FR)` 是可组合的策略层：将个人事实分类进 `10+1` 行为本体，并施加类别专属生命周期策略——差分时间衰减、槽位键替代（`slot-key supersession`）、事件时间有效期与类别感知检索路由，均为 `LLM` 抽取元数据上的确定性函数。`FR-Bank` 是其基础设施无关实现。"
-        },
-        {
-          "emoji": "📊",
-          "title": "实验结果",
-          "body": "`LifecycleBench`（新 516 题时序消歧基准）上 `FR-Bank` 通过率 76.9%，高于 Mem0、A-MEM、Memory-R1、MemoryOS（61%–70.5%）；`LongMemEval-S` 全集 75.2%（Wu et al. 判定协议）。预注册消融定位收益来源：换成三个通用生命周期原语后正确性几乎不变（-1.7pp，95% CI [-6.0, +2.7]），而行为本体承担校准收益——下游幻觉减半（12.0% vs 24.2%，p<0.001）。端到端幻觉率从 Mem0 的 45.1% 降至 22.4%（全部查询 32.2%→13.0%），且答对更多（31.2% vs 18.6%）；排序在开源权重 Kimi K2.5 上复现；独立基准 `BEAM` 上 46.8% vs Mem0 的 32.9%（280 题）。"
-        },
-        {
-          "emoji": "⚠️",
-          "title": "局限与展望",
-          "body": "本体收益集中在矛盾消解，且约在七个策略簇附近饱和；整体依赖 LLM 元数据抽取的质量。对超长会话、多人共享记忆等更复杂场景的扩展性以原文为准。"
-        }
+      "category": "LVLM 空间智能 × 合成数据",
+      "influence": "KAIST（韩国科学技术院）",
+      "github": "https://github.com/rsoohyun/SpatialBlock",
+      "stars": 5,
+      "citedBy": 0,
+      "institutions": [
+        "KAIST",
+        "South Korea",
+        "Eunho Yang"
       ],
-      "figureNote": "以原文流程图为准；预期展示：个人事实 → LLM 抽取元数据 → 10+1 行为本体分类 → 类别专属生命周期策略（差分衰减/槽位替代/事件时间有效期/检索路由）→ 持久一致的记忆库。",
-      "figures": [],
-      "authors": "Ansuman Mullick et al.",
-      "venue": "arXiv 2026.09 · Preprint, under review. 2 figures. Code, benchmark and run l",
-      "summary": "大模型的记忆系统把所有个人信息一视同仁地存着，结果库越滚越大、检索精度越来越差。真正的问题是生命周期管理：哪些记忆该留、哪些该被顶替、按什么速率淘汰——这得看事实的\"行为类型\"。这篇工作把个人事实分进一个 10+1 类的行为本体，再对每类套专属策略：差分时间衰减、槽位键替代、事件时间有效期、按类别路由检索，全部是 `LLM` 抽取元数据上的确定性函数。新基准 `LifecycleBench`（516 题时序消歧）上拿到 76.9% 通过率，端到端把幻觉率从 Mem0 的 45.1% 压到 22.4%。",
-      "paperUrl": "https://arxiv.org/abs/2609.10413",
-      "score": 0.3,
-      "scores": {
-        "innovation": 8,
-        "effectiveness": 8
-      },
-      "category": "LLM 记忆 × 生命周期管理",
-      "influence": "本体、基准与代码开源 · 新论文：团队信息以原文为准",
-      "github": "",
-      "stars": null,
-      "citedBy": null,
-      "institutions": [],
       "figure": {
         "url": null,
         "caption": ""
       },
       "fields": {
-        "background": "arXiv 2026-09-09 新论文，主分类 cs.AI。LLM 记忆无界增长与检索退化。",
-        "task": "记忆生命周期管理：依据事实的行为类型决定持久/替换/淘汰速率，保持长期一致性。",
-        "insight": "正确性收益来自通用生命周期元数据，校准（幻觉抑制）收益来自行为本体——两层收益解耦。",
-        "pipeline": "个人事实 → LLM 元数据抽取 → 10+1 行为本体分类 → 类别专属策略（差分衰减/槽位替代/事件时间有效期/检索路由）→ 持久一致记忆。",
-        "methods": "可组合策略层、10+1 行为本体、确定性生命周期函数、LifecycleBench 评测、预注册消融。",
-        "experiment": "LifecycleBench 76.9%（对比 61–70.5%）；LongMemEval-S 75.2%；端到端幻觉 45.1%→22.4%；BEAM 46.8% vs 32.9%；Kimi K2.5 上复现排序。",
-        "limitation": "收益集中于矛盾消解、约七个策略簇附近饱和；依赖元数据抽取质量。"
+        "background": "LVLM 的空间智能受限，既有真实场景空间问答数据依赖稠密几何标注，成本高且有噪声。",
+        "task": "通过结构化积木任务提升 LVLM 对三维结构的重建与推理能力。",
+        "insight": "借鉴人类认知发展，用合成积木操作任务替代稠密几何标注，学习基础空间技能。",
+        "pipeline": "积木堆叠问题生成 → SpatialBlock-15k 数据集（3D→2D 投影 / 视角变换 / 结构组合）→ 颜色调制线索 → 模型训练。",
+        "methods": "合成数据范式；SpatialBlock-15k（15,000 题）；受控颜色调制作为锚点式推理线索。",
+        "experiment": "数据集规模 15,000 题；评测结果摘要未给出，详见原文。",
+        "limitation": "合成与真实场景存在域差距，空间技能向自然图像迁移的效果待验证。"
       }
     }
   ],

@@ -1,331 +1,523 @@
 [
-  {
-    "title": "World in World: Explore the World with World Models",
-    "title_zh": "World in World: Explore the World with World Models（直译待润色）",
-    "hook": "新鲜出炉：详情以原文为准",
-    "cards": [
-      {
-        "emoji": "🎯",
-        "title": "问题与背景",
-        "body": "研究问题与背景以原文 Abstract/Introduction 为准（LLM 精读后补全专业表述）。"
-      },
-      {
-        "emoji": "⚙️",
-        "title": "方法设计",
-        "body": "方法与模块拆解以原文 Method 为准（待 LLM 精读补全）。"
-      },
-      {
-        "emoji": "📊",
-        "title": "实验结果",
-        "body": "数据集、指标与 SOTA 对比详见原文 Experiments（数字以原文为准）。"
-      },
-      {
-        "emoji": "⚠️",
-        "title": "局限与展望",
-        "body": "局限以原文 Limitation/Discussion 为准。"
-      }
-    ],
-    "figure_note": "以原文流程图为准。",
-    "figures": [],
-    "authors": "C et al.",
-    "venue": "arXiv 2026.09",
-    "summary": "本文属 4DGS / Dynamic GS × Video Diffusion / World Model 方向。任务概述：Autoregressive video world models enable interactive, long-horizon exploration, but flexible control remains challenging. Exploring a source video from new viewpoints requires the generated rollout to remain synchronised with the recorded event, place observed content in the requested view, plausibl 方法与实验结论以原文为准（LLM 精读后自动补全中文导读）。",
-    "paper_url": "https://arxiv.org/abs/2609.11548",
-    "score": 0.54,
-    "scores": {
-      "innovation": 7,
-      "effectiveness": 7,
-      "note": "启发式估计（LLM 未出分），仅供参考"
-    },
-    "category": "4DGS / Dynamic GS × Video Diffusion / World Model",
-    "influence": "新论文：作者影响力标注待补充",
-    "figure_url": null,
-    "figure_caption": "",
-    "fields": {
-      "background": "arXiv 新_submission（2026-09-10），主分类 。",
-      "task": "Autoregressive video world models enable interactive, long-horizon exploration, but flexible control remains challenging. Exploring a source video from new viewpoints requires the generated rollout to remain synchronised with the recorded event, place observed content in the requested view, plausibl",
-      "insight": "核心洞察以原文 Abstract/Method 为准（待 LLM 精读补全）。",
-      "pipeline": "I/O 与模块拆解待 LLM 精读填充；以原文 Method 部分与流程图为准。",
-      "methods": "方法细节以原文为准。",
-      "experiment": "实验数据集与消融详见原文 Experiments（数字以原文为准）。",
-      "limitation": "局限以原文 Limitation/Discussion 为准。"
-    },
-    "cited_by": 0,
-    "github": "https://github.com/datainsightat/introduction_llm",
-    "stars": 75
+ {
+  "title": "AnyView: Synthesizing Any Novel View in Dynamic Scenes",
+  "title_zh": "AnyView：让动态场景的任意新视角都能被生成出来",
+  "hook": "不依赖几何假设，扩散模型也能在剧烈动态场景里自由换视角",
+  "cards": [
+   {
+    "emoji": "🎯",
+    "title": "问题与背景",
+    "body": "生成式视频模型能产出逼真画面，但在高度动态的真实环境里难以维持多视图与时空一致性。传统动态视角合成依赖显式几何（如动态高斯、变形场）与较强制导假设，一旦场景运动剧烈、监督信号稀缺，重建与渲染都会失稳。如何在尽量少的几何归纳偏置下获得跨视角、跨时间的稳定生成，是本文要解决的核心矛盾。"
+   },
+   {
+    "emoji": "⚙️",
+    "title": "方法设计",
+    "body": "AnyView 是一套基于扩散的视频生成框架，面向 `dynamic view synthesis`。它把单目（2D）、多视图静态（3D）、多视图动态（4D）三类监督层级不同的数据统一起来，训练一个通用的时空隐式表示（generalist spatiotemporal implicit representation），使其能从任意相机位置与轨迹零样本产出新视角视频。框架刻意保持最小归纳偏置与几何假设，把一致性交给数据驱动的表示学习。"
+   },
+   {
+    "emoji": "📊",
+    "title": "实验结果",
+    "body": "作者在标准基准上与当前 SOTA 进行了对比，报告了具竞争力的结果（具体指标数值详见原文）。此外提出 `AnyViewBench`，专门面向多样真实场景中的「极端」动态视角合成；在这一更严苛的设定下，作者观察到现有方法的表现出现明显下滑，用于说明该问题尚未被解决。"
+   },
+   {
+    "emoji": "⚠️",
+    "title": "局限与展望",
+    "body": "摘要指出在极端动态场景中，即便最强的方法也会失效（原文以「we find that...」引出，具体结论详见原文）。这类纯数据驱动的生成式方法通常还受限于训练数据的动态覆盖度与算力开销；`AnyViewBench` 本身也可视作对社区的一次挑战发布。"
+   }
+  ],
+  "figure_note": "以原文流程图为准。整体应是「多源数据 → 通用时空隐式表示 → 扩散式视频生成 → 任意轨迹新视角」的链路，图中会标出 2D/3D/4D 三类监督如何汇入同一表示。",
+  "figures": [
+   {
+    "file": "2601_16982-fig1.jpg",
+    "caption": "Figure 2 : The AnyView architecture. For both the clean input and noisy target videos, we concatenate pixels (RGB values) and camera information (Plücker vectors) belonging to the same viewpoint along",
+    "kind": "pipeline"
+   }
+  ],
+  "authors": "Basile Van Hoorick et al. · Toyota Research Institute, CA, USA / Amazon Web Services, CA, USA",
+  "venue": "arXiv 2026.09 · Project webpage: this https URL",
+  "summary": "手机拍一段人来人往的街景，想换个机位重看一遍——这在静态场景已经能做，但一到人流、车流剧烈变化就崩。AnyView 把这件事交给扩散式视频生成模型，尽量不预设几何假设，只用「单目 2D + 多视图静态 3D + 多视图动态 4D」三类不同监督层级的数据，训练出一个通用的时空隐式表示，从而在任意相机位置与轨迹上零样本生成新视角视频。作者还构建了面向极端动态场景的新基准 `AnyViewBench`，用来暴露当前方法在这种更剧烈设定下的短板。",
+  "paper_url": "https://arxiv.org/abs/2601.16982",
+  "score": 0.83,
+  "scores": {
+   "innovation": 8,
+   "effectiveness": 7
   },
-  {
-    "title": "FreeFlow: A Bias-free Hierarchical Transformer for Optical Flow Estimation",
-    "title_zh": "FreeFlow: A Bias-free Hierarchical Transformer for Optical F（直译待润色）",
-    "hook": "新鲜出炉：详情以原文为准",
-    "cards": [
-      {
-        "emoji": "🎯",
-        "title": "问题与背景",
-        "body": "研究问题与背景以原文 Abstract/Introduction 为准（LLM 精读后补全专业表述）。"
-      },
-      {
-        "emoji": "⚙️",
-        "title": "方法设计",
-        "body": "方法与模块拆解以原文 Method 为准（待 LLM 精读补全）。"
-      },
-      {
-        "emoji": "📊",
-        "title": "实验结果",
-        "body": "数据集、指标与 SOTA 对比详见原文 Experiments（数字以原文为准）。"
-      },
-      {
-        "emoji": "⚠️",
-        "title": "局限与展望",
-        "body": "局限以原文 Limitation/Discussion 为准。"
-      }
-    ],
-    "figure_note": "以原文流程图为准。",
-    "figures": [],
-    "authors": "V et al.",
-    "venue": "arXiv 2026.09",
-    "summary": "本文属 Feed-forward 3D Geometry × 3D Vision Adjacent 方向。任务概述：Optical flow methods typically rely on task-specific inductive biases, such as correlation volumes, feature warping, and iterative refinement, among others, to reach high accuracy. While effective, such biases constrain the model to predefined heuristics, which can limit its expressivity and lead to 方法与实验结论以原文为准（LLM 精读后自动补全中文导读）。",
-    "paper_url": "https://arxiv.org/abs/2609.11486",
-    "score": 0.51,
-    "scores": {
-      "innovation": 7,
-      "effectiveness": 7,
-      "note": "启发式估计（LLM 未出分），仅供参考"
-    },
-    "category": "Feed-forward 3D Geometry × 3D Vision Adjacent",
-    "influence": "HF upvote 34 · 新论文：作者影响力标注待补充",
-    "figure_url": null,
-    "figure_caption": "",
-    "fields": {
-      "background": "arXiv 新_submission（2026-09-10），主分类 。",
-      "task": "Optical flow methods typically rely on task-specific inductive biases, such as correlation volumes, feature warping, and iterative refinement, among others, to reach high accuracy. While effective, such biases constrain the model to predefined heuristics, which can limit its expressivity and lead to",
-      "insight": "核心洞察以原文 Abstract/Method 为准（待 LLM 精读补全）。",
-      "pipeline": "I/O 与模块拆解待 LLM 精读填充；以原文 Method 部分与流程图为准。",
-      "methods": "方法细节以原文为准。",
-      "experiment": "实验数据集与消融详见原文 Experiments（数字以原文为准）。",
-      "limitation": "局限以原文 Limitation/Discussion 为准。"
-    },
-    "github": "https://github.com/msu-video-group/freeflow",
-    "stars": 13
+  "category": "4D 动态视角合成 × 扩散生成",
+  "influence": "Toyota Research Institute 与 Amazon 合作出品",
+  "figure_url": null,
+  "figure_caption": "",
+  "fields": {
+   "background": "生成式视频模型在动态真实环境中的多视图与时空一致性不足，显式几何方法在剧烈动态下失稳。",
+   "task": "动态视角合成（dynamic view synthesis）：从任意相机位置与轨迹零样本生成新视角视频。",
+   "insight": "用「单目 2D / 多视图静态 3D / 多视图动态 4D」多级监督训练通用时空隐式表示，尽量不引入几何归纳偏置。",
+   "pipeline": "多源数据混合训练 → 时空隐式表示 → 扩散式视频生成 → 任意轨迹新视角输出，另附 AnyViewBench 评测。",
+   "methods": "扩散式视频生成框架；最小归纳偏置与几何假设；多层级监督数据的联合训练；配套极端动态基准 AnyViewBench。",
+   "experiment": "在标准基准上与 SOTA 对比取得有竞争力结果（数值详见原文）；在 AnyViewBench 极端动态设定下方法普遍退化。",
+   "limitation": "极端动态场景仍难以处理；依赖大规模多源训练数据；摘要未给出完整的失败模式分析。"
   },
-  {
-    "title": "Scaling Automatic Research Agents via World Models",
-    "title_zh": "Scaling Automatic Research Agents via World Models（直译待润色）",
-    "hook": "新鲜出炉：详情以原文为准",
-    "cards": [
-      {
-        "emoji": "🎯",
-        "title": "问题与背景",
-        "body": "研究问题与背景以原文 Abstract/Introduction 为准（LLM 精读后补全专业表述）。"
-      },
-      {
-        "emoji": "⚙️",
-        "title": "方法设计",
-        "body": "方法与模块拆解以原文 Method 为准（待 LLM 精读补全）。"
-      },
-      {
-        "emoji": "📊",
-        "title": "实验结果",
-        "body": "数据集、指标与 SOTA 对比详见原文 Experiments（数字以原文为准）。"
-      },
-      {
-        "emoji": "⚠️",
-        "title": "局限与展望",
-        "body": "局限以原文 Limitation/Discussion 为准。"
-      }
-    ],
-    "figure_note": "以原文流程图为准。",
-    "figures": [],
-    "authors": "X et al.",
-    "venue": "arXiv 2026.08",
-    "summary": "本文属 3D Vision Adjacent 方向。任务概述：Automating empirical research is a long-standing direction of AI. Recent automatic research (AutoResearch) agents bring this goal within reach, as modern LLMs show the capability to independently implement solutions and learn from the execution outcomes. 方法与实验结论以原文为准（LLM 精读后自动补全中文导读）。",
-    "paper_url": "https://arxiv.org/abs/2608.12564",
-    "score": 0.35,
-    "scores": {
-      "innovation": 7,
-      "effectiveness": 7,
-      "note": "启发式估计（LLM 未出分），仅供参考"
-    },
-    "category": "3D Vision Adjacent",
-    "influence": "HF upvote 448 · 新论文：作者影响力标注待补充",
-    "figure_url": null,
-    "figure_caption": "",
-    "fields": {
-      "background": "arXiv 新_submission（2026-08-29），主分类 。",
-      "task": "Automating empirical research is a long-standing direction of AI. Recent automatic research (AutoResearch) agents bring this goal within reach, as modern LLMs show the capability to independently implement solutions and learn from the execution outcomes.",
-      "insight": "核心洞察以原文 Abstract/Method 为准（待 LLM 精读补全）。",
-      "pipeline": "I/O 与模块拆解待 LLM 精读填充；以原文 Method 部分与流程图为准。",
-      "methods": "方法细节以原文为准。",
-      "experiment": "实验数据集与消融详见原文 Experiments（数字以原文为准）。",
-      "limitation": "局限以原文 Limitation/Discussion 为准。"
-    },
-    "cited_by": 0,
-    "github": "https://github.com/xiyuanyang45/WMRL",
-    "stars": 20
+  "venue_label": "",
+  "award_label": "",
+  "inst_label": "Amazon",
+  "cited_by": 0,
+  "github": "https://github.com/TRI-ML/AnyView-DVS",
+  "stars": 5,
+  "institutions": [
+   "Toyota Research Institute, CA, USA",
+   "Amazon Web Services, CA, USA"
+  ]
+ },
+ {
+  "title": "NOVA-GS: Noise-Aware View-Consistent Gaussian Splatting for Low-Light Novel View Synthesis",
+  "title_zh": "NOVA-GS：让低光场景也能稳定重建的高斯泼溅",
+  "hook": "不用 SfM、不用先拍一张亮图，退化输入直接出位姿与几何",
+  "cards": [
+   {
+    "emoji": "🎯",
+    "title": "问题与背景",
+    "body": "真实低光条件下的三维重建面临严重传感器噪声、低信噪比与光度一致性退化，会同时破坏几何估计与新视角合成。现有路线有两条明显的两难：一是依赖光照良好的参考数据来获得可靠的 `SfM` 初始化，在退化输入下不可用；二是对每个视图单独做增强，但逐视图处理会引入跨视图不一致。"
+   },
+   {
+    "emoji": "⚙️",
+    "title": "方法设计",
+    "body": "NOVA-GS 是一个统一的噪声感知低光 3D 高斯泼溅框架，把增强、去噪与几何优化纳入单一过程。它利用 `VGGT` 前馈估计从退化输入直接获得稳健的相机位姿与几何，从而免去 `SfM` 初始化。在此基础上集成三个耦合组件：结构感知增强模块负责曝光校正，自监督去噪模块处理噪声（摘要在此处截断，其余组件与细节详见原文）。"
+   },
+   {
+    "emoji": "📊",
+    "title": "实验结果",
+    "body": "摘要未给出具体数据集名称与数值指标，建议以原文为准。可作为质量旁证的是：该工作被 CVPR 2026 的 3D4S Workshop 接收并获最佳论文（Best Paper Award）。"
+   },
+   {
+    "emoji": "⚠️",
+    "title": "局限与展望",
+    "body": "摘要未明确列出局限。从方法形态推断：整条链路依赖 VGGT 前馈估计的先验能力，若退化程度超出其训练分布可能受影响；免 SfM 的位姿精度上限也值得关注。以上为判断，非作者结论。"
+   }
+  ],
+  "figure_note": "以原文流程图为准。预期依次为「退化输入 → VGGT 前馈位姿/几何初始化 → 结构感知增强 + 自监督去噪 → 高斯泼溅优化」，三个模块之间应存在耦合迭代关系。",
+  "figures": [
+   {
+    "file": "2609_12682-fig1.jpg",
+    "caption": "Figure 1 : Overview of our proposed unified optimization framework (NOVA-GS). Given low-light inputs, our pipeline concurrently performs preliminary denoising and enhances in enhancement module, self-",
+    "kind": "pipeline"
+   }
+  ],
+  "authors": "Shaurya Pavan A et al. · Indian Institute of Technology Madras / Abstract",
+  "venue": "arXiv 2026.09 · Accepted to the 3D4S Workshop at CVPR 2026; selected for the",
+  "summary": "夜里或暗光下拍的照片噪点大、亮度低，普通三维重建方法连相机位姿都算不准——因为它们的初始化步骤依赖清晰图像。NOVA-GS 干脆跳过这个步骤：用 VGGT 这类前馈模型直接从退化图像里估出相机位姿和几何，再把「提亮、去噪、几何优化」放进同一个过程里一起做，避免逐张增强带来的跨视角不一致。该工作被 CVPR 2026 的 3D4S Workshop 选为最佳论文。",
+  "paper_url": "https://arxiv.org/abs/2609.12682",
+  "score": 0.78,
+  "scores": {
+   "innovation": 7,
+   "effectiveness": 7
   },
-  {
-    "title": "SpatialBlock: Enhancing Spatial Intelligence in LVLMs via Synthetic Block-Stacking Problem",
-    "title_zh": "SpatialBlock: Enhancing Spatial Intelligence in LVLMs via Sy（直译待润色）",
-    "hook": "新鲜出炉：详情以原文为准",
-    "cards": [
-      {
-        "emoji": "🎯",
-        "title": "问题与背景",
-        "body": "研究问题与背景以原文 Abstract/Introduction 为准（LLM 精读后补全专业表述）。"
-      },
-      {
-        "emoji": "⚙️",
-        "title": "方法设计",
-        "body": "方法与模块拆解以原文 Method 为准（待 LLM 精读补全）。"
-      },
-      {
-        "emoji": "📊",
-        "title": "实验结果",
-        "body": "数据集、指标与 SOTA 对比详见原文 Experiments（数字以原文为准）。"
-      },
-      {
-        "emoji": "⚠️",
-        "title": "局限与展望",
-        "body": "局限以原文 Limitation/Discussion 为准。"
-      }
-    ],
-    "figure_note": "以原文流程图为准。",
-    "figures": [],
-    "authors": "S et al.",
-    "venue": "arXiv 2026.09",
-    "summary": "本文属 3D Vision Adjacent 方向。任务概述：Large Vision-Language Models (LVLMs) have achieved strong performance on diverse visual tasks, yet their ability to reconstruct and reason about the 3D structure of the scene depicted in 2D images -- referred to as spatial intelligence -- remains limited. Existing approaches attempt to address this  方法与实验结论以原文为准（LLM 精读后自动补全中文导读）。",
-    "paper_url": "https://arxiv.org/abs/2609.07064",
-    "score": 0.35,
-    "scores": {
-      "innovation": 7,
-      "effectiveness": 7,
-      "note": "启发式估计（LLM 未出分），仅供参考"
-    },
-    "category": "3D Vision Adjacent",
-    "influence": "HF upvote 133 · 新论文：作者影响力标注待补充",
-    "figure_url": null,
-    "figure_caption": "",
-    "fields": {
-      "background": "arXiv 新_submission（2026-09-07），主分类 。",
-      "task": "Large Vision-Language Models (LVLMs) have achieved strong performance on diverse visual tasks, yet their ability to reconstruct and reason about the 3D structure of the scene depicted in 2D images -- referred to as spatial intelligence -- remains limited. Existing approaches attempt to address this ",
-      "insight": "核心洞察以原文 Abstract/Method 为准（待 LLM 精读补全）。",
-      "pipeline": "I/O 与模块拆解待 LLM 精读填充；以原文 Method 部分与流程图为准。",
-      "methods": "方法细节以原文为准。",
-      "experiment": "实验数据集与消融详见原文 Experiments（数字以原文为准）。",
-      "limitation": "局限以原文 Limitation/Discussion 为准。"
-    },
-    "cited_by": 0,
-    "github": "https://github.com/rsoohyun/SpatialBlock",
-    "stars": 5
+  "category": "3DGS × 低光重建",
+  "influence": "CVPR 2026 3D4S Workshop 最佳论文；印度理工学院马德拉斯分校（IIT Madras）",
+  "figure_url": null,
+  "figure_caption": "",
+  "fields": {
+   "background": "低光场景存在严重噪声与光度退化，破坏几何估计与新视角合成。",
+   "task": "低光条件下的 3D 高斯泼溅重建与新视角合成。",
+   "insight": "用前馈模型替代 SfM 初始化，并把增强、去噪、几何优化统一在单过程内，规避逐视图增强导致的不一致。",
+   "pipeline": "退化输入 → VGGT 前馈估计位姿与几何 → 结构感知增强 / 自监督去噪 → 高斯泼溅几何优化。",
+   "methods": "统一噪声感知框架；VGGT 前馈相机位姿与几何估计；结构感知曝光校正模块；自监督去噪模块。",
+   "experiment": "摘要未给出数据集与指标数值，以原文为准；佐证为该工作获 CVPR 2026 3D4S Workshop 最佳论文。",
+   "limitation": "摘要未列出局限；对前馈估计先验的依赖与免 SfM 位姿精度上限值得后续验证。"
   },
-  {
-    "title": "Recursive Code World Models: Building Complex Worlds through Recursive Scene Programs",
-    "title_zh": "Recursive Code World Models: Building Complex Worlds through（直译待润色）",
-    "hook": "新鲜出炉：详情以原文为准",
-    "cards": [
-      {
-        "emoji": "🎯",
-        "title": "问题与背景",
-        "body": "研究问题与背景以原文 Abstract/Introduction 为准（LLM 精读后补全专业表述）。"
-      },
-      {
-        "emoji": "⚙️",
-        "title": "方法设计",
-        "body": "方法与模块拆解以原文 Method 为准（待 LLM 精读补全）。"
-      },
-      {
-        "emoji": "📊",
-        "title": "实验结果",
-        "body": "数据集、指标与 SOTA 对比详见原文 Experiments（数字以原文为准）。"
-      },
-      {
-        "emoji": "⚠️",
-        "title": "局限与展望",
-        "body": "局限以原文 Limitation/Discussion 为准。"
-      }
-    ],
-    "figure_note": "以原文流程图为准。",
-    "figures": [],
-    "authors": "Z et al.",
-    "venue": "arXiv 2026.09",
-    "summary": "本文属 3D Vision Adjacent 方向。任务概述：Code world models represent worlds as executable programs, but this representation alone does not determine how to construct a complex world. We introduce Recursive Code World Models (RCWM), a framework for reconstructing complex 3D worlds in code from a single reference image. 方法与实验结论以原文为准（LLM 精读后自动补全中文导读）。",
-    "paper_url": "https://arxiv.org/abs/2609.11499",
-    "score": 0.26,
-    "scores": {
-      "innovation": 6,
-      "effectiveness": 6,
-      "note": "启发式估计（LLM 未出分），仅供参考"
-    },
-    "category": "3D Vision Adjacent",
-    "influence": "新论文：作者影响力标注待补充",
-    "figure_url": null,
-    "figure_caption": "",
-    "fields": {
-      "background": "arXiv 新_submission（2026-09-10），主分类 。",
-      "task": "Code world models represent worlds as executable programs, but this representation alone does not determine how to construct a complex world. We introduce Recursive Code World Models (RCWM), a framework for reconstructing complex 3D worlds in code from a single reference image.",
-      "insight": "核心洞察以原文 Abstract/Method 为准（待 LLM 精读补全）。",
-      "pipeline": "I/O 与模块拆解待 LLM 精读填充；以原文 Method 部分与流程图为准。",
-      "methods": "方法细节以原文为准。",
-      "experiment": "实验数据集与消融详见原文 Experiments（数字以原文为准）。",
-      "limitation": "局限以原文 Limitation/Discussion 为准。"
-    },
-    "cited_by": 0,
-    "github": "https://github.com/ZhiqiLi-CG/RecursiveCWM_code",
-    "stars": 2
+  "venue_label": "CVPR Workshop",
+  "award_label": "Best Paper",
+  "inst_label": "Indian Institute of Technology Madras",
+  "institutions": [
+   "Indian Institute of Technology Madras",
+   "Abstract"
+  ]
+ },
+ {
+  "title": "Dense Dynamic Scene Reconstruction and Camera Pose Estimation from Multi-View Videos",
+  "title_zh": "多台自由运动相机下的稠密动态重建与位姿估计",
+  "hook": "不用刚性支架、不用预先标定，多机各拍各的也能拼出同一个动态场景",
+  "cards": [
+   {
+    "emoji": "🎯",
+    "title": "问题与背景",
+    "body": "目标设定是「多台自由运动相机」下的稠密动态场景重建与相机位姿估计——这自然出现在多观察者共同拍摄同一事件的场景中。既有方法存在两类限制：只能处理单相机输入，或要求相机以刚性支架安装且预先标定。前者无法利用多视角互补，后者在真实拍摄中几乎不可行，实用性受限。"
+   },
+   {
+    "emoji": "⚙️",
+    "title": "方法设计",
+    "body": "作者提出两阶段优化框架，把任务解耦为鲁棒的相机跟踪与稠密深度精修。第一阶段把单相机视觉 `SLAM` 扩展到多相机设定：构建时空连接图（spatiotemporal connection graph），同时利用相机内的时间连续性与相机间的空间重叠，从而获得一致的尺度与鲁棒跟踪。为应对相机间重叠有限的情况，引入基于前馈重建模型的宽基线初始化策略。第二阶段在相机内与相机间联合优化稠密深度与相机位姿。"
+   },
+   {
+    "emoji": "📊",
+    "title": "实验结果",
+    "body": "摘要未给出具体数据集、指标与对比数值，以原文为准。"
+   },
+   {
+    "emoji": "⚠️",
+    "title": "局限与展望",
+    "body": "摘要未明确列出局限。从设定推断：方法仍依赖相机间存在一定空间重叠，若各机视角几乎不相交，连接图的构建与尺度一致性可能退化；自由运动相机带来的动态遮挡也是潜在难点。以上为判断。"
+   }
+  ],
+  "figure_note": "以原文流程图为准。可预期为两阶段结构：先由多相机时空连接图 + 宽基线前馈初始化完成跟踪，再进入稠密深度与位姿的联合精修。",
+  "figures": [
+   {
+    "file": "2603_12064-fig1.jpg",
+    "caption": "Figure 2 : Method Overview. Given multiple video inputs: Our method first uses a feed-forward model for initialization to achieve a global scale anchor and initialized poses. Then, we build a spatio-t",
+    "kind": "pipeline"
+   }
+  ],
+  "authors": "Shuo Sun et al. · Örebro University, Sweden / Schindler EPFL Lab, Lausanne, Switzerland",
+  "venue": "arXiv 2026.09 · fix typos",
+  "summary": "演唱会、体育比赛这类场合，多个人各拿一台相机从不同角度拍同一个事件。传统方法要么只吃单相机输入，要么要求相机装在刚性支架上并预先标定好——后者在现场几乎不可能满足。这篇工作提出两阶段优化框架，把问题拆成「先鲁棒跟踪相机，再精修稠密深度」，并用前馈重建模型做宽基线初始化，从而在相机间重叠有限的情况下仍能稳定工作。",
+  "paper_url": "https://arxiv.org/abs/2603.12064",
+  "score": 0.77,
+  "scores": {
+   "innovation": 7,
+   "effectiveness": 7
   },
-  {
-    "title": "SyncWorld: Visual Calibration Enables World Models as Zero-Shot Simulators",
-    "title_zh": "SyncWorld: Visual Calibration Enables World Models as Zero-S（直译待润色）",
-    "hook": "新鲜出炉：详情以原文为准",
-    "cards": [
-      {
-        "emoji": "🎯",
-        "title": "问题与背景",
-        "body": "研究问题与背景以原文 Abstract/Introduction 为准（LLM 精读后补全专业表述）。"
-      },
-      {
-        "emoji": "⚙️",
-        "title": "方法设计",
-        "body": "方法与模块拆解以原文 Method 为准（待 LLM 精读补全）。"
-      },
-      {
-        "emoji": "📊",
-        "title": "实验结果",
-        "body": "数据集、指标与 SOTA 对比详见原文 Experiments（数字以原文为准）。"
-      },
-      {
-        "emoji": "⚠️",
-        "title": "局限与展望",
-        "body": "局限以原文 Limitation/Discussion 为准。"
-      }
-    ],
-    "figure_note": "以原文流程图为准。",
-    "figures": [],
-    "authors": "Y et al.",
-    "venue": "arXiv 2026.09",
-    "summary": "本文属 3D Vision Adjacent 方向。任务概述：World models are increasingly used as policy-in-the-loop imagination environments, where reliable rollouts require fine-grained controllability with respect to low-level robot actions. A key obstacle to scaling such models in robotics is that actions are not a universal language in pixel space: chan 方法与实验结论以原文为准（LLM 精读后自动补全中文导读）。",
-    "paper_url": "https://arxiv.org/abs/2609.09155",
-    "score": 0.22,
-    "scores": {
-      "innovation": 6,
-      "effectiveness": 6,
-      "note": "启发式估计（LLM 未出分），仅供参考"
-    },
-    "category": "3D Vision Adjacent",
-    "influence": "新论文：作者影响力标注待补充",
-    "figure_url": null,
-    "figure_caption": "",
-    "fields": {
-      "background": "arXiv 新_submission（2026-09-08），主分类 。",
-      "task": "World models are increasingly used as policy-in-the-loop imagination environments, where reliable rollouts require fine-grained controllability with respect to low-level robot actions. A key obstacle to scaling such models in robotics is that actions are not a universal language in pixel space: chan",
-      "insight": "核心洞察以原文 Abstract/Method 为准（待 LLM 精读补全）。",
-      "pipeline": "I/O 与模块拆解待 LLM 精读填充；以原文 Method 部分与流程图为准。",
-      "methods": "方法细节以原文为准。",
-      "experiment": "实验数据集与消融详见原文 Experiments（数字以原文为准）。",
-      "limitation": "局限以原文 Limitation/Discussion 为准。"
-    },
-    "cited_by": 0,
-    "github": "https://github.com/UMass-Embodied-AGI/SyncWorld",
-    "stars": 19
-  }
+  "category": "动态重建 × 多相机 SLAM",
+  "influence": "Örebro University（瑞典）与 EPFL 合作",
+  "figure_url": null,
+  "figure_caption": "",
+  "fields": {
+   "background": "多自由运动相机拍摄同一事件的场景很常见，但既有方法只支持单相机，或要求刚性安装与预标定。",
+   "task": "从多台自由运动相机输入中同时恢复稠密动态场景几何与各相机位姿。",
+   "insight": "把问题解耦为「鲁棒相机跟踪 + 稠密深度精修」两阶段，并用时空连接图统一相机内时间连续与相机间空间重叠。",
+   "pipeline": "多相机输入 → 时空连接图构建 → 宽基线前馈初始化 → 鲁棒跟踪 → 稠密深度与位姿联合精修。",
+   "methods": "两阶段优化框架；扩展单相机 SLAM 至多相机；时空连接图；基于前馈重建模型的宽基线初始化。",
+   "experiment": "摘要未给出数据集与指标数值，以原文为准。",
+   "limitation": "依赖相机间存在空间重叠；视角几乎不相交时的尺度一致性与遮挡处理未在摘要中说明。"
+  },
+  "venue_label": "",
+  "award_label": "",
+  "inst_label": "EPFL",
+  "cited_by": 0,
+  "institutions": [
+   "Örebro University, Sweden",
+   "Schindler EPFL Lab, Lausanne, Switzerland",
+   "Technical University of Munich, Germany"
+  ]
+ },
+ {
+  "title": "FreeFlow: A Bias-free Hierarchical Transformer for Optical Flow Estimation",
+  "title_zh": "FreeFlow：不带任何光流专用组件的分层 Transformer",
+  "hook": "把相关体和迭代精修全删掉，纯注意力反而刷到 Sintel 榜首",
+  "cards": [
+   {
+    "emoji": "🎯",
+    "title": "问题与背景",
+    "body": "主流光流方法依赖任务特定的归纳偏置——相关体（correlation volumes）、特征 warp、迭代精修等——来达到高精度。这些偏置虽然有效，却把模型限制在预设的启发式范围内，可能压制表达能力，并导致流程更复杂、计算开销更高。问题在于：去掉这些专用组件后，能否仍然取得同等甚至更好的精度？"
+   },
+   {
+    "emoji": "⚙️",
+    "title": "方法设计",
+    "body": "FreeFlow 是一个分层（hierarchical）Transformer，完全不使用任何光流专用组件，仅由单一的前馈编码—解码器构成。其核心是三种注意力的组合：`窗口注意力`负责局部处理，`移位窗口注意力`实现跨窗口信息交换，另有一路在降采样分辨率上运行的`全局注意力`。这种设计使架构能随模型容量自然扩展。"
+   },
+   {
+    "emoji": "📊",
+    "title": "实验结果",
+    "body": "尽管没有任何标准归纳偏置，FreeFlow 在多个主要基准上取得 SOTA，摘要给出 Sintel 上 Clean/Final 的 EPE 为 0.68 / 1.48。模型容量从较小变体扩展到较大变体时，精度呈一致性提升（具体各变体的完整对比表详见原文）。"
+   },
+   {
+    "emoji": "⚠️",
+    "title": "局限与展望",
+    "body": "摘要未列出局限。可考虑的边界：低分辨率全局注意力在高分辨率输入下的计算成本、以及去除归纳偏置后对训练数据规模的依赖程度，均值得在原文中查证。"
+   }
+  ],
+  "figure_note": "以原文流程图为准。图中应体现分层编码—解码结构，以及窗口注意力 / 移位窗口注意力 / 低分辨率全局注意力三种模块的交替排布。",
+  "figures": [
+   {
+    "file": "2609_11486-fig1.jpg",
+    "caption": "Figure 3 : Method overview. Given an image pair ( I 1 , I 2 ) (I_{1},I_{2}) , we patchify each input into 8 × 8 8{\\times}8 tokens and extract features using two shared-weight encoders composed of Wind",
+    "kind": "pipeline"
+   }
+  ],
+  "authors": "V et al. · AI Center, Lomonosov MSU, Moscow, Russia / Lomonosov Moscow State University, Moscow, Russia",
+  "venue": "arXiv 2026.09 · Accepted at ECCV 2026. Project page: this https URL",
+  "summary": "过去十年光流估计几乎默认要用相关体、特征 warp、迭代精修这些「专用零件」。FreeFlow 反其道而行：整网不含任何光流专用组件，只用一个前馈的编码—解码器，靠窗口注意力、移位窗口注意力和低分辨率全局注意力三种组合来同时抓局部与全局对应关系。结果不仅在主要基准上达到 SOTA，模型从小到大还能稳定涨点，说明这套结构有良好的可扩展性。",
+  "paper_url": "https://arxiv.org/abs/2609.11486",
+  "score": 0.65,
+  "scores": {
+   "innovation": 7,
+   "effectiveness": 8
+  },
+  "category": "光流估计 × 前馈 Transformer",
+  "influence": "ECCV 2026 录用；莫斯科国立大学 AI Center（Lomonosov MSU）",
+  "figure_url": null,
+  "figure_caption": "",
+  "fields": {
+   "background": "光流方法普遍依赖相关体、特征 warp、迭代精修等任务特定归纳偏置，限制了表达力并推高复杂度。",
+   "task": "在完全不使用光流专用组件的条件下做高精度光流估计。",
+   "insight": "用窗口 + 移位窗口 + 低分辨率全局注意力的组合替代人工设计的匹配与精修机制。",
+   "pipeline": "输入图像对 → 分层前馈编码—解码器（三种注意力交替）→ 光流输出。",
+   "methods": "分层 Transformer；无光流专用组件；窗口注意力、移位窗口注意力、降分辨率全局注意力；单一前馈编码—解码器。",
+   "experiment": "Sintel Clean/Final EPE 0.68 / 1.48，取得 SOTA；模型容量增大时精度一致性提升。",
+   "limitation": "摘要未列出局限；全局注意力的计算开销与数据规模依赖需查原文。"
+  },
+  "venue_label": "ECCV",
+  "award_label": "",
+  "inst_label": "Lomonosov Moscow State University",
+  "github": "https://github.com/msu-video-group/freeflow",
+  "stars": 13,
+  "institutions": [
+   "AI Center, Lomonosov MSU, Moscow, Russia",
+   "Lomonosov Moscow State University, Moscow, Russia",
+   "MSU Institute for Artificial Intelligence, Moscow, Russia"
+  ]
+ },
+ {
+  "title": "VS-Splat: Voxel-Selective feed-forward Gaussian Splatting for end-to-end 3D object reconstruction from sparse-views",
+  "title_zh": "VS-Splat：只在「像物体」的体素里放高斯点",
+  "hook": "监督信号只有 2D 渲染，却能自己学出哪些体素该放高斯",
+  "cards": [
+   {
+    "emoji": "🎯",
+    "title": "问题与背景",
+    "body": "前馈高斯泼溅模型已能从少量二维图像重建三维物体，甚至可泛化到未见物体。但现有方法通常在三维空间中均匀预测高斯原语，导致大多数原语被放在非物体区域，这会挤占表示容量、妨碍精细物体细节的刻画，也造成不必要的存储与渲染开销。"
+   },
+   {
+    "emoji": "⚙️",
+    "title": "方法设计",
+    "body": "VS-Splat（Voxel-Selective Gaussian Splatting）是一个端到端的前馈高斯泼溅框架，只在被判定「可能属于物体」的选定体素内预测大量高斯原语，且不需要三维结构监督。为实现这一点，作者提出可学习的`体素选择`方法，仅依靠二维渲染监督来识别以物体为中心的体素。整体是一个无需 3D 结构标注的端到端流程。"
+   },
+   {
+    "emoji": "📊",
+    "title": "实验结果",
+    "body": "作者在三个基准数据集上做了稀疏视角渲染实验，报告 VS-Splat 优于若干现有 SOTA 方法（具体指标数值详见原文）。此外还进一步验证了该模型作为 backbone 的有效性。"
+   },
+   {
+    "emoji": "⚠️",
+    "title": "局限与展望",
+    "body": "摘要未列出局限。作为物体级（object-centric）方法，其在完整大场景上的可扩展性、以及体素选择对场景类型的敏感性，是需要进一步确认的边界。以上为判断。"
+   }
+  ],
+  "figure_note": "以原文流程图为准。预期展示「输入少量图像 → 可学习体素选择 → 仅在选中体素内预测高斯原语 → 2D 渲染监督」的端到端回路。",
+  "figures": [
+   {
+    "file": "2609_12343-fig1.jpg",
+    "caption": "Fig. 1: Overview of the proposed framework vs. existing E2E feed-forward object reconstruction approaches in generalizable Gaussian splatting under a sparse-view setup. (a) Existing methods predict a ",
+    "kind": "pipeline"
+   }
+  ],
+  "authors": "Yunsu Jeong et al.",
+  "venue": "arXiv 2026.09 · Main paper: 10 pages, 4 figures. Appendix: 4 pages, 5 figure",
+  "summary": "前馈式高斯泼溅能从几张照片直接重建三维物体，但现有方法在整片空间里均匀撒高斯点，大量点落在空无一物的区域，真正需要细节的地方反而不够密。VS-Splat 的做法是先判断哪些体素大概率属于物体，只在这些体素内预测高斯原语。关键是不需要任何三维结构标注，仅靠二维渲染监督就能学出这套选择机制，在三个基准的稀疏视角渲染上都优于现有方法。",
+  "paper_url": "https://arxiv.org/abs/2609.12343",
+  "score": 0.55,
+  "scores": {
+   "innovation": 7,
+   "effectiveness": 7
+  },
+  "category": "前馈 3DGS × 稀疏视角",
+  "influence": "作者单位未在摘要中标注，以原文为准",
+  "figure_url": null,
+  "figure_caption": "",
+  "fields": {
+   "background": "前馈高斯泼溅在三维空间中均匀放置原语，大量点落在非物体区域，损害细节表示效率。",
+   "task": "稀疏视角下的前馈高斯泼溅物体重建，且不依赖三维结构监督。",
+   "insight": "先用可学习体素选择筛出物体中心体素，再只在其中密集预测高斯原语，全程仅用二维渲染监督。",
+   "pipeline": "少量输入图像 → 可学习体素选择 → 选中体素内的高斯原语预测 → 二维渲染监督优化。",
+   "methods": "端到端前馈高斯泼溅框架；可学习体素选择；无 3D 结构监督。",
+   "experiment": "在三个基准数据集的稀疏视角渲染实验中优于若干 SOTA（数值详见原文）；并验证了作为 backbone 的有效性。",
+   "limitation": "摘要未列出局限；面向物体级的设定在完整大场景上的扩展性待验证。"
+  },
+  "venue_label": "",
+  "award_label": "",
+  "inst_label": "",
+  "cited_by": 0
+ },
+ {
+  "title": "SUCCESS-GS: Survey of Compactness and Compression for Efficient Static and Dynamic Gaussian Splatting",
+  "title_zh": "SUCCESS-GS：3D/4D 高斯泼溅压缩与加速的首个统一综述",
+  "hook": "把 3DGS 与 4DGS 的高效化路线第一次收进同一张地图",
+  "cards": [
+   {
+    "emoji": "🎯",
+    "title": "问题与背景",
+    "body": "3D 高斯泼溅已成为一种强大的显式表示，能够支持实时、高保真的三维重建与新视角合成。但其实际应用受制于存储与渲染数百万个高斯所需的巨大内存与算力开销；在 4D 动态场景中，这些问题会进一步加剧。因此「高效高斯泼溅」方向近年快速演进，但缺少统一的梳理。"
+   },
+   {
+    "emoji": "⚙️",
+    "title": "方法设计",
+    "body": "本文是一篇综述，提出对高效 3D 与 4D 高斯泼溅技术的首个统一概述。作者对两种设定分别把已有方法系统归入两大方向：`参数压缩`（Parameter Compression）与`重构压缩`（Restructuring Compression），并逐类总结其核心思想与方法论趋势。此外还覆盖了广泛使用的数据集、评价指标与代表性基准对比。"
+   },
+   {
+    "emoji": "📊",
+    "title": "实验结果",
+    "body": "作为综述，本文不提出新方法，主要贡献是分类体系与基准汇总；具体的分类细节、数据统计与对比表格详见原文。"
+   },
+   {
+    "emoji": "⚠️",
+    "title": "局限与展望",
+    "body": "综述类工作通常受限于截稿时间点，快速演进的新方法可能未被纳入。摘要末尾提到会讨论未来方向（具体内容详见原文）。作为文献入口更合适，不宜直接当作方法选型依据。"
+   }
+  ],
+  "figure_note": "以原文流程图为准。预期是一张分类总览图，把 3D 与 4D 两类设定各自沿参数压缩 / 重构压缩两条主干展开。",
+  "figures": [
+   {
+    "file": "2512_07197-fig1.png",
+    "caption": "Figure 1 . Overview of the static 3D Gaussian Splatting (3DGS) pipeline. A scene is represented as a set of 3D Gaussians with attributes including position 𝝁 \\boldsymbol{\\mu} , scale 𝒔 \\boldsymbol{s} ",
+    "kind": "pipeline"
+   }
+  ],
+  "authors": "Youn, Seokhyun et al. · Chung-Ang University / Kyung Hee University",
+  "venue": "arXiv 2026.09 · The first three authors contributed equally to this work. Th",
+  "summary": "3D 高斯泼溅虽然能实时高保真渲染，但动辄百万级高斯点带来的显存和算力开销让落地上限很低；到了 4D 动态场景，问题还要再放大一层。这篇综述把这几年「高效高斯泼溅」的工作第一次统一梳理了一遍，把方法分成参数压缩与重构压缩两条主线，并整理了常用数据集、评价指标和代表性基准对比，适合作为该方向的入门地图。",
+  "paper_url": "https://arxiv.org/abs/2512.07197",
+  "score": 0.54,
+  "scores": {
+   "innovation": 5,
+   "effectiveness": 6
+  },
+  "category": "3DGS 综述 × 压缩加速",
+  "influence": "中央大学（Chung-Ang University）等合作；前三位作者贡献等同",
+  "figure_url": null,
+  "figure_caption": "",
+  "fields": {
+   "background": "3DGS 的内存与算力开销巨大，4D 动态场景更严重，高效化方法快速涌现但缺乏统一梳理。",
+   "task": "对高效 3D 与 4D 高斯泼溅技术做首个统一综述。",
+   "insight": "以「参数压缩 / 重构压缩」两大类为主线，统一组织 3D 与 4D 两种设定下的方法体系。",
+   "pipeline": "文献归类 → 两大类方法展开 → 数据集与评价指标汇总 → 代表性基准对比 → 未来方向讨论。",
+   "methods": "综述性分类框架；参数压缩与重构压缩二分法；基准与指标梳理。",
+   "experiment": "无新实验；提供分类体系与代表性基准对比（详见原文）。",
+   "limitation": "受截稿时间限制可能遗漏最新工作，宜作文献地图而非选型结论。"
+  },
+  "venue_label": "",
+  "award_label": "",
+  "inst_label": "Chung-Ang University",
+  "cited_by": 0,
+  "institutions": [
+   "Chung-Ang University",
+   "Kyung Hee University"
+  ]
+ },
+ {
+  "title": "DRS-VPT: Directly Relocalizing in a Scan with Vision Point Transformers",
+  "title_zh": "DRS-VPT：把查询图像直接对齐到点云扫描里",
+  "hook": "一个模型同时搞定自动驾驶标定与室内重定位，还不用为每张地图单独训练",
+  "cards": [
+   {
+    "emoji": "🎯",
+    "title": "问题与背景",
+    "body": "图像到扫描（image-to-scan）配准是空间定位的基础问题：给定查询图像与参考三维点云，需要恢复扫描与相机之间的相对位姿。这类问题同时出现在自动驾驶的相机-LiDAR 标定与室内重定位等下游任务中，但既有方案往往针对单一任务或单一环境定制，泛化性与零样本迁移能力有限。"
+   },
+   {
+    "emoji": "⚙️",
+    "title": "方法设计",
+    "body": "DRS-VPT 是一个前馈 Transformer 架构，面向基础性的图像—扫描配准。给定查询图像与参考点云，模型预测扫描位姿与点图，以及每个相机的位姿与点图，全部表达在第一个相机的坐标系下。此外它还预测由粗到细的逐点与逐像素特征金字塔，用于把扫描直接重投影对齐到首帧图像。这一形式统一了相机-LiDAR 标定与室内相机到地图重定位等下游任务。"
+   },
+   {
+    "emoji": "📊",
+    "title": "实验结果",
+    "body": "单一 DRS-VPT 模型在自动驾驶的图像到 LiDAR 配准上达到 SOTA，在室内重定位上取得有竞争力的表现且无需训练地图特定权重，并展现出较强的零样本迁移能力（具体数据集与数值详见原文）。作者还定性地展示了模型学到了遮挡背面点等复杂扫描到图像的投影性质。"
+   },
+   {
+    "emoji": "⚠️",
+    "title": "局限与展望",
+    "body": "摘要未列出局限。可预期的边界包括：对点云质量与坐标系一致性的依赖、以及室内场景「有竞争力」但未必领先的定位精度。以上为判断，非作者结论。"
+   }
+  ],
+  "figure_note": "以原文流程图为准。应体现「查询图像 + 参考点云 → 共享编码器 → 位姿/点图与多尺度特征金字塔 → 重投影对齐」的单阶段前馈结构。",
+  "figures": [
+   {
+    "file": "2609_12557-fig1.jpg",
+    "caption": "Figure 2 : DRS-VPT architecture. Query images and a reference 3D point cloud are encoded using DINOv2 and a Sonata point transformer respectively. Their tokens are fused using a transformer with alter",
+    "kind": "pipeline"
+   }
+  ],
+  "authors": "Lanke Frank Tarimo Fu et al. · University of Oxford, Oxford OX2 6NN, United Kingdom",
+  "venue": "arXiv 2026.09",
+  "summary": "手上有一份三维点云地图，想凭一张现场照片算出相机在其中的位置——这就是图像到扫描的配准问题。DRS-VPT 用一个前馈 Transformer 一次预测出扫描位姿、点图以及每个相机的位姿与点图，并额外给出由粗到细的特征金字塔用于重投影对齐。同一个模型既能做自动驾驶里的相机-LiDAR 标定，也能做室内相机到地图的重定位，而且不需要针对具体地图训练权重。",
+  "paper_url": "https://arxiv.org/abs/2609.12557",
+  "score": 0.52,
+  "scores": {
+   "innovation": 7,
+   "effectiveness": 7
+  },
+  "category": "图像-点云配准 × 前馈几何",
+  "influence": "牛津大学（University of Oxford）团队",
+  "figure_url": null,
+  "figure_caption": "",
+  "fields": {
+   "background": "图像到点云扫描的配准是相机-LiDAR 标定与室内重定位的共同基础，既有方案多针对单任务或单环境定制。",
+   "task": "基础性的 image-to-scan 配准：从查询图像与参考点云恢复扫描位姿与相机位姿。",
+   "insight": "用统一的前馈 Transformer 在首相机坐标系下同时输出扫描位姿、点图与多尺度特征金字塔，直接重投影对齐。",
+   "pipeline": "查询图像 + 参考点云 → 前馈 Transformer → 扫描/相机位姿与点图 + 由粗到细特征金字塔 → 重投影对齐。",
+   "methods": "前馈 Transformer；统一的首相机坐标系表达；逐点/逐像素特征金字塔；无需地图特定权重。",
+   "experiment": "自动驾驶图像到 LiDAR 配准达 SOTA；室内重定位有竞争力且免地图特定训练；零样本迁移表现强（数值详见原文）。",
+   "limitation": "摘要未列出局限；对点云质量与配准精度的边界条件需查原文。"
+  },
+  "venue_label": "",
+  "award_label": "",
+  "inst_label": "University of Oxford",
+  "institutions": [
+   "University of Oxford, Oxford OX2 6NN, United Kingdom"
+  ]
+ },
+ {
+  "title": "SpatialBlock: Enhancing Spatial Intelligence in LVLMs via Synthetic Block-Stacking Problem",
+  "title_zh": "SpatialBlock：用积木题给多模态大模型补空间感",
+  "hook": "不标一个 3D 点，1.5 万道合成积木题就能提升空间推理",
+  "cards": [
+   {
+    "emoji": "🎯",
+    "title": "问题与背景",
+    "body": "大型视觉语言模型（LVLMs）在多种视觉任务上表现强劲，但在重建与推理二维图像所描绘的三维场景结构——即所谓空间智能——方面仍存在明显局限。现有方法尝试用真实场景的空间问答数据集来弥补，但这类数据需要稠密几何标注，构建成本高、耗时长，且因依赖外部感知模块而常常带有噪声。"
+   },
+   {
+    "emoji": "⚙️",
+    "title": "方法设计",
+    "body": "作者提出一种受人类认知发展启发的新范式：通过学习结构化的积木操作任务来掌握基础空间技能。为此构建了 `SpatialBlock-15k` 合成数据集，包含 15,000 道积木堆叠问题，覆盖三维到二维投影、视角变换与结构组合三类能力。数据集还引入了受控的颜色调制作为视觉线索，用于在视觉复杂条件下鼓励基于锚点的推理。"
+   },
+   {
+    "emoji": "📊",
+    "title": "实验结果",
+    "body": "摘要在此处截断，未给出具体基准名称与提升幅度，训练与评测结果详见原文。摘要可确认的量化信息是数据集规模：15,000 道合成问题。"
+   },
+   {
+    "emoji": "⚠️",
+    "title": "局限与展望",
+    "body": "合成数据与真实场景之间存在域差距，积木任务学到的空间技能能否迁移到自然图像中的复杂三维推理，是需要验证的关键点。此外摘要未给出评测结果，实际增益幅度尚不明确。以上为判断。"
+   }
+  ],
+  "figure_note": "以原文流程图为准。预期展示「积木堆叠任务生成 → SpatialBlock-15k（投影/视角/组合）→ 颜色线索注入 → LVLM 空间能力训练与评测」的数据流水线。",
+  "figures": [
+   {
+    "file": "2609_07064-fig1.png",
+    "caption": "Figure 1: Performance Gap Between Humans and LVLMs in Block-Stacking Problem . The top row shows a block-stacking task that requires predicting a 2D projection from a given 3D structure. While humans ",
+    "kind": "other"
+   }
+  ],
+  "authors": "Soohyun Ryu et al. · KAIST / South Korea",
+  "venue": "arXiv 2026.09",
+  "summary": "多模态大模型看图很在行，但让它判断图里物体的三维结构关系就常常答错。现有做法依赖真实场景的空间问答数据，而这类标注需要稠密几何信息，既贵又噪。SpatialBlock 换了个思路：向人类儿童认知发展取经，用积木堆叠这类结构化任务来训练基础空间技能，构建了 1.5 万道题的合成数据集，覆盖三维到二维投影、视角变换与结构组合。",
+  "paper_url": "https://arxiv.org/abs/2609.07064",
+  "score": 0.51,
+  "scores": {
+   "innovation": 6,
+   "effectiveness": 6
+  },
+  "category": "LVLM 空间智能 × 合成数据",
+  "influence": "KAIST（韩国科学技术院）",
+  "figure_url": null,
+  "figure_caption": "",
+  "fields": {
+   "background": "LVLM 的空间智能受限，既有真实场景空间问答数据依赖稠密几何标注，成本高且有噪声。",
+   "task": "通过结构化积木任务提升 LVLM 对三维结构的重建与推理能力。",
+   "insight": "借鉴人类认知发展，用合成积木操作任务替代稠密几何标注，学习基础空间技能。",
+   "pipeline": "积木堆叠问题生成 → SpatialBlock-15k 数据集（3D→2D 投影 / 视角变换 / 结构组合）→ 颜色调制线索 → 模型训练。",
+   "methods": "合成数据范式；SpatialBlock-15k（15,000 题）；受控颜色调制作为锚点式推理线索。",
+   "experiment": "数据集规模 15,000 题；评测结果摘要未给出，详见原文。",
+   "limitation": "合成与真实场景存在域差距，空间技能向自然图像迁移的效果待验证。"
+  },
+  "venue_label": "",
+  "award_label": "",
+  "inst_label": "KAIST",
+  "cited_by": 0,
+  "github": "https://github.com/rsoohyun/SpatialBlock",
+  "stars": 5,
+  "institutions": [
+   "KAIST",
+   "South Korea",
+   "Eunho Yang"
+  ]
+ }
 ]
