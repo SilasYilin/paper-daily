@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { ArrowRight, ExternalLink, Code, Star, Quote, Building2 } from 'lucide-react';
 import type { DataBundle, Paper } from '../../types/data';
-import { groupPapers, humanDate, type Group } from '../../utils/groups';
+import { groupPapers, humanDate, TIERS, type Group } from '../../utils/groups';
 import { allPapers } from '../../utils/helpers';
 
 const SUMMARY_MAX = 60;
@@ -263,7 +263,7 @@ export function Overview({
             <a href="https://arxiv.org" target="_blank" rel="noopener noreferrer">arXiv</a>
           </div>
           <div className="mt-1.5">
-            分层依据：核心方向 / 相关方向 / 泛读（按你的偏好画像自动判定）　·　摘要为自动归纳，引用请以原文为准。
+            分层依据：{TIERS.map(t => t.label).join(' / ')}（按你的偏好画像自动判定）　·　摘要为自动归纳，引用请以原文为准。
           </div>
         </div>
       </footer>
